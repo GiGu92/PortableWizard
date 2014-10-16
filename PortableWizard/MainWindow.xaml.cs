@@ -39,7 +39,7 @@ namespace PortableWizard
 
 		private void ExitButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			Close();
 		}
 
 		private void AppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
