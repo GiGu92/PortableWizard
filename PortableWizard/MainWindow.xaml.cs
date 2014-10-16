@@ -42,6 +42,11 @@ namespace PortableWizard
 
 		}
 
+		private void AppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			AppsCheckListBox.ItemsSource = new List<string> { "Internet Explorer", "Safari", "Notepad", "Anyad" };
+		}
+
 		private void AppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
 		{
 			FolderBrowserDialog dlg = new FolderBrowserDialog();
@@ -51,6 +56,13 @@ namespace PortableWizard
 				AppsPathTextBox.Text = dlg.SelectedPath;
 			}
 		}
+
+		private void ConfigFileBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		
 
 		
 	}

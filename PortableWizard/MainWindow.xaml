@@ -53,13 +53,28 @@
 
                 <GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="AppsPathTextBox" Width="600"/>
+                        <TextBox x:Name="AppsPathTextBox" Width="600" TextChanged="AppsPathTextBox_TextChanged"/>
                         <Button x:Name="AppsPathBrowseButton" Click="AppsPathBrowseButton_Click">Browse</Button>
                     </StackPanel>
                 </GroupBox>
-                
-                
-                
+
+                <GroupBox Header="Portable Wizard configuration file location" Grid.Column="0" Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="ConfigFilePathTextBox" Width="600"/>
+                        <Button x:Name="ConfigFileBrowseButton" Click="ConfigFileBrowseButton_Click">Browse</Button>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Programs from your folder" Grid.Column="0" Grid.Row="2">
+                    <xctk:CheckListBox x:Name="AppsCheckListBox">
+                        <xctk:CheckListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </xctk:CheckListBox.ItemTemplate>
+                    </xctk:CheckListBox>
+                </GroupBox>
+
             </Grid>
             
         </xctk:WizardPage>
