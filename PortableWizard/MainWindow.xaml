@@ -2,17 +2,71 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="500" Width="700">
     
-    <xctk:Wizard FinishButtonClosesWindow="True">
+    <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
         <xctk:WizardPage x:Name="IntroPage" 
-                         Title="Welcome to my Wizard"
-                         Description="This Wizard will walk you though how to do something." />
-        <xctk:WizardPage x:Name="Page1" PageType="Interior"
-                         Title="Page 1"
-                         Description="This is the first page in the process."
+                         Title="Welcome to Portable Wizard!"
+                         Description="This Wizard will walk you though initializing your portable applications!"
+                         NextButtonVisibility="Hidden"
+                         BackButtonVisibility="Hidden"
+                         HelpButtonVisibility="Hidden">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>                
+
+                <Button x:Name="InitializeButton" Grid.Column="0" Grid.Row="0" Click="InitializeButton_Click">Initialize</Button>
+                <Button x:Name="UninstallButton" Grid.Column="0" Grid.Row="1" Click="UninstallButton_Click">Uninstall</Button>
+                <Button x:Name="ExitButton" Grid.Column="0" Grid.Row="2" Click="ExitButton_Click">Exit</Button>
+                
+                <Label Grid.Column="1" Grid.Row="0">Initialize your portable applications</Label>
+                <Label Grid.Column="1" Grid.Row="1">Uninstall your initialized portable applications</Label>
+                <Label Grid.Column="1" Grid.Row="2">Exit program</Label>
+                
+            </Grid>
+            
+        </xctk:WizardPage>
+        
+        
+        
+        <xctk:WizardPage x:Name="AppChooser" PageType="Interior"
+                         Title="Which apps do you want to initialize?"
+                         Description="Please choose the folder in which you store your portable apps, then select which of those you want to initialize!"
                          NextPage="{Binding ElementName=Page2}"
-                         PreviousPage="{Binding ElementName=IntroPage}"/>
+                         PreviousPage="{Binding ElementName=IntroPage}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="AppsPathTextBox" Width="600"/>
+                        <Button x:Name="AppsPathBrowseButton" Click="AppsPathBrowseButton_Click">Browse</Button>
+                    </StackPanel>
+                </GroupBox>
+                
+                
+                
+            </Grid>
+            
+        </xctk:WizardPage>
+
+
+
+
         <xctk:WizardPage x:Name="Page2" PageType="Interior"
                          Title="Page 2"
                          Description="This is the second page in the process">

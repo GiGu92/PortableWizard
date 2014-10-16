@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -25,5 +26,32 @@ namespace PortableWizard
 		{
 			InitializeComponent();
 		}
+
+		private void InitializeButton_Click(object sender, RoutedEventArgs e)
+		{
+			Wizard.CurrentPage = AppChooser;
+		}
+
+		private void UninstallButton_Click(object sender, RoutedEventArgs e)
+		{
+			
+		}
+
+		private void ExitButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void AppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+			FolderBrowserDialog dlg = new FolderBrowserDialog();
+			var result = dlg.ShowDialog();
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				AppsPathTextBox.Text = dlg.SelectedPath;
+			}
+		}
+
+		
 	}
 }
