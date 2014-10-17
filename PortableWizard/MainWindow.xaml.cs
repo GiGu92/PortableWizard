@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
+using Xceed.Wpf.Toolkit.Primitives;
 
 namespace PortableWizard
 {
@@ -69,6 +70,12 @@ namespace PortableWizard
 			{
 				ConfigFilePathTextBox.Text = dlg.FileName;
 			}
+		}
+
+		private void AppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			AppManager.SetApplicationList(AppsPathTextBox.Text);
+			SelectedAppsDataGrid.ItemsSource = AppsCheckListBox.SelectedItems;
 		}
 
 

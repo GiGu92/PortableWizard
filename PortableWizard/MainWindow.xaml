@@ -77,10 +77,10 @@
                 </GroupBox>
                 
                 <GroupBox Header="Portable applications found in your folder" Grid.Column="0" Grid.Row="2">
-                    <xctk:CheckListBox
-                        Name="AppsCheckListBox"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <xctk:CheckListBox Name="AppsCheckListBox"
+                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                       ItemSelectionChanged="AppsCheckListBox_ItemSelectionChanged">
                         <xctk:CheckListBox.ItemTemplate>
                             <DataTemplate>                                
                                 <StackPanel Orientation="Horizontal" >
@@ -102,10 +102,30 @@
                          Title="What shortcuts and pins do you want for your apps?"
                          Description="Please choose whether you want a desktop shortcut, start menu shortcut for each app you selected, and please choose which app do you want to pin to the start page or the taskbar!"
                          NextPage="{Binding ElementName=StartupChooser}"
-                         PreviousPage="{Binding ElementName=IntroPage}">
-            <ListBox>
-                <!--TODO-->
-            </ListBox>
+                         PreviousPage="{Binding ElementName=AppChooser}">
+            
+            <DataGrid Name="SelectedAppsDataGrid"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeColumns="False" >
+                
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Icon" Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="10,0,10,0" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Name" Width="4*" IsReadOnly="True" Binding="{Binding Path=Name}" />
+                    <DataGridCheckBoxColumn Header="Desktop shortcut" Width="*" Binding="{Binding Path=IsDesktopShortcut}" />
+                    <DataGridCheckBoxColumn Header="Start menu shortcut" Width="*" Binding="{Binding Path=IsStartMenuShortcut}" />
+                    <DataGridCheckBoxColumn Header="Pin to Start" Width="*" Binding="{Binding Path=IsPinnedToStart}" />
+                    <DataGridCheckBoxColumn Header="Pin to taskbar" Width="*" Binding="{Binding Path=IsPinnedToTaskbar}" />
+                </DataGrid.Columns>
+                
+            </DataGrid>
         </xctk:WizardPage>
 
 
