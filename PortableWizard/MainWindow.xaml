@@ -10,11 +10,15 @@
         <!-- Intro Page -->
         <xctk:WizardPage x:Name="IntroPage" 
                          Title="Welcome to Portable Wizard!"
-                         Description="This Wizard will walk you though initializing your portable applications!"
+                         Description="This Wizard will walk you though initializing your portable applications! Please choose what operation would you like to use Portabe Wizard for!"
                          NextButtonVisibility="Hidden"
                          BackButtonVisibility="Hidden"
-                         HelpButtonVisibility="Hidden">
-            <Grid>
+                         HelpButtonVisibility="Hidden"
+                         CancelButtonVisibility="Hidden"
+                         FinishButtonVisibility="Hidden">
+            
+            <Grid Margin="20">
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -25,13 +29,16 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>                
 
-                <Button x:Name="InitializeButton" Grid.Column="0" Grid.Row="0" Click="InitializeButton_Click">Initialize</Button>
-                <Button x:Name="UninstallButton" Grid.Column="0" Grid.Row="1" Click="UninstallButton_Click">Uninstall</Button>
-                <Button x:Name="ExitButton" Grid.Column="0" Grid.Row="2" Click="ExitButton_Click">Exit</Button>
+                <Button x:Name="InitializeButton" Grid.Column="0" Grid.Row="0" Margin="20" Width="100" Height="50"
+                        Click="InitializeButton_Click">Initialize</Button>
+                <Button x:Name="UninstallButton" Grid.Column="0" Grid.Row="1" Margin="20" Width="100" Height="50"
+                        Click="UninstallButton_Click">Uninstall</Button>
+                <Button x:Name="ExitButton" Grid.Column="0" Grid.Row="2" Margin="20" Width="100" Height="50"
+                        Click="ExitButton_Click">Exit</Button>
                 
-                <Label Grid.Column="1" Grid.Row="0">Initialize your portable applications</Label>
-                <Label Grid.Column="1" Grid.Row="1">Uninstall your initialized portable applications</Label>
-                <Label Grid.Column="1" Grid.Row="2">Exit program</Label>
+                <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">Initialize your portable applications</Label>
+                <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Uninstall your initialized portable applications</Label>
+                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">Exit program</Label>
                 
             </Grid>
             
