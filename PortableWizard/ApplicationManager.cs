@@ -11,28 +11,30 @@ namespace PortableWizard
 {
     class ApplicationManager
     {
-        private string AppsPath;
-        public ObservableCollection<Application> AppList { get; set; }
+        private string AppsFolderPath;
+        public ObservableCollection<Application> ApplicationList { get; set; }
 
 
         public ApplicationManager()
         {
-            AppList = new ObservableCollection<Application>();
-        }
-        public void Init(string AppsPath)
-        {
-
-            this.AppsPath = AppsPath;
-            searchPortableApps();
+            ApplicationList = new ObservableCollection<Application>();
         }
 
-        private void searchPortableApps()
+        public void SetApplicationList(string AppsPath)
         {
-            if (AppsPath.EndsWith("\\"))
+            this.AppsFolderPath = AppsPath;
+            this.ApplicationList = GetPortableApps();
+        }
+
+		private ObservableCollection<Application> GetPortableApps()
+        {
+			var result = new ObservableCollection<Application>();
+            if (AppsFolderPath.EndsWith("\\"))
             {
-                AppsPath = AppsPath.Substring(0, AppsPath.Length - 2);
+                AppsFolderPath = AppsFolderPath.Substring(0, AppsFolderPath.Length - 2);
             }
-            DirectoryInfo directory = new DirectoryInfo(AppsPath);
+
+            DirectoryInfo directory = new DirectoryInfo(AppsFolderPath);
             if (directory.Exists)
             {
                 DirectoryInfo[] subDirs = directory.GetDirectories();
@@ -44,13 +46,13 @@ namespace PortableWizard
                     if (iniFile.Exists)
                     {
                         Application app = new Application(iniFile);
-                        AppList.Add(app);
+						result.Add(app);
                     }
                 }
             }
+
+			return result;
         }
-
-
 
     }
 }

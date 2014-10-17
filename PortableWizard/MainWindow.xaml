@@ -2,13 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="MainWindow" Height="500" Width="700">
-
-
-   
-
-
-
+        Title="MainWindow" Height="500" Width="700" ResizeMode="CanMinimize">
 
     <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
         
@@ -50,59 +44,46 @@
                          Description="Please choose the folder in which you store your portable apps, then select which of those you want to initialize!"
                          NextPage="{Binding ElementName=ShortcutsChooser}"
                          PreviousPage="{Binding ElementName=IntroPage}">
+            
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="AppsPathTextBox" Width="600" TextChanged="AppsPathTextBox_TextChanged"/>
-                        <Button x:Name="AppsPathBrowseButton" Click="AppsPathBrowseButton_Click">Browse</Button>
+                        <TextBox x:Name="AppsPathTextBox" Width="550" TextChanged="AppsPathTextBox_TextChanged"/>
+                        <Button x:Name="AppsPathBrowseButton" Click="AppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
                     </StackPanel>
                 </GroupBox>
-                  <ListBox Margin="12,83,12,12"
-                        Name="AppListBox"
+                
+                <GroupBox Header="Portable Wizard configuration file location (optional)" Grid.Column="0" Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="ConfigFilePathTextBox" Width="550"/>
+                        <Button x:Name="ConfigFilePathBrowseButton" Click="ConfigFilePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+                    </StackPanel>
+                </GroupBox>
+                
+                <GroupBox Header="Portable applications found in your folder" Grid.Column="0" Grid.Row="2">
+                    <xctk:CheckListBox
+                        Name="AppsCheckListBox"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        ScrollViewer.VerticalScrollBarVisibility="Auto"
-                        Grid.Row="1">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <!-- In the video, this is in a UserControl. That's still ok to do. -->
-                            <Grid Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="35" />
-                                    <ColumnDefinition Width="50" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <CheckBox
-	                                HorizontalAlignment="Left"
-	                                Margin="10,10,0,0"
-	                                VerticalAlignment="Top"
-	                                IsChecked="{Binding Path=WillProcessed}"
-                                    Grid.Column="0"
-                                    />
-                                
-                                <Image Source="{Binding Path=Icon}"
-                                    Height="32"
-                                    Width="32"
-                                    VerticalAlignment="Top"
-                                    Grid.Column="1"/>
-                                <TextBlock Text="{Binding Path=Name}"
-                                    Grid.Column="2" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
+                        ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <xctk:CheckListBox.ItemTemplate>
+                            <DataTemplate>                                
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </xctk:CheckListBox.ItemTemplate>
+                    </xctk:CheckListBox>
+                </GroupBox>
 
             </Grid>
             

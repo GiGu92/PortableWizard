@@ -23,6 +23,7 @@ namespace PortableWizard
     public partial class MainWindow : Window
     {
         private ApplicationManager AppManager;
+
         public MainWindow()
         {
             AppManager = new ApplicationManager();
@@ -41,8 +42,14 @@ namespace PortableWizard
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-
+			Close();
         }
+
+		private void AppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			AppManager.SetApplicationList(AppsPathTextBox.Text);
+			AppsCheckListBox.ItemsSource = AppManager.ApplicationList;
+		}
 
         private void AppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -52,13 +59,17 @@ namespace PortableWizard
             {
                 AppsPathTextBox.Text = dlg.SelectedPath;
             }
-        }
+        }       
 
-        private void AppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            AppManager.Init(AppsPathTextBox.Text);
-            AppListBox.ItemsSource = AppManager.AppList;
-        }
+		private void ConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			var result = dlg.ShowDialog();
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				ConfigFilePathTextBox.Text = dlg.FileName;
+			}
+		}
 
 
     }
