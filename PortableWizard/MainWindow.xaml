@@ -136,8 +136,9 @@
                          Description="Please choose which apps do you want to start automatically after Windows starts!"
                          NextPage="{Binding ElementName=FileExtensionChooser}"
                          PreviousPage="{Binding ElementName=ShortcutsChooser}">
+            
             <GroupBox Header="Apps starting with Windows">
-                <xctk:CheckListBox Name="StartupChooserCheckListBox"
+                <xctk:CheckListBox x:Name="StartupChooserCheckListBox"
                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                            ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <xctk:CheckListBox.ItemTemplate>
@@ -150,6 +151,7 @@
                     </xctk:CheckListBox.ItemTemplate>
                 </xctk:CheckListBox>
             </GroupBox>
+            
         </xctk:WizardPage>
 
 
@@ -159,7 +161,40 @@
                          Description="Please choose file extensions do you want to link with each of your apps!"
                          NextPage="{Binding ElementName=SummaryPage}"
                          PreviousPage="{Binding ElementName=StartupChooser}">
-            <!--TODO-->
+            
+            <StackPanel Orientation="Horizontal">
+                
+                <GroupBox Header="Programs" Width="325" HorizontalAlignment="Left">
+                    <ListBox x:Name="FileExtensionChooserProgramsListBox"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             SelectionChanged="FileExtensionChooserProgramsListBox_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+
+                <GroupBox Header="File extensions" Width="325" HorizontalAlignment="Right">
+                    <xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox"
+                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                       ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <xctk:CheckListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </xctk:CheckListBox.ItemTemplate>
+                        
+                    </xctk:CheckListBox>
+                </GroupBox>
+                
+            </StackPanel>
+            
         </xctk:WizardPage>
 
         <!-- Summary page -->

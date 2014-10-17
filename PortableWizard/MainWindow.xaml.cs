@@ -78,6 +78,14 @@ namespace PortableWizard
 			AppManager.SetApplicationList(AppsPathTextBox.Text);
 			ShortcutsChooserAppsDataGrid.ItemsSource = AppsCheckListBox.SelectedItems;
 			StartupChooserCheckListBox.ItemsSource = AppsCheckListBox.SelectedItems;
+			FileExtensionChooserProgramsListBox.ItemsSource = AppsCheckListBox.SelectedItems;
+		}
+
+		private void FileExtensionChooserProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
+			var extensions = selectedApplication.SupportedFileExtensions;
+			FileExtensionChooserExtensionsCheckListBox.ItemsSource = extensions;
 		}
 
 

@@ -34,22 +34,23 @@ namespace PortableWizard
                 AppsFolderPath = AppsFolderPath.Substring(0, AppsFolderPath.Length - 2);
             }
 
-            DirectoryInfo directory = new DirectoryInfo(AppsFolderPath);
-            if (directory.Exists)
-            {
-                DirectoryInfo[] subDirs = directory.GetDirectories();
+			if (Directory.Exists(AppsFolderPath))
+			{
+				DirectoryInfo directory = new DirectoryInfo(AppsFolderPath);				
+				DirectoryInfo[] subDirs = directory.GetDirectories();
 
-                foreach (DirectoryInfo dirInfo in subDirs)
-                {
-                    string iniPath = dirInfo.FullName + @"\App\AppInfo\appinfo.ini";
-                    FileInfo iniFile = new FileInfo(iniPath);
-                    if (iniFile.Exists)
-                    {
-                        Application app = new Application(iniFile);
+				foreach (DirectoryInfo dirInfo in subDirs)
+				{
+					string iniPath = dirInfo.FullName + @"\App\AppInfo\appinfo.ini";
+					FileInfo iniFile = new FileInfo(iniPath);
+					if (iniFile.Exists)
+					{
+						Application app = new Application(iniFile);
 						result.Add(app);
-                    }
-                }
-            }
+					}
+				}
+				
+			}
 
 			return result;
         }
