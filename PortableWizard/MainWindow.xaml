@@ -77,19 +77,36 @@
                 </GroupBox>
                 
                 <GroupBox Header="Portable applications found in your folder" Grid.Column="0" Grid.Row="2">
-                    <xctk:CheckListBox Name="AppsCheckListBox"
-                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                       ItemSelectionChanged="AppsCheckListBox_ItemSelectionChanged">
-                        <xctk:CheckListBox.ItemTemplate>
-                            <DataTemplate>                                
-                                <StackPanel Orientation="Horizontal" >
-                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </xctk:CheckListBox.ItemTemplate>
-                    </xctk:CheckListBox>
+                    <Grid>
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        
+                        <xctk:CheckListBox Name="AppsCheckListBox" Grid.Column="0" Grid.Row="0"
+                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                           ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                           ItemSelectionChanged="AppsCheckListBox_ItemSelectionChanged">
+                            <xctk:CheckListBox.ItemTemplate>
+                                <DataTemplate>                                
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+                                        <TextBlock Text="{Binding Path=Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </xctk:CheckListBox.ItemTemplate>
+                        </xctk:CheckListBox>
+
+                        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
+                            <Button x:Name="AppChooserSelectAllButton" Click="AppChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                            <Button x:Name="AppChooserDeselectAllButton" Click="AppChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+                        </StackPanel>
+                        
+                    </Grid>
                 </GroupBox>
 
             </Grid>
@@ -108,7 +125,8 @@
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
-                      CanUserResizeColumns="False" 
+                      CanUserResizeColumns="False"
+                      CanUserResizeRows="False"
                       GridLinesVisibility="None" >
                 
                 <DataGrid.Columns>

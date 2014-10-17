@@ -81,13 +81,27 @@ namespace PortableWizard
 			FileExtensionChooserProgramsListBox.ItemsSource = AppsCheckListBox.SelectedItems;
 		}
 
-		private void FileExtensionChooserProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void AppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
 		{
-			var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
-			var extensions = selectedApplication.SupportedFileExtensions;
-			FileExtensionChooserExtensionsCheckListBox.ItemsSource = extensions;
+			AppsCheckListBox.SelectedItemsOverride = AppsCheckListBox.Items;
 		}
 
+		private void AppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			AppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+		}
+
+		private void FileExtensionChooserProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			
+			List<string> extensions = null;
+			if (FileExtensionChooserProgramsListBox.Items.Count > 0)
+			{
+				var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
+				extensions = selectedApplication.SupportedFileExtensions;
+			}
+			FileExtensionChooserExtensionsCheckListBox.ItemsSource = extensions;
+		}
 
     }
 }
