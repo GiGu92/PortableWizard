@@ -104,23 +104,24 @@
                          NextPage="{Binding ElementName=StartupChooser}"
                          PreviousPage="{Binding ElementName=AppChooser}">
             
-            <DataGrid Name="SelectedAppsDataGrid"
+            <DataGrid Name="ShortcutsChooserAppsDataGrid"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
-                      CanUserResizeColumns="False" >
+                      CanUserResizeColumns="False" 
+                      GridLinesVisibility="None" >
                 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Icon" Width="SizeToCells" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="Icon" Width="35" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="10,0,10,0" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Name" Width="4*" IsReadOnly="True" Binding="{Binding Path=Name}" />
-                    <DataGridCheckBoxColumn Header="Desktop shortcut" Width="*" Binding="{Binding Path=IsDesktopShortcut}" />
-                    <DataGridCheckBoxColumn Header="Start menu shortcut" Width="*" Binding="{Binding Path=IsStartMenuShortcut}" />
+                    <DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
+                    <DataGridCheckBoxColumn Header="Desktop" Width="*" Binding="{Binding Path=IsDesktopShortcut}" />
+                    <DataGridCheckBoxColumn Header="Start menu" Width="*" Binding="{Binding Path=IsStartMenuShortcut}" />
                     <DataGridCheckBoxColumn Header="Pin to Start" Width="*" Binding="{Binding Path=IsPinnedToStart}" />
                     <DataGridCheckBoxColumn Header="Pin to taskbar" Width="*" Binding="{Binding Path=IsPinnedToTaskbar}" />
                 </DataGrid.Columns>
@@ -135,7 +136,20 @@
                          Description="Please choose which apps do you want to start automatically after Windows starts!"
                          NextPage="{Binding ElementName=FileExtensionChooser}"
                          PreviousPage="{Binding ElementName=ShortcutsChooser}">
-            <!--TODO-->
+            <GroupBox Header="Apps starting with Windows">
+                <xctk:CheckListBox Name="StartupChooserCheckListBox"
+                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                           ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <xctk:CheckListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" >
+                                <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+                                <TextBlock Text="{Binding Path=Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </xctk:CheckListBox.ItemTemplate>
+                </xctk:CheckListBox>
+            </GroupBox>
         </xctk:WizardPage>
 
 

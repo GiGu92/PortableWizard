@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,7 +76,8 @@ namespace PortableWizard
 		private void AppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
 		{
 			AppManager.SetApplicationList(AppsPathTextBox.Text);
-			SelectedAppsDataGrid.ItemsSource = AppsCheckListBox.SelectedItems;
+			ShortcutsChooserAppsDataGrid.ItemsSource = AppsCheckListBox.SelectedItems;
+			StartupChooserCheckListBox.ItemsSource = AppsCheckListBox.SelectedItems;
 		}
 
 

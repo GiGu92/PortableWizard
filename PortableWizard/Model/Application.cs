@@ -20,8 +20,6 @@ namespace PortableWizard.Model
         public bool IsPinnedToTaskbar { get; set; }
         public bool IsStartup { get; set; }
 
-        //public bool WillProcessed { get; set; }
-
         public List<string> SupportedFileExtensions { get; set; }
         public List<string> HandledFileExtensions { get; set; }        
 
@@ -35,18 +33,17 @@ namespace PortableWizard.Model
 
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             Name = iniFile.IniReadValue("Details", "Name");
-            IsDesktopShortcut = false;
-            IsStartMenuShortcut = false;
-            IsPinnedToStart = false;
+            IsDesktopShortcut = true;
+            IsStartMenuShortcut = true;
+            IsPinnedToStart = true;
             IsPinnedToTaskbar = false;
-            //WillProcessed = false;
             IsStartup = false;
 
             SupportedFileExtensions = new List<string>();
-            string association = iniFile.IniReadValue("Associations", "FileTypes");
-            if (association != "")
+            string associations = iniFile.IniReadValue("Associations", "FileTypes");
+            if (associations != "")
             {
-                SupportedFileExtensions.AddRange(association.Split(','));
+                SupportedFileExtensions.AddRange(associations.Split(','));
             }
 
             FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
