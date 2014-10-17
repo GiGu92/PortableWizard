@@ -11,6 +11,9 @@
 
 
     <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
+        
+        
+        <!-- Intro Page -->
         <xctk:WizardPage x:Name="IntroPage" 
                          Title="Welcome to Portable Wizard!"
                          Description="This Wizard will walk you though initializing your portable applications!"
@@ -41,11 +44,11 @@
         </xctk:WizardPage>
         
         
-        
+        <!-- Application chooser page -->
         <xctk:WizardPage x:Name="AppChooser" PageType="Interior"
                          Title="Which apps do you want to initialize?"
                          Description="Please choose the folder in which you store your portable apps, then select which of those you want to initialize!"
-                         NextPage="{Binding ElementName=Page2}"
+                         NextPage="{Binding ElementName=ShortcutsChooser}"
                          PreviousPage="{Binding ElementName=IntroPage}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -62,9 +65,7 @@
                         <Button x:Name="AppsPathBrowseButton" Click="AppsPathBrowseButton_Click">Browse</Button>
                     </StackPanel>
                 </GroupBox>
-
-
-                <ListBox Margin="12,83,12,12"
+                  <ListBox Margin="12,83,12,12"
                         Name="AppListBox"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -97,7 +98,6 @@
                                     Grid.Column="1"/>
                                 <TextBlock Text="{Binding Path=Name}"
                                     Grid.Column="2" />
-
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -109,16 +109,42 @@
         </xctk:WizardPage>
 
 
-
-
-        <xctk:WizardPage x:Name="Page2" PageType="Interior"
-                         Title="Page 2"
-                         Description="This is the second page in the process">
-            <TextBox IsReadOnly="True">Anyad</TextBox>
+        <!-- Shortcuts and pins chooser page -->
+        <xctk:WizardPage x:Name="ShortcutsChooser" PageType="Interior"
+                         Title="What shortcuts and pins do you want for your apps?"
+                         Description="Please choose whether you want a desktop shortcut, start menu shortcut for each app you selected, and please choose which app do you want to pin to the start page or the taskbar!"
+                         NextPage="{Binding ElementName=StartupChooser}"
+                         PreviousPage="{Binding ElementName=IntroPage}">
+            <ListBox>
+                <!--TODO-->
+            </ListBox>
         </xctk:WizardPage>
-        <xctk:WizardPage x:Name="LastPage" PageType="Interior"
-                         Title="Last Page"
-                         Description="This is the last page in the process"
+
+
+        <!-- Startup apps chooser page -->
+        <xctk:WizardPage x:Name="StartupChooser" PageType="Interior"
+                         Title="What programs do you want to start automatically after Windows starts?"
+                         Description="Please choose which apps do you want to start automatically after Windows starts!"
+                         NextPage="{Binding ElementName=FileExtensionChooser}"
+                         PreviousPage="{Binding ElementName=ShortcutsChooser}">
+            <!--TODO-->
+        </xctk:WizardPage>
+
+
+        <!-- File extension chooser page -->
+        <xctk:WizardPage x:Name="FileExtensionChooser" PageType="Interior"
+                         Title="What type of files do you want your apps to open?"
+                         Description="Please choose file extensions do you want to link with each of your apps!"
+                         NextPage="{Binding ElementName=SummaryPage}"
+                         PreviousPage="{Binding ElementName=StartupChooser}">
+            <!--TODO-->
+        </xctk:WizardPage>
+
+        <!-- Summary page -->
+        <xctk:WizardPage x:Name="SummaryPage" PageType="Interior"
+                         Title="Summary"
+                         Description="Check out your options once more. If you like them, press finish!"
+                         PreviousPage="{Binding ElementName=FileExtensionChooser}"
                          CanFinish="True"/>
     </xctk:Wizard>
     
