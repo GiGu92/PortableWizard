@@ -3,7 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="MainWindow" Height="500" Width="700">
-    
+
+
+   
+
+
+
+
     <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
         <xctk:WizardPage x:Name="IntroPage" 
                          Title="Welcome to Portable Wizard!"
@@ -47,19 +53,57 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="AppsPathTextBox" Width="600"/>
+                        <TextBox x:Name="AppsPathTextBox" Width="600" TextChanged="AppsPathTextBox_TextChanged"/>
                         <Button x:Name="AppsPathBrowseButton" Click="AppsPathBrowseButton_Click">Browse</Button>
                     </StackPanel>
                 </GroupBox>
-                
-                
-                
+
+
+                <ListBox Margin="12,83,12,12"
+                        Name="AppListBox"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        Grid.Row="1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- In the video, this is in a UserControl. That's still ok to do. -->
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="35" />
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <CheckBox
+	                                HorizontalAlignment="Left"
+	                                Margin="10,10,0,0"
+	                                VerticalAlignment="Top"
+	                                IsChecked="{Binding Path=WillProcessed}"
+                                    Grid.Column="0"
+                                    />
+                                
+                                <Image Source="{Binding Path=Icon}"
+                                    Height="32"
+                                    Width="32"
+                                    VerticalAlignment="Top"
+                                    Grid.Column="1"/>
+                                <TextBlock Text="{Binding Path=Name}"
+                                    Grid.Column="2" />
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+
             </Grid>
             
         </xctk:WizardPage>
