@@ -30,11 +30,26 @@
                 </Grid.RowDefinitions>                
 
                 <Button x:Name="InitializeButton" Grid.Column="0" Grid.Row="0" Margin="20" Width="100" Height="50"
-                        Click="InitializeButton_Click">Initialize</Button>
+                        Click="InitializeButton_Click" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Source="Media/Icons/Install-icon.png" Height="28" Width="28" Margin="5,0,5,0" />
+                        <Label>Initialize</Label>
+                    </StackPanel>
+                </Button>
                 <Button x:Name="UninstallButton" Grid.Column="0" Grid.Row="1" Margin="20" Width="100" Height="50"
-                        Click="UninstallButton_Click">Uninstall</Button>
+                        Click="UninstallButton_Click" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Source="Media/Icons/Uninstall-icon.png" Height="28" Width="28" Margin="5,0,5,0" />
+                        <Label>Uninstall</Label>
+                    </StackPanel>
+                </Button>
                 <Button x:Name="ExitButton" Grid.Column="0" Grid.Row="2" Margin="20" Width="100" Height="50"
-                        Click="ExitButton_Click">Exit</Button>
+                        Click="ExitButton_Click" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Source="Media/Icons/Exit-icon.png" Height="28" Width="28" Margin="5,0,5,0" />
+                        <Label>Exit</Label>
+                    </StackPanel>
+                </Button>
                 
                 <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">Initialize your portable applications</Label>
                 <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Uninstall your initialized portable applications</Label>
@@ -138,10 +153,10 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
-                    <DataGridCheckBoxColumn Header="Desktop" Width="*" Binding="{Binding Path=IsDesktopShortcut}" />
-                    <DataGridCheckBoxColumn Header="Start menu" Width="*" Binding="{Binding Path=IsStartMenuShortcut}" />
-                    <DataGridCheckBoxColumn Header="Pin to Start" Width="*" Binding="{Binding Path=IsPinnedToStart}" />
-                    <DataGridCheckBoxColumn Header="Pin to taskbar" Width="*" Binding="{Binding Path=IsPinnedToTaskbar}" />
+                    <DataGridCheckBoxColumn Header="Desktop" Width="*" Binding="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridCheckBoxColumn Header="Start menu" Width="*" Binding="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridCheckBoxColumn Header="Pin to Start" Width="*" Binding="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridCheckBoxColumn Header="Pin to taskbar" Width="*" Binding="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </DataGrid.Columns>
                 
             </DataGrid>
@@ -220,7 +235,14 @@
                          Title="Summary"
                          Description="Check out your options once more. If you like them, press finish!"
                          PreviousPage="{Binding ElementName=FileExtensionChooser}"
-                         CanFinish="True"/>
+                         CanFinish="True">
+            <StackPanel Orientation="Vertical">
+                <Button x:Name="CreateIcon" Click="CreateIcon_Click" Width="80" Margin="10,0,0,0">Create Icon</Button>
+                <Button x:Name="DeleteIcon" Click="DeleteIcon_Click" Width="80" Margin="10,0,0,0">Delete Icon</Button>
+                <Button x:Name="CreateStartMenuIcon" Click="CreateStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Create STMenu Icon</Button>
+                <Button x:Name="DeleteStartMenuIcon" Click="DeleteStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Delete STMenu Icon</Button>
+            </StackPanel>
+        </xctk:WizardPage>
     </xctk:Wizard>
     
 </Window>

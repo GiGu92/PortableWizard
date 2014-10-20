@@ -35,7 +35,7 @@ namespace PortableWizard.Model
             Name = iniFile.IniReadValue("Details", "Name");
             IsDesktopShortcut = true;
             IsStartMenuShortcut = true;
-            IsPinnedToStart = true;
+            IsPinnedToStart = false;
             IsPinnedToTaskbar = false;
             IsStartup = false;
 
@@ -52,6 +52,72 @@ namespace PortableWizard.Model
                 Icon = new BitmapImage(new Uri(ConfigFile.Directory.FullName + @"\appicon_32.png"));
             }
         }
+
+        public void addShortcutToDesktop()
+        {
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+            IniFile iniFile = new IniFile(ConfigFile.FullName);
+            string appexe = iniFile.IniReadValue("Control", "Start");
+            FileInfo appPath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\"+appexe);
+
+            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + Name + ".url"))
+            {
+                writer.WriteLine("[InternetShortcut]");
+                writer.WriteLine("URL=file:///" + appPath.FullName.Replace("\\", "/"));
+                writer.WriteLine("IconIndex=0");
+
+                FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon.ico");
+                string icon = iconPath.FullName;
+
+                writer.WriteLine("IconFile=" + icon);
+                writer.Flush();
+            }
+        }
+
+        public void deleteShortcutFromDesktop()
+        {
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            File.Delete(deskDir + "\\" + Name + ".url");
+        }
+
+        public void addShortcutToStartMenu()
+        {
+            string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
+            DirectoryInfo startPath = new DirectoryInfo(startDir);
+            if (!startPath.Exists)
+            {
+                startPath.Create();
+            }
+
+
+            IniFile iniFile = new IniFile(ConfigFile.FullName);
+            string appexe = iniFile.IniReadValue("Control", "Start");
+            FileInfo appPath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe);
+
+            using (StreamWriter writer = new StreamWriter(startDir + "\\" + Name + ".url"))
+            {
+                writer.WriteLine("[InternetShortcut]");
+                writer.WriteLine("URL=file:///" + appPath.FullName.Replace("\\", "/"));
+                writer.WriteLine("IconIndex=0");
+
+                FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon.ico");
+                string icon = iconPath.FullName;
+
+                writer.WriteLine("IconFile=" + icon);
+                writer.Flush();
+            }
+        }
+        public void deleteShortcutFromStartMenu()
+        {
+            string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
+            DirectoryInfo startPath = new DirectoryInfo(startDir);
+            startPath.Delete(true);
+        }
+
+        
 
     }
 }

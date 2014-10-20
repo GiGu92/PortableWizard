@@ -55,5 +55,47 @@ namespace PortableWizard
 			return result;
         }
 
+        public void createShortcuts() {
+            foreach (var app in ApplicationList)
+            {
+                if (app.IsDesktopShortcut)
+                {
+                    app.addShortcutToDesktop();
+                }
+            }
+        }
+
+        public void deleteShortcuts() {
+            foreach (var app in ApplicationList)
+            {
+                if (app.IsDesktopShortcut)
+                {
+                    app.deleteShortcutFromDesktop();
+                }
+            }
+        }
+
+        public void createStartMenuShortcuts()
+        {
+            foreach (var app in ApplicationList)
+            {
+                if (app.IsStartMenuShortcut)
+                {
+                    app.addShortcutToStartMenu();
+                }
+            }
+        }
+
+        public void deleteStartMenuShortcuts()
+        {
+            foreach (var app in ApplicationList)
+            {
+                if (app.IsStartMenuShortcut)
+                {
+                    app.deleteShortcutFromStartMenu();
+                }
+            }
+        }
+
     }
 }

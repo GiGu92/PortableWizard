@@ -103,5 +103,24 @@ namespace PortableWizard
 			FileExtensionChooserExtensionsCheckListBox.ItemsSource = extensions;
 		}
 
+        private void CreateIcon_Click(object sender, RoutedEventArgs e)
+        {
+            AppManager.createShortcuts();
+        }
+        private void DeleteIcon_Click(object sender, RoutedEventArgs e)
+        {
+            AppManager.deleteShortcuts();
+        }
+
+        private void CreateStartMenuIcon_Click(object sender, RoutedEventArgs e)
+        {
+            AppManager.createStartMenuShortcuts();
+        }
+
+        private void DeleteStartMenuIcon_Click(object sender, RoutedEventArgs e)
+        {
+            AppManager.deleteStartMenuShortcuts();
+        }
+
     }
 }
