@@ -24,15 +24,17 @@ namespace PortableWizard
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ApplicationManager AppManager;
+        private ApplicationManager appManager;
 
         public MainWindow()
         {
-            AppManager = new ApplicationManager();
+            appManager = new ApplicationManager();
             InitializeComponent();
         }
 
-        private void InitializeButton_Click(object sender, RoutedEventArgs e)
+		#region IntroPage
+
+		private void InitializeButton_Click(object sender, RoutedEventArgs e)
         {
             Wizard.CurrentPage = AppChooser;
         }
@@ -47,49 +49,67 @@ namespace PortableWizard
 			Close();
         }
 
-		private void AppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		#endregion
+
+		#region AppChooser
+
+		private void AppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			AppManager.SetApplicationList(AppsPathTextBox.Text);
-			AppsCheckListBox.ItemsSource = AppManager.ApplicationList;
+			appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
+			AppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
 		}
 
-        private void AppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
+		private void AppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
             var result = dlg.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                AppsPathTextBox.Text = dlg.SelectedPath;
+				AppChooserAppsPathTextBox.Text = dlg.SelectedPath;
             }
-        }       
+        }
 
-		private void ConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
+		private void AppChooserConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
 		{
 			OpenFileDialog dlg = new OpenFileDialog();
 			var result = dlg.ShowDialog();
 			if (result == System.Windows.Forms.DialogResult.OK)
 			{
-				ConfigFilePathTextBox.Text = dlg.FileName;
+				AppChooserConfigFilePathTextBox.Text = dlg.FileName;
 			}
 		}
 
-		private void AppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		private void AppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
 		{
-			AppManager.SetApplicationList(AppsPathTextBox.Text);
-			ShortcutsChooserAppsDataGrid.ItemsSource = AppsCheckListBox.SelectedItems;
-			StartupChooserCheckListBox.ItemsSource = AppsCheckListBox.SelectedItems;
-			FileExtensionChooserProgramsListBox.ItemsSource = AppsCheckListBox.SelectedItems;
+			appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
+			ShortcutsChooserAppsDataGrid.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
+			StartupChooserCheckListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
+			FileExtensionChooserProgramsListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
+
+			PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[AppChooserAppsCheckListBox.SelectedItems.Count];
+			AppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			appManager.SelectedApplicationList = new ObservableCollection<PortableWizard.Model.Application>(selectedItems);
 		}
 
 		private void AppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
 		{
-			AppsCheckListBox.SelectedItemsOverride = AppsCheckListBox.Items;
+			AppChooserAppsCheckListBox.SelectedItemsOverride = AppChooserAppsCheckListBox.Items;
 		}
 
 		private void AppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
 		{
-			AppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+			AppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
 		}
+
+		#endregion
+
+		#region ShortcutsChooser
+		#endregion
+
+		#region StartupChooser
+		#endregion
+
+		#region FileExtensionChooser
 
 		private void FileExtensionChooserProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
@@ -111,43 +131,43 @@ namespace PortableWizard
 			var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
 			string[] selectedItems = new string[FileExtensionChooserExtensionsCheckListBox.SelectedItems.Count];
 			FileExtensionChooserExtensionsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
-			selectedApplication.HandledFileExtensions = new List<string>();
-			foreach (var extension in selectedItems)
-			{
-				selectedApplication.HandledFileExtensions.Add((string)extension);
-			}
+			selectedApplication.HandledFileExtensions = new List<string>(selectedItems);
 		}
 
-        private void CreateIcon_Click(object sender, RoutedEventArgs e)
+		#endregion
+
+		#region SummaryPage
+
+		private void CreateIcon_Click(object sender, RoutedEventArgs e)
         {
-            AppManager.createShortcuts();
+            appManager.CreateShortcuts();
         }
         private void DeleteIcon_Click(object sender, RoutedEventArgs e)
         {
-            AppManager.deleteShortcuts();
+            appManager.DeleteShortcuts();
         }
 
         private void CreateStartMenuIcon_Click(object sender, RoutedEventArgs e)
         {
-            AppManager.createStartMenuShortcuts();
+            appManager.CreateStartMenuShortcuts();
         }
 
         private void DeleteStartMenuIcon_Click(object sender, RoutedEventArgs e)
         {
-            AppManager.deleteStartMenuShortcuts();
+            appManager.DeleteStartMenuShortcuts();
         }
 
         private void PinToTask_Click(object sender, RoutedEventArgs e)
         {
-            AppManager.pinShortcutsToTaskBar();
+            appManager.PinShortcutsToTaskBar();
         }
 
         private void UnPinFromTask_Click(object sender, RoutedEventArgs e)
         {
-            AppManager.unPinShortcutsToTaskBar();
-        }
+            appManager.UnPinShortcutsToTaskBar();
+		}
 
-		
+		#endregion
 
-    }
+	}
 }

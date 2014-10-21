@@ -12,8 +12,9 @@ namespace PortableWizard
     class ApplicationManager
     {
         private string AppsFolderPath;
-        public ObservableCollection<Application> ApplicationList { get; set; }
 
+        public ObservableCollection<Application> ApplicationList { get; set; }
+		public ObservableCollection<Application> SelectedApplicationList { get; set; }
 
         public ApplicationManager()
         {
@@ -55,66 +56,66 @@ namespace PortableWizard
 			return result;
         }
 
-        public void createShortcuts() {
-            foreach (var app in ApplicationList)
+        public void CreateShortcuts() {
+            foreach (var app in SelectedApplicationList)
             {
                 if (app.IsDesktopShortcut)
                 {
-                    app.addShortcutToDesktop();
+                    app.AddShortcutToDesktop();
                 }
             }
         }
 
-        public void deleteShortcuts() {
-            foreach (var app in ApplicationList)
+        public void DeleteShortcuts() {
+            foreach (var app in SelectedApplicationList)
             {
                 if (app.IsDesktopShortcut)
                 {
-                    app.deleteShortcutFromDesktop();
+                    app.DeleteShortcutFromDesktop();
                 }
             }
         }
 
-        public void createStartMenuShortcuts()
+        public void CreateStartMenuShortcuts()
         {
-            foreach (var app in ApplicationList)
+			foreach (var app in SelectedApplicationList)
             {
                 if (app.IsStartMenuShortcut)
                 {
-                    app.addShortcutToStartMenu();
+                    app.AddShortcutToStartMenu();
                 }
             }
         }
 
-        public void deleteStartMenuShortcuts()
+        public void DeleteStartMenuShortcuts()
         {
-            foreach (var app in ApplicationList)
+			foreach (var app in SelectedApplicationList)
             {
                 if (app.IsStartMenuShortcut)
                 {
-                    app.deleteShortcutFromStartMenu();
+                    app.DeleteShortcutFromStartMenu();
                 }
             }
         }
 
-        public void pinShortcutsToTaskBar()
+        public void PinShortcutsToTaskBar()
         {
-            foreach (var app in ApplicationList)
+			foreach (var app in SelectedApplicationList)
             {
                 if (app.IsStartMenuShortcut)
                 {
-                    app.pinShortcutToTaskBar();
+                    app.PinShortcutToTaskBar();
                 }
             }
         }
 
-        public void unPinShortcutsToTaskBar()
+        public void UnPinShortcutsToTaskBar()
         {
-            foreach (var app in ApplicationList)
+			foreach (var app in SelectedApplicationList)
             {
                 if (app.IsStartMenuShortcut)
                 {
-                    app.unPinShortcutToTaskBar();
+                    app.UnPinShortcutToTaskBar();
                 }
             }
         }

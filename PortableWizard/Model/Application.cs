@@ -55,7 +55,7 @@ namespace PortableWizard.Model
             }
         }
 
-        public void addShortcutToDesktop()
+        public void AddShortcutToDesktop()
         {
             string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
@@ -77,13 +77,13 @@ namespace PortableWizard.Model
             }
         }
 
-        public void deleteShortcutFromDesktop()
+        public void DeleteShortcutFromDesktop()
         {
             string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             File.Delete(deskDir + "\\" + Name + ".url");
         }
 
-        public void addShortcutToStartMenu()
+        public void AddShortcutToStartMenu()
         {
             string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
@@ -111,7 +111,8 @@ namespace PortableWizard.Model
                 writer.Flush();
             }
         }
-        public void deleteShortcutFromStartMenu()
+
+        public void DeleteShortcutFromStartMenu()
         {
             string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
@@ -119,7 +120,7 @@ namespace PortableWizard.Model
             startPath.Delete(true);
         }
 
-        public void pinShortcutToTaskBar()
+        public void PinShortcutToTaskBar()
         {
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             string appexe = iniFile.IniReadValue("Control", "Start");
@@ -151,7 +152,8 @@ namespace PortableWizard.Model
 
             shellApplication = null;
         }
-        public void unPinShortcutToTaskBar()
+
+        public void UnPinShortcutToTaskBar()
         {
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             string appexe = iniFile.IniReadValue("Control", "Start");

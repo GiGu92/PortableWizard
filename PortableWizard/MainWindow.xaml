@@ -79,15 +79,15 @@
 
                 <GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="AppsPathTextBox" Width="550" TextChanged="AppsPathTextBox_TextChanged"/>
-                        <Button x:Name="AppsPathBrowseButton" Click="AppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+                        <TextBox x:Name="AppChooserAppsPathTextBox" Width="550" TextChanged="AppChooserAppsPathTextBox_TextChanged"/>
+                        <Button x:Name="AppChooserAppsPathBrowseButton" Click="AppChooserAppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
                     </StackPanel>
                 </GroupBox>
                 
                 <GroupBox Header="Portable Wizard configuration file location (optional)" Grid.Column="0" Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="ConfigFilePathTextBox" Width="550"/>
-                        <Button x:Name="ConfigFilePathBrowseButton" Click="ConfigFilePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+                        <TextBox x:Name="AppChooserConfigFilePathTextBox" Width="550"/>
+                        <Button x:Name="AppChooserConfigFilePathBrowseButton" Click="AppChooserConfigFilePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
                     </StackPanel>
                 </GroupBox>
                 
@@ -101,11 +101,11 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        
-                        <xctk:CheckListBox Name="AppsCheckListBox" Grid.Column="0" Grid.Row="0"
+
+                        <xctk:CheckListBox Name="AppChooserAppsCheckListBox" Grid.Column="0" Grid.Row="0"
                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                           ItemSelectionChanged="AppsCheckListBox_ItemSelectionChanged">
+                                           ItemSelectionChanged="AppChooserAppsCheckListBox_ItemSelectionChanged">
                             <xctk:CheckListBox.ItemTemplate>
                                 <DataTemplate>                                
                                     <StackPanel Orientation="Horizontal" >
