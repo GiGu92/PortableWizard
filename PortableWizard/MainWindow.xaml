@@ -241,6 +241,9 @@
                 <Button x:Name="DeleteIcon" Click="DeleteIcon_Click" Width="80" Margin="10,0,0,0">Delete Icon</Button>
                 <Button x:Name="CreateStartMenuIcon" Click="CreateStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Create STMenu Icon</Button>
                 <Button x:Name="DeleteStartMenuIcon" Click="DeleteStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Delete STMenu Icon</Button>
+                <Button x:Name="PinToTask" Click="PinToTask_Click" Width="80" Margin="10,0,0,0">Pin Icon</Button>
+                <Button x:Name="UnPinFromTask" Click="UnPinFromTask_Click" Width="80" Margin="10,0,0,0">UnPin Icon</Button>
+
             </StackPanel>
         </xctk:WizardPage>
     </xctk:Wizard>

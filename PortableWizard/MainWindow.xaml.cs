@@ -122,5 +122,15 @@ namespace PortableWizard
             AppManager.deleteStartMenuShortcuts();
         }
 
+        private void PinToTask_Click(object sender, RoutedEventArgs e)
+        {
+            AppManager.pinShortcutsToTaskBar();
+        }
+
+        private void UnPinFromTask_Click(object sender, RoutedEventArgs e)
+        {
+            AppManager.unPinShortcutsToTaskBar();
+        }
+
     }
 }

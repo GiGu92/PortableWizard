@@ -97,5 +97,27 @@ namespace PortableWizard
             }
         }
 
+        public void pinShortcutsToTaskBar()
+        {
+            foreach (var app in ApplicationList)
+            {
+                if (app.IsStartMenuShortcut)
+                {
+                    app.pinShortcutToTaskBar();
+                }
+            }
+        }
+
+        public void unPinShortcutsToTaskBar()
+        {
+            foreach (var app in ApplicationList)
+            {
+                if (app.IsStartMenuShortcut)
+                {
+                    app.unPinShortcutToTaskBar();
+                }
+            }
+        }
+
     }
 }

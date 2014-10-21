@@ -36,7 +36,7 @@ namespace PortableWizard.Model
             IsDesktopShortcut = true;
             IsStartMenuShortcut = true;
             IsPinnedToStart = false;
-            IsPinnedToTaskbar = false;
+            IsPinnedToTaskbar = true;
             IsStartup = false;
 
             SupportedFileExtensions = new List<string>();
@@ -117,7 +117,69 @@ namespace PortableWizard.Model
             startPath.Delete(true);
         }
 
-        
+        public void pinShortcutToTaskBar()
+        {
+            IniFile iniFile = new IniFile(ConfigFile.FullName);
+            string appexe = iniFile.IniReadValue("Control", "Start");
+            string filePath=new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe).FullName;
 
+            if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
+
+            // create the shell application object
+            dynamic shellApplication = Activator.CreateInstance(Type.GetTypeFromProgID("Shell.Application"));
+
+            string path = Path.GetDirectoryName(filePath);
+            string fileName = Path.GetFileName(filePath);
+
+            dynamic directory = shellApplication.NameSpace(path);
+            dynamic link = directory.ParseName(fileName);
+
+            dynamic verbs = link.Verbs();
+            for (int i = 0; i < verbs.Count(); i++)
+            {
+                dynamic verb = verbs.Item(i);
+                string verbName = verb.Name.Replace(@"&", string.Empty).ToLower();
+
+                if (IsPinnedToTaskbar && (verbName.Equals("pin to taskbar") || (verbName.Contains("tálcán") && verbName.Contains("rögzítés"))))
+                {
+
+                    verb.DoIt();
+                }
+            }
+
+            shellApplication = null;
+        }
+        public void unPinShortcutToTaskBar()
+        {
+            IniFile iniFile = new IniFile(ConfigFile.FullName);
+            string appexe = iniFile.IniReadValue("Control", "Start");
+            string filePath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe).FullName;
+
+            if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
+
+            // create the shell application object
+            dynamic shellApplication = Activator.CreateInstance(Type.GetTypeFromProgID("Shell.Application"));
+
+            string path = Path.GetDirectoryName(filePath);
+            string fileName = Path.GetFileName(filePath);
+
+            dynamic directory = shellApplication.NameSpace(path);
+            dynamic link = directory.ParseName(fileName);
+
+            dynamic verbs = link.Verbs();
+            for (int i = 0; i < verbs.Count(); i++)
+            {
+                dynamic verb = verbs.Item(i);
+                string verbName = verb.Name.Replace(@"&", string.Empty).ToLower();
+
+                if (IsPinnedToTaskbar && (verbName.Equals("unpin from taskbar") || (verbName.Contains("tálcán") && verbName.Contains("feloldása"))  ))
+                {
+
+                    verb.DoIt();
+                }
+            }
+
+            shellApplication = null;
+        }
     }
 }
