@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="MainWindow" Height="500" Width="700" ResizeMode="CanMinimize">
+        Title="Portable Wizard" Height="500" Width="700" ResizeMode="CanMinimize">
 
     <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
         
@@ -216,7 +216,8 @@
                 <GroupBox Header="File extensions" Width="325" HorizontalAlignment="Right">
                     <xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox"
                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                       ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                       ItemSelectionChanged="FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged">
                         <xctk:CheckListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}" />

@@ -94,13 +94,28 @@ namespace PortableWizard
 		private void FileExtensionChooserProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			
-			List<string> extensions = null;
+			List<string> supportedExtensions = null;
+			List<string> handledExtensions = null;
 			if (FileExtensionChooserProgramsListBox.Items.Count > 0)
 			{
 				var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
-				extensions = selectedApplication.SupportedFileExtensions;
+				supportedExtensions = selectedApplication.SupportedFileExtensions;
+				handledExtensions = selectedApplication.HandledFileExtensions;
 			}
-			FileExtensionChooserExtensionsCheckListBox.ItemsSource = extensions;
+			FileExtensionChooserExtensionsCheckListBox.ItemsSource = supportedExtensions;
+			FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = handledExtensions;
+		}
+
+		private void FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
+			string[] selectedItems = new string[FileExtensionChooserExtensionsCheckListBox.SelectedItems.Count];
+			FileExtensionChooserExtensionsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			selectedApplication.HandledFileExtensions = new List<string>();
+			foreach (var extension in selectedItems)
+			{
+				selectedApplication.HandledFileExtensions.Add((string)extension);
+			}
 		}
 
         private void CreateIcon_Click(object sender, RoutedEventArgs e)
@@ -131,6 +146,8 @@ namespace PortableWizard
         {
             AppManager.unPinShortcutsToTaskBar();
         }
+
+		
 
     }
 }

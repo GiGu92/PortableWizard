@@ -46,6 +46,8 @@ namespace PortableWizard.Model
                 SupportedFileExtensions.AddRange(associations.Split(','));
             }
 
+			HandledFileExtensions = new List<string>();
+
             FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
             if (iconPath.Exists)
             {
