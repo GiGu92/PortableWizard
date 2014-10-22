@@ -19,6 +19,7 @@ namespace PortableWizard
         public ApplicationManager()
         {
             ApplicationList = new ObservableCollection<Application>();
+			SelectedApplicationList = new ObservableCollection<Application>();
         }
 
         public void SetApplicationList(string AppsPath)
@@ -109,7 +110,7 @@ namespace PortableWizard
             }
         }
 
-        public void UnPinShortcutsToTaskBar()
+        public void UnPinShortcutsFromTaskBar()
         {
 			foreach (var app in SelectedApplicationList)
             {

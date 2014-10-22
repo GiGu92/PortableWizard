@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace PortableWizard
 
         private void UninstallButton_Click(object sender, RoutedEventArgs e)
         {
-
+			Wizard.CurrentPage = UninstallAppChooser;
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -164,10 +165,92 @@ namespace PortableWizard
 
         private void UnPinFromTask_Click(object sender, RoutedEventArgs e)
         {
-            appManager.UnPinShortcutsToTaskBar();
+            appManager.UnPinShortcutsFromTaskBar();
 		}
 
 		#endregion
 
+		#region UninstallAppChooser
+
+		private void UninstallAppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			appManager.SetApplicationList(UninstallAppChooserAppsPathTextBox.Text);
+			UninstallAppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
+		}
+
+		private void UninstallAppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+			FolderBrowserDialog dlg = new FolderBrowserDialog();
+			var result = dlg.ShowDialog();
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				UninstallAppChooserAppsPathTextBox.Text = dlg.SelectedPath;
+			}
+		}
+
+		private void UninstallAppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[UninstallAppChooserAppsCheckListBox.SelectedItems.Count];
+			UninstallAppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			appManager.SelectedApplicationList = new ObservableCollection<PortableWizard.Model.Application>(selectedItems);
+		}
+
+		private void UninstallAppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			UninstallAppChooserAppsCheckListBox.SelectedItemsOverride = UninstallAppChooserAppsCheckListBox.Items;
+		}
+
+		private void UninstallAppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			UninstallAppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+		}
+
+		#endregion
+
+		private void UninstallProgressPage_Enter(object sender, RoutedEventArgs e)
+		{
+			UninstallProgressPage.Description = "Deleting shortcuts from desktop...";
+
+			BackgroundWorker worker = new BackgroundWorker();
+			worker.WorkerReportsProgress = true;
+			worker.DoWork += worker_DoWork;
+			worker.ProgressChanged += worker_ProgressChanged;
+
+			worker.RunWorkerAsync();
+		}
+
+		private void worker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			appManager.DeleteShortcuts();
+			//System.Threading.Thread.Sleep(1000);
+			(sender as BackgroundWorker).ReportProgress(33);
+
+			appManager.DeleteStartMenuShortcuts();
+			//System.Threading.Thread.Sleep(1000);
+			(sender as BackgroundWorker).ReportProgress(66);
+			
+			appManager.UnPinShortcutsFromTaskBar();
+			//System.Threading.Thread.Sleep(1000);
+			(sender as BackgroundWorker).ReportProgress(100);			
+		}
+
+		void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			switch (e.ProgressPercentage)
+			{
+				case 33:
+					UninstallProgressPage.Description = "Deleting shortcuts from start menu...";
+					break;
+				case 66:
+					UninstallProgressPage.Description = "Unpinning shortcuts from taskbar";
+					break;
+				case 100:
+					UninstallProgressPage.Description = "Finished!";
+					UninstallProgressPage.CanFinish = true;
+					break;
+			}
+
+			UninstallProgressPageProgressBar.Value = e.ProgressPercentage;
+		}
 	}
 }
