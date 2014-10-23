@@ -105,6 +105,19 @@ namespace PortableWizard
 		#endregion
 
 		#region ShortcutsChooser
+
+        public bool IsStartMenuPinSupported
+        {
+            get
+            {
+                string ver = Environment.OSVersion.VersionString;
+                if (Environment.OSVersion.Version.Major >= 6)
+                    if (Environment.OSVersion.Version.Minor >= 2)
+                        return true;
+                return false;
+            }
+        }
+
 		#endregion
 
 		#region StartupChooser
@@ -168,6 +181,31 @@ namespace PortableWizard
             appManager.UnPinShortcutsFromTaskBar();
 		}
 
+        private void PinToStart_Click(object sender, RoutedEventArgs e)
+        {
+            appManager.PinShortcutsToStart();
+        }
+
+        private void UnPinFromStart_Click(object sender, RoutedEventArgs e)
+        {
+            appManager.UnPinShortcutsFromStart();
+        }
+
+        private void Windetect_Click(object sender, RoutedEventArgs e)
+        {
+            bool x = IsStartMenuPinSupported;
+        }
+
+        private void AddToAutostart_Click(object sender, RoutedEventArgs e)
+        {
+            appManager.AddToAutostart();
+        }
+
+        private void DeleteFromAutostart_Click(object sender, RoutedEventArgs e)
+        {
+            appManager.DeleteFromAutostart();
+        }
+
 		#endregion
 
 		#region UninstallAppChooser
@@ -177,7 +215,6 @@ namespace PortableWizard
 			appManager.SetApplicationList(UninstallAppChooserAppsPathTextBox.Text);
 			UninstallAppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
 		}
-
 		private void UninstallAppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
 		{
 			FolderBrowserDialog dlg = new FolderBrowserDialog();
@@ -207,7 +244,8 @@ namespace PortableWizard
 
 		#endregion
 
-		private void UninstallProgressPage_Enter(object sender, RoutedEventArgs e)
+        #region UninstallProcessing
+        private void UninstallProgressPage_Enter(object sender, RoutedEventArgs e)
 		{
 			UninstallProgressPage.Description = "Deleting shortcuts from desktop...";
 
@@ -251,6 +289,11 @@ namespace PortableWizard
 			}
 
 			UninstallProgressPageProgressBar.Value = e.ProgressPercentage;
-		}
-	}
+        }
+        #endregion UninstallProcessing
+
+
+
+        
+    }
 }

@@ -4,6 +4,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="Portable Wizard" Height="500" Width="700" ResizeMode="CanMinimize">
 
+    
     <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
         
         
@@ -244,8 +245,13 @@
                 <Button x:Name="DeleteIcon" Click="DeleteIcon_Click" Width="80" Margin="10,0,0,0">Delete Icon</Button>
                 <Button x:Name="CreateStartMenuIcon" Click="CreateStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Create STMenu Icon</Button>
                 <Button x:Name="DeleteStartMenuIcon" Click="DeleteStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Delete STMenu Icon</Button>
-                <Button x:Name="PinToTask" Click="PinToTask_Click" Width="80" Margin="10,0,0,0">Pin Icon</Button>
-                <Button x:Name="UnPinFromTask" Click="UnPinFromTask_Click" Width="80" Margin="10,0,0,0">UnPin Icon</Button>
+                <Button x:Name="PinToTask" Click="PinToTask_Click" Width="80" Margin="10,0,0,0">Pin Task</Button>
+                <Button x:Name="UnPinFromTask" Click="UnPinFromTask_Click" Width="80" Margin="10,0,0,0">UnPin Task</Button>
+                <Button x:Name="PinToStart" Click="PinToStart_Click" Width="80" Margin="10,0,0,0">Pin Start</Button>
+                <Button x:Name="UnPinFromStart" Click="UnPinFromStart_Click" Width="80" Margin="10,0,0,0">UnPin Start</Button>
+                <Button x:Name="AddToAutostart" Click="AddToAutostart_Click" Width="80" Margin="10,0,0,0">Add to autostart</Button>
+                <Button x:Name="DeleteFromAutostart" Click="DeleteFromAutostart_Click" Width="80" Margin="10,0,0,0">Delete from autostart</Button>
+                <Button x:Name="Windetect" Click="Windetect_Click" Width="80" Margin="10,0,0,0">Win Detect</Button>
 
             </StackPanel>
         </xctk:WizardPage>

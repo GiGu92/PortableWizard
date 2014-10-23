@@ -103,7 +103,7 @@ namespace PortableWizard
         {
 			foreach (var app in SelectedApplicationList)
             {
-                if (app.IsStartMenuShortcut)
+                if (app.IsPinnedToTaskbar)
                 {
                     app.PinShortcutToTaskBar();
                 }
@@ -114,12 +114,56 @@ namespace PortableWizard
         {
 			foreach (var app in SelectedApplicationList)
             {
-                if (app.IsStartMenuShortcut)
+                if (app.IsPinnedToTaskbar)
                 {
-                    app.UnPinShortcutToTaskBar();
+                    app.UnPinShortcutFromTaskBar();
                 }
             }
         }
 
+        public void PinShortcutsToStart()
+        {
+            foreach (var app in SelectedApplicationList)
+            {
+                if (app.IsPinnedToStart)
+                {
+                    app.PinShortcutToStart();
+                }
+            }
+        }
+
+        public void UnPinShortcutsFromStart()
+        {
+            foreach (var app in SelectedApplicationList)
+            {
+                if (app.IsPinnedToStart)
+                {
+                    app.UnPinShortcutFromStart();
+                }
+            }
+        }
+
+
+        internal void AddToAutostart()
+        {
+            foreach (var app in SelectedApplicationList)
+            {
+                if (app.IsStartup)
+                {
+                    app.AddToAutostart();
+                }
+            }
+        }
+
+        internal void DeleteFromAutostart()
+        {
+            foreach (var app in SelectedApplicationList)
+            {
+                if (app.IsStartup)
+                {
+                    app.DeleteFromAutostart();
+                }
+            }
+        }
     }
 }

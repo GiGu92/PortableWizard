@@ -58,23 +58,7 @@ namespace PortableWizard.Model
         public void AddShortcutToDesktop()
         {
             string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
-            IniFile iniFile = new IniFile(ConfigFile.FullName);
-            string appexe = iniFile.IniReadValue("Control", "Start");
-            FileInfo appPath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\"+appexe);
-
-            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + Name + ".url"))
-            {
-                writer.WriteLine("[InternetShortcut]");
-                writer.WriteLine("URL=file:///" + appPath.FullName.Replace("\\", "/"));
-                writer.WriteLine("IconIndex=0");
-
-                FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon.ico");
-                string icon = iconPath.FullName;
-
-                writer.WriteLine("IconFile=" + icon);
-                writer.Flush();
-            }
+            createShortcut(deskDir + "\\" + Name + ".url");
         }
 
         public void DeleteShortcutFromDesktop()
@@ -92,13 +76,71 @@ namespace PortableWizard.Model
             {
                 startPath.Create();
             }
+            createShortcut(startDir + "\\" + Name + ".url");
 
+        }
 
+        public void DeleteShortcutFromStartMenu()
+        {
+            string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
+            DirectoryInfo startPath = new DirectoryInfo(startDir);
+            if (startPath.Exists)
+            {
+                startPath.Delete(true);
+            }
+        }
+
+        public void PinShortcutToTaskBar()
+        {
+            PinToWindows(true, true);
+        }
+
+        public void UnPinShortcutFromTaskBar()
+        {
+            PinToWindows(true, false);
+        }
+
+        public void PinShortcutToStart()
+        {
+            PinToWindows(false, true);
+        }
+
+        public void UnPinShortcutFromStart()
+        {
+            PinToWindows(false, false);
+        }
+
+        public void DeleteFromAutostart()
+        {
+            string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            startDir += @"\Microsoft\Windows\Start Menu\Programs\Startup\" + Name + ".url";
+            FileInfo fileshortcut = new FileInfo(startDir);
+            if (fileshortcut.Exists)
+            {
+                fileshortcut.Delete();
+            }
+        }
+
+        public void AddToAutostart()
+        {
+            string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            startDir += @"\Microsoft\Windows\Start Menu\Programs\Startup";
+            DirectoryInfo startPath = new DirectoryInfo(startDir);
+            if (!startPath.Exists)
+            {
+                startPath.Create();
+            }
+            createShortcut(startDir + "\\" + Name + ".url");   
+        }
+
+        private void createShortcut(string fullpath)
+        {
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             string appexe = iniFile.IniReadValue("Control", "Start");
             FileInfo appPath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe);
 
-            using (StreamWriter writer = new StreamWriter(startDir + "\\" + Name + ".url"))
+            using (StreamWriter writer = new StreamWriter(fullpath))
             {
                 writer.WriteLine("[InternetShortcut]");
                 writer.WriteLine("URL=file:///" + appPath.FullName.Replace("\\", "/"));
@@ -112,48 +154,12 @@ namespace PortableWizard.Model
             }
         }
 
-        public void DeleteShortcutFromStartMenu()
-        {
-            string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
-            DirectoryInfo startPath = new DirectoryInfo(startDir);
-            startPath.Delete(true);
-        }
-
-        public void PinShortcutToTaskBar()
-        {
-            IniFile iniFile = new IniFile(ConfigFile.FullName);
-            string appexe = iniFile.IniReadValue("Control", "Start");
-            string filePath=new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe).FullName;
-
-            if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
-
-            // create the shell application object
-            dynamic shellApplication = Activator.CreateInstance(Type.GetTypeFromProgID("Shell.Application"));
-
-            string path = Path.GetDirectoryName(filePath);
-            string fileName = Path.GetFileName(filePath);
-
-            dynamic directory = shellApplication.NameSpace(path);
-            dynamic link = directory.ParseName(fileName);
-
-            dynamic verbs = link.Verbs();
-            for (int i = 0; i < verbs.Count(); i++)
-            {
-                dynamic verb = verbs.Item(i);
-                string verbName = verb.Name.Replace(@"&", string.Empty).ToLower();
-
-                if (IsPinnedToTaskbar && (verbName.Equals("pin to taskbar") || (verbName.Contains("tálcán") && verbName.Contains("rögzítés"))))
-                {
-
-                    verb.DoIt();
-                }
-            }
-
-            shellApplication = null;
-        }
-
-        public void UnPinShortcutToTaskBar()
+        /// <summary>
+        /// This method pin/unpin the application to the taskbar or the StartMenu.
+        /// </summary>
+        /// <param name="TaskBar_StartMenu">If true; pin to taskbar. If false; pin to start menu.</param>
+        /// <param name="Pin_UnPin">If true; pin. If false; unpin.</param>
+        private void PinToWindows(bool TaskBar_StartMenu,bool  Pin_UnPin)
         {
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             string appexe = iniFile.IniReadValue("Control", "Start");
@@ -176,14 +182,112 @@ namespace PortableWizard.Model
                 dynamic verb = verbs.Item(i);
                 string verbName = verb.Name.Replace(@"&", string.Empty).ToLower();
 
-                if (IsPinnedToTaskbar && (verbName.Equals("unpin from taskbar") || (verbName.Contains("tálcán") && verbName.Contains("feloldása"))  ))
+                //taskbar
+                if (TaskBar_StartMenu)
                 {
-
-                    verb.DoIt();
+                    //pin
+                    if (Pin_UnPin)
+                    {
+                        if (IsTaskbarPinItem(verbName))
+                        {
+                            verb.DoIt();
+                        }
+                    }
+                    //unpin
+                    else
+                    {
+                        if (IsTaskbarUnPinItem(verbName))
+                        {
+                            verb.DoIt();
+                        }
+                    }
+                }
+                //start menu
+                else
+                {
+                    //pin
+                    if (Pin_UnPin)
+                    {
+                        if (IsStartMenuPinItem(verbName))
+                        {
+                            verb.DoIt();
+                        }
+                    }
+                    //unpin
+                    else
+                    {
+                        if (IsStartMenuUnPinItem(verbName))
+                        {
+                            verb.DoIt();
+                        }
+                    }
                 }
             }
 
             shellApplication = null;
         }
+
+        private bool IsTaskbarPinItem(string verbName)
+        {
+            //English locale
+            if (verbName.Equals("pin to taskbar"))
+            {
+                return true;
+            }
+            //Hungarian locale
+            if (verbName.Contains("tálcán") && verbName.Contains("rögzítés"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        private bool IsTaskbarUnPinItem(string verbName)
+        {
+            //English locale
+            if (verbName.Equals("unpin from taskbar"))
+            {
+                return true;
+            }
+            //Hungarian locale
+            if (verbName.Contains("tálcán") && verbName.Contains("feloldása"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        private bool IsStartMenuPinItem(string verbName)
+        {
+            //English locale
+            if (verbName.Equals("pin to Start"))
+            {
+                return true;
+            }
+            //Hungarian locale
+            if (verbName.Contains("Start") && verbName.Contains("rögzítés"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        private bool IsStartMenuUnPinItem(string verbName)
+        {
+            //English locale
+            if (verbName.Equals("unpin from Start"))
+            {
+                return true;
+            }
+            //Hungarian locale
+            if (verbName.Contains("Start") && verbName.Contains("feloldása"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        
     }
 }
