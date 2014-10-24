@@ -253,6 +253,9 @@
                 <Button x:Name="DeleteFromAutostart" Click="DeleteFromAutostart_Click" Width="80" Margin="10,0,0,0">Delete from autostart</Button>
                 <Button x:Name="Windetect" Click="Windetect_Click" Width="80" Margin="10,0,0,0">Win Detect</Button>
 
+                <Button x:Name="AddFileAssoc" Click="AddFileAssoc_Click" Width="80" Margin="10,0,0,0">Add file association</Button>
+                <Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
+                <Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
             </StackPanel>
         </xctk:WizardPage>
 

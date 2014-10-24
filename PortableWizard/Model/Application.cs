@@ -1,4 +1,5 @@
-﻿using PortableWizard.Toolkit;
+﻿using Microsoft.Win32;
+using PortableWizard.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -286,6 +287,89 @@ namespace PortableWizard.Model
             }
 
             return false;
+        }
+
+        public void TakeToRegistry(string ext)
+        {
+            if (!ext.StartsWith(".")) ext = "." + ext;
+
+            IniFile iniFile = new IniFile(ConfigFile.FullName);
+            RegistryKey key;
+            key = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("Classes", RegistryKeyPermissionCheck.ReadWriteSubTree);
+            string[] subkeys=key.GetSubKeyNames();
+
+            string appId=iniFile.IniReadValue("Details", "AppID");
+
+            bool foundApp = false;
+            bool foundExt = false;
+            foreach (var keyname in subkeys)
+            {
+                if (keyname == appId)
+                    foundApp = true;
+                if (keyname == ext)
+                    foundExt = true;
+            }
+            if (!foundApp)
+            {
+                string assoc = iniFile.IniReadValue("Associations", "FileTypeCommandLine");
+                string exec = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + iniFile.IniReadValue("Control", "Start")).FullName;
+
+                if (assoc == "") assoc = "\"%1\"";
+
+                key.CreateSubKey(appId);
+                RegistryKey appkey = key.OpenSubKey(appId, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                appkey.SetValue("",Name);
+                appkey.CreateSubKey("DefaultIcon");
+                appkey.OpenSubKey("DefaultIcon", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", "\""+exec+"\",0");
+                appkey.CreateSubKey("shell");
+                appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", "open");
+                appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).CreateSubKey("open");
+                appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("open", RegistryKeyPermissionCheck.ReadWriteSubTree).CreateSubKey("command");
+                appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("open", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("command", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", "\"" + exec + "\" " + assoc);
+                appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("open", RegistryKeyPermissionCheck.ReadWriteSubTree).CreateSubKey("ddeexec");
+                appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("open", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("ddeexec", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", "");
+            }
+
+            if (foundExt) {
+                key.DeleteSubKeyTree(ext);
+            }
+
+            key.CreateSubKey(ext);
+            key.OpenSubKey(ext, RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", appId);
+
+        }
+
+        public void DeleteFromRegistry(string ext)
+        {
+            if (!ext.StartsWith(".")) ext = "." + ext;
+
+            IniFile iniFile = new IniFile(ConfigFile.FullName);
+            RegistryKey key;
+            key = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("Classes", RegistryKeyPermissionCheck.ReadWriteSubTree);
+            string[] subkeys = key.GetSubKeyNames();
+
+            string appId = iniFile.IniReadValue("Details", "AppID");
+
+            bool foundApp = false;
+            bool foundExt = false;
+            foreach (var keyname in subkeys)
+            {
+                if (keyname == appId)
+                    foundApp = true;
+                if (keyname == ext)
+                    foundExt = true;
+            }
+            //??? ez picit túllövés, mert ha lecsatlakoztatok egyet, akkor teljesen szétesik...
+            if (foundApp)
+            {
+                key.DeleteSubKeyTree(appId);
+            }
+
+            if (foundExt)
+            {
+                key.DeleteSubKeyTree(ext);
+            }
+
         }
 
         

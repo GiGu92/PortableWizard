@@ -144,7 +144,7 @@ namespace PortableWizard
         }
 
 
-        internal void AddToAutostart()
+        public void AddToAutostart()
         {
             foreach (var app in SelectedApplicationList)
             {
@@ -155,13 +155,41 @@ namespace PortableWizard
             }
         }
 
-        internal void DeleteFromAutostart()
+        public void DeleteFromAutostart()
         {
             foreach (var app in SelectedApplicationList)
             {
                 if (app.IsStartup)
                 {
                     app.DeleteFromAutostart();
+                }
+            }
+        }
+
+        public void AddFileAssoc()
+        {
+            foreach (var app in SelectedApplicationList)
+            {
+                if (app.HandledFileExtensions.Count>0)
+                {
+                    foreach (var ext in app.HandledFileExtensions)
+                    {
+                        app.TakeToRegistry(ext);
+                    }
+                }
+            }
+        }
+
+        public void DeleteFileAssoc()
+        {
+            foreach (var app in SelectedApplicationList)
+            {
+                if (app.HandledFileExtensions.Count > 0)
+                {
+                    foreach (var ext in app.HandledFileExtensions)
+                    {
+                        app.DeleteFromRegistry(ext);
+                    }
                 }
             }
         }

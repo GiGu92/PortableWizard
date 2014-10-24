@@ -28,6 +28,8 @@ namespace PortableWizard
     public partial class MainWindow : Window
     {
         private ApplicationManager appManager;
+
+        #region Load
         private int xceedLoadEvents = 0;
 
         public MainWindow()
@@ -68,6 +70,7 @@ namespace PortableWizard
             //Return the loaded assembly.
             return MyAssembly;
         }
+        #endregion Load
 
         #region IntroPage
 
@@ -241,6 +244,20 @@ namespace PortableWizard
         {
             appManager.DeleteFromAutostart();
         }
+        private void AddFileAssoc_Click(object sender, RoutedEventArgs e)
+        {
+            appManager.AddFileAssoc();
+        }
+
+        private void DeleteFileAssoc_Click(object sender, RoutedEventArgs e)
+        {
+            appManager.DeleteFileAssoc();
+        }
+
+        private void RestartExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            Toolkit.WinProcessRestarter.KillProcess("explorer.exe");
+        }
 
         #endregion
 
@@ -327,6 +344,8 @@ namespace PortableWizard
             UninstallProgressPageProgressBar.Value = e.ProgressPercentage;
         }
         #endregion UninstallProcessing
+
+       
 
 
 
