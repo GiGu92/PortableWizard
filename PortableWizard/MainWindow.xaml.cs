@@ -130,7 +130,10 @@ namespace PortableWizard
 
         private void AppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
         {
-            AppChooserAppsCheckListBox.SelectedItemsOverride = AppChooserAppsCheckListBox.Items;
+			Object[] items = new Object[AppChooserAppsCheckListBox.Items.Count];
+			AppChooserAppsCheckListBox.Items.CopyTo(items, 0);
+			ObservableCollection<Object> itemsCollection = new ObservableCollection<object>(items);
+			AppChooserAppsCheckListBox.SelectedItemsOverride = itemsCollection;
         }
 
         private void AppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
