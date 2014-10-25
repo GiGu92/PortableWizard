@@ -65,8 +65,6 @@ namespace PortableWizard
                 MyAssembly = Assembly.LoadFrom(strTempAssmbPath);
             }
 
-
-
             //Return the loaded assembly.
             return MyAssembly;
         }
@@ -145,19 +143,6 @@ namespace PortableWizard
         #endregion
 
         #region ShortcutsChooser
-
-        public bool IsStartMenuPinSupported
-        {
-            get
-            {
-                string ver = Environment.OSVersion.VersionString;
-                if (Environment.OSVersion.Version.Major >= 6)
-                    if (Environment.OSVersion.Version.Minor >= 2)
-                        return true;
-                return false;
-            }
-        }
-
         #endregion
 
         #region StartupChooser
@@ -236,7 +221,7 @@ namespace PortableWizard
 
         private void Windetect_Click(object sender, RoutedEventArgs e)
         {
-            bool x = IsStartMenuPinSupported;
+            bool x = appManager.IsPinToStartSupported;
         }
 
         private void AddToAutostart_Click(object sender, RoutedEventArgs e)

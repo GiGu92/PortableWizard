@@ -16,6 +16,17 @@ namespace PortableWizard
         public ObservableCollection<Application> ApplicationList { get; set; }
 		public ObservableCollection<Application> SelectedApplicationList { get; set; }
 
+		public bool IsPinToStartSupported
+		{
+			get
+			{
+				if (Environment.OSVersion.Version.Major >= 6)
+					if (Environment.OSVersion.Version.Minor >= 2)
+						return true;
+				return false;
+			}
+		}
+
         public ApplicationManager()
         {
             ApplicationList = new ObservableCollection<Application>();

@@ -112,6 +112,144 @@ namespace PortableWizard.Model
             PinToWindows(false, false);
         }
 
+		/// <summary>
+		/// This method pin/unpin the application to the taskbar or the StartMenu.
+		/// </summary>
+		/// <param name="TaskBar_StartMenu">If true; pin to taskbar. If false; pin to start menu.</param>
+		/// <param name="Pin_UnPin">If true; pin. If false; unpin.</param>
+		private void PinToWindows(bool TaskBar_StartMenu, bool Pin_UnPin)
+		{
+			IniFile iniFile = new IniFile(ConfigFile.FullName);
+			string appexe = iniFile.IniReadValue("Control", "Start");
+			string filePath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe).FullName;
+
+			if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
+
+			// create the shell application object
+			dynamic shellApplication = Activator.CreateInstance(Type.GetTypeFromProgID("Shell.Application"));
+
+			string path = Path.GetDirectoryName(filePath);
+			string fileName = Path.GetFileName(filePath);
+
+			dynamic directory = shellApplication.NameSpace(path);
+			dynamic link = directory.ParseName(fileName);
+
+			dynamic verbs = link.Verbs();
+			for (int i = 0; i < verbs.Count(); i++)
+			{
+				dynamic verb = verbs.Item(i);
+				string verbName = verb.Name.Replace(@"&", string.Empty).ToLower();
+
+				//taskbar
+				if (TaskBar_StartMenu)
+				{
+					//pin
+					if (Pin_UnPin)
+					{
+						if (IsTaskbarPinItem(verbName))
+						{
+							verb.DoIt();
+						}
+					}
+					//unpin
+					else
+					{
+						if (IsTaskbarUnPinItem(verbName))
+						{
+							verb.DoIt();
+						}
+					}
+				}
+				//start menu
+				else
+				{
+					//pin
+					if (Pin_UnPin)
+					{
+						if (IsStartPinItem(verbName))
+						{
+							verb.DoIt();
+						}
+					}
+					//unpin
+					else
+					{
+						if (IsStartUnPinItem(verbName))
+						{
+							verb.DoIt();
+						}
+					}
+				}
+			}
+
+			shellApplication = null;
+		}
+
+		#region PinToWindows helper methods
+
+		private bool IsTaskbarPinItem(string verbName)
+		{
+			//English locale
+			if (verbName.Equals("pin to taskbar"))
+			{
+				return true;
+			}
+			//Hungarian locale
+			if (verbName.Contains("tálcán") && verbName.Contains("rögzítés"))
+			{
+				return true;
+			}
+
+			return false;
+		}
+		private bool IsTaskbarUnPinItem(string verbName)
+		{
+			//English locale
+			if (verbName.Equals("unpin from taskbar"))
+			{
+				return true;
+			}
+			//Hungarian locale
+			if (verbName.Contains("tálcán") && verbName.Contains("feloldása"))
+			{
+				return true;
+			}
+
+			return false;
+		}
+		private bool IsStartPinItem(string verbName)
+		{
+			//English locale
+			if (verbName.Equals("pin to Start"))
+			{
+				return true;
+			}
+			//Hungarian locale
+			if (verbName.Contains("Start") && verbName.Contains("rögzítés"))
+			{
+				return true;
+			}
+
+			return false;
+		}
+		private bool IsStartUnPinItem(string verbName)
+		{
+			//English locale
+			if (verbName.Equals("unpin from Start"))
+			{
+				return true;
+			}
+			//Hungarian locale
+			if (verbName.Contains("Start") && verbName.Contains("feloldása"))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		#endregion
+
         public void DeleteFromAutostart()
         {
             string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -153,140 +291,6 @@ namespace PortableWizard.Model
                 writer.WriteLine("IconFile=" + icon);
                 writer.Flush();
             }
-        }
-
-        /// <summary>
-        /// This method pin/unpin the application to the taskbar or the StartMenu.
-        /// </summary>
-        /// <param name="TaskBar_StartMenu">If true; pin to taskbar. If false; pin to start menu.</param>
-        /// <param name="Pin_UnPin">If true; pin. If false; unpin.</param>
-        private void PinToWindows(bool TaskBar_StartMenu,bool  Pin_UnPin)
-        {
-            IniFile iniFile = new IniFile(ConfigFile.FullName);
-            string appexe = iniFile.IniReadValue("Control", "Start");
-            string filePath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe).FullName;
-
-            if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
-
-            // create the shell application object
-            dynamic shellApplication = Activator.CreateInstance(Type.GetTypeFromProgID("Shell.Application"));
-
-            string path = Path.GetDirectoryName(filePath);
-            string fileName = Path.GetFileName(filePath);
-
-            dynamic directory = shellApplication.NameSpace(path);
-            dynamic link = directory.ParseName(fileName);
-
-            dynamic verbs = link.Verbs();
-            for (int i = 0; i < verbs.Count(); i++)
-            {
-                dynamic verb = verbs.Item(i);
-                string verbName = verb.Name.Replace(@"&", string.Empty).ToLower();
-
-                //taskbar
-                if (TaskBar_StartMenu)
-                {
-                    //pin
-                    if (Pin_UnPin)
-                    {
-                        if (IsTaskbarPinItem(verbName))
-                        {
-                            verb.DoIt();
-                        }
-                    }
-                    //unpin
-                    else
-                    {
-                        if (IsTaskbarUnPinItem(verbName))
-                        {
-                            verb.DoIt();
-                        }
-                    }
-                }
-                //start menu
-                else
-                {
-                    //pin
-                    if (Pin_UnPin)
-                    {
-                        if (IsStartMenuPinItem(verbName))
-                        {
-                            verb.DoIt();
-                        }
-                    }
-                    //unpin
-                    else
-                    {
-                        if (IsStartMenuUnPinItem(verbName))
-                        {
-                            verb.DoIt();
-                        }
-                    }
-                }
-            }
-
-            shellApplication = null;
-        }
-
-        private bool IsTaskbarPinItem(string verbName)
-        {
-            //English locale
-            if (verbName.Equals("pin to taskbar"))
-            {
-                return true;
-            }
-            //Hungarian locale
-            if (verbName.Contains("tálcán") && verbName.Contains("rögzítés"))
-            {
-                return true;
-            }
-
-            return false;
-        }
-        private bool IsTaskbarUnPinItem(string verbName)
-        {
-            //English locale
-            if (verbName.Equals("unpin from taskbar"))
-            {
-                return true;
-            }
-            //Hungarian locale
-            if (verbName.Contains("tálcán") && verbName.Contains("feloldása"))
-            {
-                return true;
-            }
-
-            return false;
-        }
-        private bool IsStartMenuPinItem(string verbName)
-        {
-            //English locale
-            if (verbName.Equals("pin to Start"))
-            {
-                return true;
-            }
-            //Hungarian locale
-            if (verbName.Contains("Start") && verbName.Contains("rögzítés"))
-            {
-                return true;
-            }
-
-            return false;
-        }
-        private bool IsStartMenuUnPinItem(string verbName)
-        {
-            //English locale
-            if (verbName.Equals("unpin from Start"))
-            {
-                return true;
-            }
-            //Hungarian locale
-            if (verbName.Contains("Start") && verbName.Contains("feloldása"))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public void TakeToRegistry(string ext)
