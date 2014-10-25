@@ -145,6 +145,10 @@
                       CanUserResizeRows="False"
                       GridLinesVisibility="None" >
                 
+                <DataGrid.Resources>
+                    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+                </DataGrid.Resources>
+                
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Icon" Width="35" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -156,7 +160,8 @@
                     <DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
                     <DataGridCheckBoxColumn Header="Desktop" Width="*" Binding="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <DataGridCheckBoxColumn Header="Start menu" Width="*" Binding="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <DataGridCheckBoxColumn Header="Pin to Start" Width="*" Binding="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridCheckBoxColumn Header="Pin to Start" Width="*" Binding="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            Visibility="{Binding ElementName=Wizard, Path=IsPinToStartSupported, Converter={StaticResource ResourceKey=BoolToVisibility}}" />
                     <DataGridCheckBoxColumn Header="Pin to taskbar" Width="*" Binding="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </DataGrid.Columns>
                 

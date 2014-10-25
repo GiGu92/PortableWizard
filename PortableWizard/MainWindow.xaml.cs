@@ -54,8 +54,6 @@ namespace PortableWizard
             if (!path.Exists) return null;
             FileInfo[] files = path.GetFiles("Xceed*", SearchOption.AllDirectories);
 
-
-
             Array.Sort(files, (x, y) => x.FullName.Length.CompareTo(y.FullName.Length));
 
             if (xceedLoadEvents < files.Length)
@@ -143,6 +141,18 @@ namespace PortableWizard
         #endregion
 
         #region ShortcutsChooser
+
+		public bool IsPinToStartSupported
+		{
+			get
+			{
+				//if (Environment.OSVersion.Version.Major >= 6)
+				//	if (Environment.OSVersion.Version.Minor >= 2)
+				//		return true;
+				return false;
+			}
+		}
+
         #endregion
 
         #region StartupChooser
@@ -221,7 +231,7 @@ namespace PortableWizard
 
         private void Windetect_Click(object sender, RoutedEventArgs e)
         {
-            bool x = appManager.IsPinToStartSupported;
+            bool x = this.IsPinToStartSupported;
         }
 
         private void AddToAutostart_Click(object sender, RoutedEventArgs e)
