@@ -149,9 +149,9 @@ namespace PortableWizard
 		{
 			get
 			{
-				//if (Environment.OSVersion.Version.Major >= 6)
-				//	if (Environment.OSVersion.Version.Minor >= 2)
-				//		return true;
+				if (Environment.OSVersion.Version.Major >= 6)
+					if (Environment.OSVersion.Version.Minor >= 2)
+						return true;
 				return false;
 			}
 		}
