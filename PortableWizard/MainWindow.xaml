@@ -263,8 +263,8 @@
         <!-- Uninstall Application chooser page -->
         <xctk:WizardPage x:Name="UninstallAppChooser" PageType="Interior"
                          Title="Which apps do you want to uninstall?"
-                         Description="Please choose the folder in which you store your portable apps, then select which of those you want to uninstall!"
-                         NextPage="{Binding ElementName=UninstallSummaryPage}"
+                         Description="Please choose the folder in which you store your portable apps, then select which of those you want to uninstall! Note, that all shortcuts, pins, and file associations of the selected programs will be removed!"
+                         NextPage="{Binding ElementName=UninstallProgressPage}"
                          PreviousPage="{Binding ElementName=IntroPage}">
 
             <Grid>
@@ -319,28 +319,28 @@
             </Grid>
 
         </xctk:WizardPage>
-        
-        <!-- Uninstall Summary page -->
-        <xctk:WizardPage x:Name="UninstallSummaryPage" PageType="Interior"
-                         Title="Summary"
-                         Description="All shortcuts, pins and file associations of the following programs will be removed."
-                         PreviousPage="{Binding ElementName=IntroPage}"
-                         NextPage="{Binding ElementName=UninstallProgressPage}">
-            
-        </xctk:WizardPage>
 
         <!-- Uninstall Progress page -->
         <xctk:WizardPage x:Name="UninstallProgressPage" PageType="Interior"
                          Title="Uninstalling..."
-                         PreviousPage="{Binding ElementName=UninstallSummaryPage}"
+                         PreviousPage="{Binding ElementName=UninstallAppChooser}"
                          CanSelectNextPage="False"
+                         CanSelectPreviousPage="False"
                          CanFinish="False"
                          Enter="UninstallProgressPage_Enter">
             
-            <GroupBox Header="Overall progress" VerticalAlignment="Top">
-                <ProgressBar x:Name="UninstallProgressPageProgressBar" Height="20" />
-            </GroupBox>
-            
+            <StackPanel Orientation="Vertical">
+                <GroupBox Header="Overall progress" VerticalAlignment="Top">
+                    <ProgressBar x:Name="UninstallProgressPageProgressBar" Height="20" />
+                </GroupBox>
+                
+                <GroupBox Header="Log">
+                    <TextBlock x:Name="UninstallProgressPageTextBlock" Height ="270"
+                               ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                               Text="Uninstalling applications..."/>
+                </GroupBox>
+            </StackPanel>
+
         </xctk:WizardPage>
 
     </xctk:Wizard>

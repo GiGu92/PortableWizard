@@ -125,6 +125,7 @@ namespace PortableWizard
             ShortcutsChooserAppsDataGrid.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
             StartupChooserCheckListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
             FileExtensionChooserProgramsListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
+			FileExtensionChooserProgramsListBox.UnselectAll();
 
             PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[AppChooserAppsCheckListBox.SelectedItems.Count];
             AppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
@@ -172,8 +173,11 @@ namespace PortableWizard
             if (FileExtensionChooserProgramsListBox.Items.Count > 0)
             {
                 var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
-                supportedExtensions = selectedApplication.SupportedFileExtensions;
-                handledExtensions = selectedApplication.HandledFileExtensions;
+				if (selectedApplication != null)
+				{
+					supportedExtensions = selectedApplication.SupportedFileExtensions;
+					handledExtensions = selectedApplication.HandledFileExtensions;
+				}
             }
             FileExtensionChooserExtensionsCheckListBox.ItemsSource = supportedExtensions;
             FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = handledExtensions;
@@ -297,11 +301,10 @@ namespace PortableWizard
 
         #endregion
 
-        #region UninstallProcessing
+        #region UninstallProgressPage
+
         private void UninstallProgressPage_Enter(object sender, RoutedEventArgs e)
         {
-            UninstallProgressPage.Description = "Deleting shortcuts from desktop...";
-
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
             worker.DoWork += worker_DoWork;
@@ -313,15 +316,15 @@ namespace PortableWizard
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             appManager.DeleteShortcuts();
-            //System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1000);
             (sender as BackgroundWorker).ReportProgress(33);
 
             appManager.DeleteStartMenuShortcuts();
-            //System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1000);
             (sender as BackgroundWorker).ReportProgress(66);
 
             appManager.UnPinShortcutsFromTaskBar();
-            //System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(1000);
             (sender as BackgroundWorker).ReportProgress(100);
         }
 
@@ -330,25 +333,21 @@ namespace PortableWizard
             switch (e.ProgressPercentage)
             {
                 case 33:
-                    UninstallProgressPage.Description = "Deleting shortcuts from start menu...";
+                    UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from start menu...";
                     break;
                 case 66:
-                    UninstallProgressPage.Description = "Unpinning shortcuts from taskbar";
+					UninstallProgressPageTextBlock.Text += "\n\tUnpinning shortcuts from taskbar...";
                     break;
                 case 100:
-                    UninstallProgressPage.Description = "Finished!";
+					UninstallProgressPageTextBlock.Text += "\nFinished!";
                     UninstallProgressPage.CanFinish = true;
                     break;
             }
 
             UninstallProgressPageProgressBar.Value = e.ProgressPercentage;
         }
+
         #endregion UninstallProcessing
-
-       
-
-
-
 
     }
 }
