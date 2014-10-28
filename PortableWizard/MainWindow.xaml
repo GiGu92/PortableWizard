@@ -61,13 +61,31 @@
             
         </xctk:WizardPage>
         
-        
+        <xctk:WizardPage x:Name="InstallWarningPage" PageType="Exterior"
+                         Title="Please read this before you start!"
+                         Description=""
+                         NextPage="{Binding ElementName=AppChooser}"
+                         PreviousPage="{Binding ElementName=IntroPage}"
+                         HelpButtonVisibility="Hidden">
+            <Label>Wow! Such warrning! Very careful!</Label>
+        </xctk:WizardPage>
+
+        <xctk:WizardPage x:Name="UninstallWarningPage" PageType="Exterior"
+                         Title="Please read this before you start!"
+                         Description=""
+                         NextPage="{Binding ElementName=UninstallAppChooser}"
+                         PreviousPage="{Binding ElementName=IntroPage}"
+                         HelpButtonVisibility="Hidden">
+            <Label>Wow! Such warrning! Very careful!</Label>
+        </xctk:WizardPage>
+
         <!-- Application chooser page -->
         <xctk:WizardPage x:Name="AppChooser" PageType="Interior"
                          Title="Which apps do you want to initialize?"
                          Description="Please choose the folder in which you store your portable apps, then select which of those you want to initialize!"
                          NextPage="{Binding ElementName=ShortcutsChooser}"
-                         PreviousPage="{Binding ElementName=IntroPage}">
+                         PreviousPage="{Binding ElementName=InstallWarningPage}"
+                         HelpButtonVisibility="Hidden">
             
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -136,7 +154,8 @@
                          Title="What shortcuts and pins do you want for your apps?"
                          Description="Please choose whether you want a desktop shortcut, start menu shortcut for each app you selected, and please choose which app do you want to pin to the start page or the taskbar!"
                          NextPage="{Binding ElementName=StartupChooser}"
-                         PreviousPage="{Binding ElementName=AppChooser}">
+                         PreviousPage="{Binding ElementName=AppChooser}"
+                         HelpButtonVisibility="Hidden">
             
             <DataGrid Name="ShortcutsChooserAppsDataGrid"
                       AutoGenerateColumns="False"
@@ -195,7 +214,8 @@
                          Title="What programs do you want to start automatically after Windows starts?"
                          Description="Please choose which apps do you want to start automatically after Windows starts!"
                          NextPage="{Binding ElementName=FileExtensionChooser}"
-                         PreviousPage="{Binding ElementName=ShortcutsChooser}">
+                         PreviousPage="{Binding ElementName=ShortcutsChooser}"
+                         HelpButtonVisibility="Hidden">
             
             <GroupBox Header="Apps starting with Windows">
                 <xctk:CheckListBox x:Name="StartupChooserCheckListBox"
@@ -220,7 +240,8 @@
                          Title="What type of files do you want your apps to open?"
                          Description="Please choose file extensions do you want to link with each of your apps!"
                          NextPage="{Binding ElementName=SummaryPage}"
-                         PreviousPage="{Binding ElementName=StartupChooser}">
+                         PreviousPage="{Binding ElementName=StartupChooser}"
+                         HelpButtonVisibility="Hidden">
             
             <StackPanel Orientation="Horizontal">
                 
@@ -265,7 +286,8 @@
                          Description="Check out your options once more. If you like them, press next!"
                          PreviousPage="{Binding ElementName=FileExtensionChooser}"
                          NextPage="{Binding ElementName=ProgressPage}"
-                         CanFinish="False">
+                         CanFinish="False"
+                         HelpButtonVisibility="Hidden">
             <StackPanel Orientation="Vertical">
                 <Button x:Name="CreateIcon" Click="CreateIcon_Click" Width="80" Margin="10,0,0,0">Create Icon</Button>
                 <Button x:Name="DeleteIcon" Click="DeleteIcon_Click" Width="80" Margin="10,0,0,0">Delete Icon</Button>
@@ -290,7 +312,8 @@
                          CanSelectPreviousPage="False"
                          CanSelectNextPage="False"
                          CanFinish="False"
-                         Enter="ProgressPage_Enter">
+                         Enter="ProgressPage_Enter"
+                         HelpButtonVisibility="Hidden">
             <StackPanel Orientation="Vertical">
                 <GroupBox Header="Overall progress" VerticalAlignment="Top">
                     <ProgressBar x:Name="InstallProgressPageProgressBar" Height="20" />
@@ -310,7 +333,8 @@
                          Title="Which apps do you want to uninstall?"
                          Description="Please choose the folder in which you store your portable apps, then select which of those you want to uninstall! Note, that all shortcuts, pins, and file associations of the selected programs will be removed!"
                          NextPage="{Binding ElementName=UninstallProgressPage}"
-                         PreviousPage="{Binding ElementName=IntroPage}">
+                         PreviousPage="{Binding ElementName=IntroPage}"
+                         HelpButtonVisibility="Hidden">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -372,7 +396,8 @@
                          CanSelectNextPage="False"
                          CanSelectPreviousPage="False"
                          CanFinish="False"
-                         Enter="ProgressPage_Enter">
+                         Enter="ProgressPage_Enter"
+                         HelpButtonVisibility="Hidden">
             
             <StackPanel Orientation="Vertical">
                 <GroupBox Header="Overall progress" VerticalAlignment="Top">

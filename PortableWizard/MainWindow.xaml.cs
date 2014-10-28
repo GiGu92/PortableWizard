@@ -72,12 +72,12 @@ namespace PortableWizard
 
         private void InitializeButton_Click(object sender, RoutedEventArgs e)
         {
-            Wizard.CurrentPage = AppChooser;
+            Wizard.CurrentPage = InstallWarningPage;
         }
 
         private void UninstallButton_Click(object sender, RoutedEventArgs e)
         {
-            Wizard.CurrentPage = UninstallAppChooser;
+            Wizard.CurrentPage = UninstallWarningPage;
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -150,8 +150,8 @@ namespace PortableWizard
             get
             {
                 if (Environment.OSVersion.Version.Major >= 6)
-                	if (Environment.OSVersion.Version.Minor >= 2)
-                		return true;
+                    if (Environment.OSVersion.Version.Minor >= 2)
+                        return true;
                 return false;
             }
         }
@@ -299,7 +299,7 @@ namespace PortableWizard
 
         #endregion
 
-        #region UninstallProgressPage
+        #region ProgressPages
 
         private bool install = true;
 
