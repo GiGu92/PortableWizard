@@ -78,8 +78,27 @@ namespace PortableWizard.Model
                 startPath.Create();
             }
             createShortcut(startDir + "\\" + Name + ".url");
-
         }
+
+		private void createShortcut(string fullpath)
+		{
+			IniFile iniFile = new IniFile(ConfigFile.FullName);
+			string appexe = iniFile.IniReadValue("Control", "Start");
+			FileInfo appPath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe);
+
+			using (StreamWriter writer = new StreamWriter(fullpath))
+			{
+				writer.WriteLine("[InternetShortcut]");
+				writer.WriteLine("URL=file:///" + appPath.FullName.Replace("\\", "/"));
+				writer.WriteLine("IconIndex=0");
+
+				FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon.ico");
+				string icon = iconPath.FullName;
+
+				writer.WriteLine("IconFile=" + icon);
+				writer.Flush();
+			}
+		}
 
         public void DeleteShortcutFromStartMenu()
         {
@@ -271,27 +290,7 @@ namespace PortableWizard.Model
                 startPath.Create();
             }
             createShortcut(startDir + "\\" + Name + ".url");   
-        }
-
-        private void createShortcut(string fullpath)
-        {
-            IniFile iniFile = new IniFile(ConfigFile.FullName);
-            string appexe = iniFile.IniReadValue("Control", "Start");
-            FileInfo appPath = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + appexe);
-
-            using (StreamWriter writer = new StreamWriter(fullpath))
-            {
-                writer.WriteLine("[InternetShortcut]");
-                writer.WriteLine("URL=file:///" + appPath.FullName.Replace("\\", "/"));
-                writer.WriteLine("IconIndex=0");
-
-                FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon.ico");
-                string icon = iconPath.FullName;
-
-                writer.WriteLine("IconFile=" + icon);
-                writer.Flush();
-            }
-        }
+        }        
 
         public void TakeToRegistry(string ext)
         {

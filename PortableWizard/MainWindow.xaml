@@ -1,8 +1,9 @@
-﻿<Window x:Class="PortableWizard.MainWindow"
+﻿<Window x:Name="WizardWindow"
+        x:Class="PortableWizard.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="Portable Wizard" Height="500" Width="700" ResizeMode="CanMinimize">
+        Title="Portable Wizard" Height="500" Width="700" ResizeMode="CanMinimize" Icon="Media/PortableWizard_icon.ico">
 
     
     <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
@@ -33,21 +34,21 @@
                 <Button x:Name="InitializeButton" Grid.Column="0" Grid.Row="0" Margin="20" Width="100" Height="50"
                         Click="InitializeButton_Click" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Icons/Install-icon.png" Height="28" Width="28" Margin="5,0,5,0" />
+                        <Image Source="Media/Buttons/Install-button.png" Height="28" Width="28" Margin="5,0,5,0" />
                         <Label>Initialize</Label>
                     </StackPanel>
                 </Button>
                 <Button x:Name="UninstallButton" Grid.Column="0" Grid.Row="1" Margin="20" Width="100" Height="50"
                         Click="UninstallButton_Click" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Icons/Uninstall-icon.png" Height="28" Width="28" Margin="5,0,5,0" />
+                        <Image Source="Media/Buttons/Uninstall-button.png" Height="28" Width="28" Margin="5,0,5,0" />
                         <Label>Uninstall</Label>
                     </StackPanel>
                 </Button>
                 <Button x:Name="ExitButton" Grid.Column="0" Grid.Row="2" Margin="20" Width="100" Height="50"
                         Click="ExitButton_Click" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Icons/Exit-icon.png" Height="28" Width="28" Margin="5,0,5,0" />
+                        <Image Source="Media/Buttons/Exit-button.png" Height="28" Width="28" Margin="5,0,5,0" />
                         <Label>Exit</Label>
                     </StackPanel>
                 </Button>
@@ -145,10 +146,6 @@
                       CanUserResizeRows="False"
                       GridLinesVisibility="None" >
                 
-                <DataGrid.Resources>
-                    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-                </DataGrid.Resources>
-                
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Icon" Width="35" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -158,11 +155,35 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
-                    <DataGridCheckBoxColumn Header="Desktop" Width="*" Binding="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <DataGridCheckBoxColumn Header="Start menu" Width="*" Binding="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <DataGridCheckBoxColumn Header="Pin to Start" Width="*" Binding="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                            Visibility="{Binding ElementName=Wizard, Path=IsPinToStartSupported, Converter={StaticResource ResourceKey=BoolToVisibility}}" />
-                    <DataGridCheckBoxColumn Header="Pin to taskbar" Width="*" Binding="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTemplateColumn Header="Desktop" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Start menu" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Pin to Start" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Pin to taskbar" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 
             </DataGrid>
