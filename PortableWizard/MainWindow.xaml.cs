@@ -313,6 +313,8 @@ namespace PortableWizard
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
+			(sender as BackgroundWorker).ReportProgress(0);
+
             appManager.DeleteShortcuts();
             System.Threading.Thread.Sleep(1000);
             (sender as BackgroundWorker).ReportProgress(33);
@@ -330,6 +332,9 @@ namespace PortableWizard
         {
             switch (e.ProgressPercentage)
             {
+				case 0:
+					UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from desktop...";
+					break;
                 case 33:
                     UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from start menu...";
                     break;
