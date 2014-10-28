@@ -9,9 +9,10 @@ namespace PortableWizard.Toolkit
 {
     class WinProcessRestarter
     {
-        public static void RestartProcess(string processName){
+        public static void RestartProcess(string processName)
+        {
             foreach (Process p in Process.GetProcesses())
-	        {
+            {
                 try
                 {
                     if (processName.StartsWith(p.ProcessName))
@@ -25,7 +26,7 @@ namespace PortableWizard.Toolkit
                     }
                 }
                 catch { }
-	        }
+            }
         }
         public static void KillProcess(string processName)
         {
@@ -38,6 +39,33 @@ namespace PortableWizard.Toolkit
                         p.Kill();
                         break;
                     }
+                }
+                catch { }
+            }
+        }
+        public static void StartProcessIfNotRunning(string processName)
+        {
+            bool found = false;
+            foreach (Process p in Process.GetProcesses())
+            {
+                try
+                {
+                    if (processName.StartsWith(p.ProcessName))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                catch { }
+            }
+            if (!found)
+            {
+                try
+                {
+                    Process proc = new Process();
+                    proc.StartInfo.FileName = processName;
+                    proc.StartInfo.UseShellExecute = true;
+                    proc.Start();
                 }
                 catch { }
             }

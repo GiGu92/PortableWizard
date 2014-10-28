@@ -241,10 +241,10 @@
         <!-- Summary page -->
         <xctk:WizardPage x:Name="SummaryPage" PageType="Interior"
                          Title="Summary"
-                         Description="Check out your options once more. If you like them, press finish!"
+                         Description="Check out your options once more. If you like them, press next!"
                          PreviousPage="{Binding ElementName=FileExtensionChooser}"
-                         CanSelectNextPage="False"
-                         CanFinish="True">
+                         NextPage="{Binding ElementName=ProgressPage}"
+                         CanFinish="False">
             <StackPanel Orientation="Vertical">
                 <Button x:Name="CreateIcon" Click="CreateIcon_Click" Width="80" Margin="10,0,0,0">Create Icon</Button>
                 <Button x:Name="DeleteIcon" Click="DeleteIcon_Click" Width="80" Margin="10,0,0,0">Delete Icon</Button>
@@ -261,6 +261,25 @@
                 <Button x:Name="AddFileAssoc" Click="AddFileAssoc_Click" Width="80" Margin="10,0,0,0">Add file association</Button>
                 <Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
                 <Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
+            </StackPanel>
+        </xctk:WizardPage>
+        <xctk:WizardPage x:Name="ProgressPage" PageType="Interior"
+                         Title="Installing..."
+                         Description="Please wait while the processes are finishing."
+                         CanSelectPreviousPage="False"
+                         CanSelectNextPage="False"
+                         CanFinish="False"
+                         Enter="ProgressPage_Enter">
+            <StackPanel Orientation="Vertical">
+                <GroupBox Header="Overall progress" VerticalAlignment="Top">
+                    <ProgressBar x:Name="InstallProgressPageProgressBar" Height="20" />
+                </GroupBox>
+
+                <GroupBox Header="Log">
+                    <TextBlock x:Name="InstallProgressPageTextBlock" Height ="270"
+                               ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                               Text="Installing applications..."/>
+                </GroupBox>
             </StackPanel>
         </xctk:WizardPage>
 
@@ -332,7 +351,7 @@
                          CanSelectNextPage="False"
                          CanSelectPreviousPage="False"
                          CanFinish="False"
-                         Enter="UninstallProgressPage_Enter">
+                         Enter="ProgressPage_Enter">
             
             <StackPanel Orientation="Vertical">
                 <GroupBox Header="Overall progress" VerticalAlignment="Top">
