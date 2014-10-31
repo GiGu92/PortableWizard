@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PortableWizard.Toolkit
 {
-    class WinProcessRestarter
+    class WinProcessManager
     {
         public static void RestartProcess(string processName)
         {
@@ -28,6 +28,7 @@ namespace PortableWizard.Toolkit
                 catch { }
             }
         }
+
         public static void KillProcess(string processName)
         {
             foreach (Process p in Process.GetProcesses())
@@ -43,6 +44,7 @@ namespace PortableWizard.Toolkit
                 catch { }
             }
         }
+
         public static void StartProcessIfNotRunning(string processName)
         {
             bool found = false;

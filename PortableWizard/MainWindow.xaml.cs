@@ -156,6 +156,56 @@ namespace PortableWizard
             }
         }
 
+		private void ShortcutsChooserSelectAllButtons_Click(object sender, RoutedEventArgs e)
+		{
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if ((sender.Equals(ShortcutsChooserDesktopSelectAllButton)))
+				{
+					app.IsDesktopShortcut = true;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartMenuSelectAllButton)))
+				{
+					app.IsStartMenuShortcut = true;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartSelectAllButton)))
+				{
+					app.IsPinnedToStart = true;
+				}
+				else if ((sender.Equals(ShortcutsChooserTaskbarSelectAllButton)))
+				{
+					app.IsPinnedToTaskbar = true;
+				}
+			}
+
+			ShortcutsChooserAppsDataGrid.Items.Refresh();
+		}
+
+		private void ShortcutsChooserDeselectAllButtons_Click(object sender, RoutedEventArgs e)
+		{
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if ((sender.Equals(ShortcutsChooserDesktopDeselectAllButton)))
+				{
+					app.IsDesktopShortcut = false;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartMenuDeselectAllButton)))
+				{
+					app.IsStartMenuShortcut = false;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartDeselectAllButton)))
+				{
+					app.IsPinnedToStart = false;
+				}
+				else if ((sender.Equals(ShortcutsChooserTaskbarDeselectAllButton)))
+				{
+					app.IsPinnedToTaskbar = false;
+				}
+			}
+
+			ShortcutsChooserAppsDataGrid.Items.Refresh();
+		}
+
         #endregion
 
         #region StartupChooser
@@ -258,7 +308,7 @@ namespace PortableWizard
 
         private void RestartExplorer_Click(object sender, RoutedEventArgs e)
         {
-            Toolkit.WinProcessRestarter.KillProcess("explorer.exe");
+            Toolkit.WinProcessManager.KillProcess("explorer.exe");
         }
 
         #endregion
@@ -338,11 +388,11 @@ namespace PortableWizard
                 appManager.AddFileAssoc();
 
                 (sender as BackgroundWorker).ReportProgress(98);
-                Toolkit.WinProcessRestarter.KillProcess("explorer.exe");
+                Toolkit.WinProcessManager.KillProcess("explorer.exe");
                 System.Threading.Thread.Sleep(1000);
 
                 (sender as BackgroundWorker).ReportProgress(99);
-                Toolkit.WinProcessRestarter.StartProcessIfNotRunning("explorer.exe");
+                Toolkit.WinProcessManager.StartProcessIfNotRunning("explorer.exe");
 
                 (sender as BackgroundWorker).ReportProgress(100);
 
@@ -428,6 +478,8 @@ namespace PortableWizard
         }
 
         #endregion UninstallProcessing
+
+
 
 
     }
