@@ -209,6 +209,20 @@ namespace PortableWizard
         #endregion
 
         #region StartupChooser
+
+		private void StartupChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			Object[] items = new Object[StartupChooserCheckListBox.Items.Count];
+			StartupChooserCheckListBox.Items.CopyTo(items, 0);
+			ObservableCollection<Object> itemsCollection = new ObservableCollection<object>(items);
+			StartupChooserCheckListBox.SelectedItemsOverride = itemsCollection;
+		}
+
+		private void StartupChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			StartupChooserCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+		}
+
         #endregion
 
         #region FileExtensionChooser
@@ -478,6 +492,8 @@ namespace PortableWizard
         }
 
         #endregion UninstallProcessing
+
+
 
 
 

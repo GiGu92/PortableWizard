@@ -158,7 +158,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 
@@ -252,18 +252,32 @@
                          HelpButtonVisibility="Hidden">
             
             <GroupBox Header="Apps starting with Windows">
-                <xctk:CheckListBox x:Name="StartupChooserCheckListBox"
-                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                           ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <xctk:CheckListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" >
-                                <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </xctk:CheckListBox.ItemTemplate>
-                </xctk:CheckListBox>
+                <Grid>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                
+                    <xctk:CheckListBox x:Name="StartupChooserCheckListBox" Grid.Row="0"
+                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                       ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <xctk:CheckListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </xctk:CheckListBox.ItemTemplate>
+                    </xctk:CheckListBox>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <Button x:Name="StartupChooserSelectAllButton" Click="StartupChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                        <Button x:Name="StartupChooserDeselectAllButton" Click="StartupChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+                    </StackPanel>
+                    
+                </Grid>
             </GroupBox>
             
         </xctk:WizardPage>
