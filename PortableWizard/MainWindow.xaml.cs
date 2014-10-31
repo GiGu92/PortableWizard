@@ -130,15 +130,15 @@ namespace PortableWizard
 
         private void AppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
         {
-            Object[] items = new Object[AppChooserAppsCheckListBox.Items.Count];
+			object[] items = new object[AppChooserAppsCheckListBox.Items.Count];
             AppChooserAppsCheckListBox.Items.CopyTo(items, 0);
-            ObservableCollection<Object> itemsCollection = new ObservableCollection<object>(items);
+			ObservableCollection<object> itemsCollection = new ObservableCollection<object>(items);
             AppChooserAppsCheckListBox.SelectedItemsOverride = itemsCollection;
         }
 
         private void AppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
         {
-            AppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+			AppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
         }
 
         #endregion
@@ -212,15 +212,15 @@ namespace PortableWizard
 
 		private void StartupChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
 		{
-			Object[] items = new Object[StartupChooserCheckListBox.Items.Count];
+			object[] items = new object[StartupChooserCheckListBox.Items.Count];
 			StartupChooserCheckListBox.Items.CopyTo(items, 0);
-			ObservableCollection<Object> itemsCollection = new ObservableCollection<object>(items);
+			ObservableCollection<object> itemsCollection = new ObservableCollection<object>(items);
 			StartupChooserCheckListBox.SelectedItemsOverride = itemsCollection;
 		}
 
 		private void StartupChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
 		{
-			StartupChooserCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+			StartupChooserCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
 		}
 
         #endregion
@@ -252,6 +252,19 @@ namespace PortableWizard
             FileExtensionChooserExtensionsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
             selectedApplication.HandledFileExtensions = new List<string>(selectedItems);
         }
+
+		private void FileExtensionChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			object[] items = new object[FileExtensionChooserExtensionsCheckListBox.Items.Count];
+			FileExtensionChooserExtensionsCheckListBox.Items.CopyTo(items, 0);
+			ObservableCollection<object> itemsCollection = new ObservableCollection<object>(items);
+			FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = itemsCollection;
+		}
+
+		private void FileExtensionChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
+		}
 
         #endregion
 
@@ -492,11 +505,6 @@ namespace PortableWizard
         }
 
         #endregion UninstallProcessing
-
-
-
-
-
 
     }
 }

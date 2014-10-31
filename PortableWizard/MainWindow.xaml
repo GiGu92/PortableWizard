@@ -310,17 +310,30 @@
                 </GroupBox>
 
                 <GroupBox Header="File extensions" Width="325" HorizontalAlignment="Right">
-                    <xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox"
-                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                       ItemSelectionChanged="FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged">
-                        <xctk:CheckListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" />
-                            </DataTemplate>
-                        </xctk:CheckListBox.ItemTemplate>
+                    <Grid>
                         
-                    </xctk:CheckListBox>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        
+                        <xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox" Grid.Row="0"
+                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                           ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                           ItemSelectionChanged="FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged">
+                            <xctk:CheckListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" />
+                                </DataTemplate>
+                            </xctk:CheckListBox.ItemTemplate>                        
+                        </xctk:CheckListBox>
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="1">
+                            <Button x:Name="FileExtensionChooserSelectAllButton" Click="FileExtensionChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                            <Button x:Name="FileExtensionChooserDeselectAllButton" Click="FileExtensionChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+                        </StackPanel>
+                        
+                    </Grid>
                 </GroupBox>
                 
             </StackPanel>

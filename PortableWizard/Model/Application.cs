@@ -46,6 +46,7 @@ namespace PortableWizard.Model
             {
                 SupportedFileExtensions.AddRange(associations.Split(','));
             }
+			SupportedFileExtensions.Sort();
 
 			HandledFileExtensions = new List<string>();
 
