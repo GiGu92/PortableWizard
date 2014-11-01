@@ -46,7 +46,7 @@ namespace PortableWizard.Model
             {
                 SupportedFileExtensions.AddRange(associations.Split(','));
             }
-			SupportedFileExtensions.Sort();
+            SupportedFileExtensions.Sort();
 
             HandledFileExtensions = new List<string>();
 
@@ -198,7 +198,15 @@ namespace PortableWizard.Model
                     {
                         if (IsStartPinItem(verbName))
                         {
-                            verb.DoIt();
+                            string ext = appexe.Split('.')[appexe.Split('.').Length - 1];
+                            string exename = appexe.Substring(0, appexe.LastIndexOf("." + ext));
+                            string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                            startDir += @"\Microsoft\Windows\Start Menu\Programs\" + exename + ".lnk";
+                            FileInfo fileshortcut = new FileInfo(startDir);
+                            if (!fileshortcut.Exists)
+                            {
+                                verb.DoIt();
+                            }
                         }
                     }
                     //unpin
