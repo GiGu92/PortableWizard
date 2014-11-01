@@ -61,6 +61,8 @@
             
         </xctk:WizardPage>
         
+        
+        <!-- Install warning page -->
         <xctk:WizardPage x:Name="InstallWarningPage" PageType="Exterior"
                          Title="Please read this before you start!"
                          Description=""
@@ -69,15 +71,7 @@
                          HelpButtonVisibility="Hidden">
             <Label>Wow! Such warrning! Very careful!</Label>
         </xctk:WizardPage>
-
-        <xctk:WizardPage x:Name="UninstallWarningPage" PageType="Exterior"
-                         Title="Please read this before you start!"
-                         Description=""
-                         NextPage="{Binding ElementName=UninstallAppChooser}"
-                         PreviousPage="{Binding ElementName=IntroPage}"
-                         HelpButtonVisibility="Hidden">
-            <Label>Wow! Such warrning! Very careful!</Label>
-        </xctk:WizardPage>
+        
 
         <!-- Application chooser page -->
         <xctk:WizardPage x:Name="AppChooser" PageType="Interior"
@@ -114,15 +108,12 @@
                 <GroupBox Header="Portable applications found in your folder" Grid.Column="0" Grid.Row="2">
                     <Grid>
                         
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <xctk:CheckListBox Name="AppChooserAppsCheckListBox" Grid.Column="0" Grid.Row="0"
+                        <xctk:CheckListBox Name="AppChooserAppsCheckListBox" Grid.Row="0"
                                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
                                            ItemSelectionChanged="AppChooserAppsCheckListBox_ItemSelectionChanged">
@@ -136,7 +127,7 @@
                             </xctk:CheckListBox.ItemTemplate>
                         </xctk:CheckListBox>
 
-                        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
+                        <StackPanel Orientation="Horizontal" Grid.Row="1">
                             <Button x:Name="AppChooserSelectAllButton" Click="AppChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
                             <Button x:Name="AppChooserDeselectAllButton" Click="AppChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
                         </StackPanel>
@@ -156,56 +147,99 @@
                          NextPage="{Binding ElementName=StartupChooser}"
                          PreviousPage="{Binding ElementName=AppChooser}"
                          HelpButtonVisibility="Hidden">
-            
-            <DataGrid Name="ShortcutsChooserAppsDataGrid"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserResizeColumns="False"
-                      CanUserResizeRows="False"
-                      GridLinesVisibility="None" >
+            <Grid>
                 
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Icon" Width="35" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="10,0,10,0" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
-                    <DataGridTemplateColumn Header="Desktop" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Start menu" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Pin to Start" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Pin to taskbar" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="35" />
+                    <ColumnDefinition Width="3.5*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 
-            </DataGrid>
+                <DataGrid Name="ShortcutsChooserAppsDataGrid"
+                          Grid.ColumnSpan="6"
+                          Grid.Column="0"
+                          Grid.Row="0"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserResizeColumns="False"
+                          CanUserResizeRows="False"
+                          CanUserReorderColumns="False"
+                          GridLinesVisibility="None"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Icon" Width="35" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="10,0,10,0" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
+                        <DataGridTemplateColumn Header="Desktop" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Start menu" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Pin to Start" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Pin to taskbar" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                
+                </DataGrid>
+
+                <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
+                    <Button x:Name="ShortcutsChooserDesktopSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                    <Button x:Name="ShortcutsChooserDesktopDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Column="3" Grid.Row="1">
+                    <Button x:Name="ShortcutsChooserStartMenuSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                    <Button x:Name="ShortcutsChooserStartMenuDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Column="4" Grid.Row="1">
+                    <Button x:Name="ShortcutsChooserStartSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0"
+                            IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Select All</Button>
+                    <Button x:Name="ShortcutsChooserStartDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0"
+                            IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Deselect All</Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Column="5" Grid.Row="1">
+                    <Button x:Name="ShortcutsChooserTaskbarSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                    <Button x:Name="ShortcutsChooserTaskbarDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+                </StackPanel>
+
+            </Grid>
         </xctk:WizardPage>
 
 
@@ -218,18 +252,33 @@
                          HelpButtonVisibility="Hidden">
             
             <GroupBox Header="Apps starting with Windows">
-                <xctk:CheckListBox x:Name="StartupChooserCheckListBox"
-                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                           ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <xctk:CheckListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" >
-                                <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
-                                <TextBlock Text="{Binding Path=Name}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </xctk:CheckListBox.ItemTemplate>
-                </xctk:CheckListBox>
+                <Grid>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                
+                    <xctk:CheckListBox x:Name="StartupChooserCheckListBox" Grid.Row="0"
+                                       ItemSelectionChanged="StartupChooserCheckListBox_ItemSelectionChanged"
+                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                       ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <xctk:CheckListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </xctk:CheckListBox.ItemTemplate>
+                    </xctk:CheckListBox>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <Button x:Name="StartupChooserSelectAllButton" Click="StartupChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                        <Button x:Name="StartupChooserDeselectAllButton" Click="StartupChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+                    </StackPanel>
+                    
+                </Grid>
             </GroupBox>
             
         </xctk:WizardPage>
@@ -262,17 +311,30 @@
                 </GroupBox>
 
                 <GroupBox Header="File extensions" Width="325" HorizontalAlignment="Right">
-                    <xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox"
-                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                       ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                       ItemSelectionChanged="FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged">
-                        <xctk:CheckListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" />
-                            </DataTemplate>
-                        </xctk:CheckListBox.ItemTemplate>
+                    <Grid>
                         
-                    </xctk:CheckListBox>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        
+                        <xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox" Grid.Row="0"
+                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                           ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                           ItemSelectionChanged="FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged">
+                            <xctk:CheckListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" />
+                                </DataTemplate>
+                            </xctk:CheckListBox.ItemTemplate>                        
+                        </xctk:CheckListBox>
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="1">
+                            <Button x:Name="FileExtensionChooserSelectAllButton" Click="FileExtensionChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+                            <Button x:Name="FileExtensionChooserDeselectAllButton" Click="FileExtensionChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+                        </StackPanel>
+                        
+                    </Grid>
                 </GroupBox>
                 
             </StackPanel>
@@ -285,6 +347,21 @@
                          Title="Summary"
                          Description="Check out your options once more. If you like them, press next!"
                          PreviousPage="{Binding ElementName=FileExtensionChooser}"
+                         NextPage="{Binding ElementName=TestPage}"
+                         HelpButtonVisibility="Hidden"
+                         Enter="SummaryPage_Enter">
+            
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBlock x:Name="SummaryPageTextBlock" />
+            </ScrollViewer>
+            
+        </xctk:WizardPage>
+
+
+        <!-- Test page -->
+        <xctk:WizardPage x:Name="TestPage" PageType="Interior"
+                         Title="Test"
+                         PreviousPage="{Binding ElementName=SummaryPage}"
                          NextPage="{Binding ElementName=ProgressPage}"
                          CanFinish="False"
                          HelpButtonVisibility="Hidden">
@@ -300,18 +377,21 @@
                 <Button x:Name="AddToAutostart" Click="AddToAutostart_Click" Width="80" Margin="10,0,0,0">Add to autostart</Button>
                 <Button x:Name="DeleteFromAutostart" Click="DeleteFromAutostart_Click" Width="80" Margin="10,0,0,0">Delete from autostart</Button>
                 <Button x:Name="Windetect" Click="Windetect_Click" Width="80" Margin="10,0,0,0">Win Detect</Button>
-
                 <Button x:Name="AddFileAssoc" Click="AddFileAssoc_Click" Width="80" Margin="10,0,0,0">Add file association</Button>
                 <Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
                 <Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
             </StackPanel>
         </xctk:WizardPage>
+
+        
+        <!-- Progress page -->
         <xctk:WizardPage x:Name="ProgressPage" PageType="Interior"
                          Title="Installing..."
                          Description="Please wait while the processes are finishing."
                          CanSelectPreviousPage="False"
                          CanSelectNextPage="False"
                          CanFinish="False"
+                         CanCancel="False"
                          Enter="ProgressPage_Enter"
                          HelpButtonVisibility="Hidden">
             <StackPanel Orientation="Vertical">
@@ -328,12 +408,23 @@
         </xctk:WizardPage>
 
 
+        <!-- Uninstall warning page -->
+        <xctk:WizardPage x:Name="UninstallWarningPage" PageType="Exterior"
+                         Title="Please read this before you start!"
+                         Description=""
+                         NextPage="{Binding ElementName=UninstallAppChooser}"
+                         PreviousPage="{Binding ElementName=IntroPage}"
+                         HelpButtonVisibility="Hidden">
+            <Label>Wow! Such warrning! Very careful!</Label>
+        </xctk:WizardPage>
+        
+
         <!-- Uninstall Application chooser page -->
         <xctk:WizardPage x:Name="UninstallAppChooser" PageType="Interior"
                          Title="Which apps do you want to uninstall?"
                          Description="Please choose the folder in which you store your portable apps, then select which of those you want to uninstall! Note, that all shortcuts, pins, and file associations of the selected programs will be removed!"
                          NextPage="{Binding ElementName=UninstallProgressPage}"
-                         PreviousPage="{Binding ElementName=IntroPage}"
+                         PreviousPage="{Binding ElementName=UninstallWarningPage}"
                          HelpButtonVisibility="Hidden">
 
             <Grid>
@@ -396,6 +487,7 @@
                          CanSelectNextPage="False"
                          CanSelectPreviousPage="False"
                          CanFinish="False"
+                         CanCancel="False"
                          Enter="ProgressPage_Enter"
                          HelpButtonVisibility="Hidden">
             

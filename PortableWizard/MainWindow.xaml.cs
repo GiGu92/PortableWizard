@@ -130,15 +130,15 @@ namespace PortableWizard
 
         private void AppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
         {
-            Object[] items = new Object[AppChooserAppsCheckListBox.Items.Count];
+			object[] items = new object[AppChooserAppsCheckListBox.Items.Count];
             AppChooserAppsCheckListBox.Items.CopyTo(items, 0);
-            ObservableCollection<Object> itemsCollection = new ObservableCollection<object>(items);
+			ObservableCollection<object> itemsCollection = new ObservableCollection<object>(items);
             AppChooserAppsCheckListBox.SelectedItemsOverride = itemsCollection;
         }
 
         private void AppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
         {
-            AppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+			AppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
         }
 
         #endregion
@@ -156,9 +156,96 @@ namespace PortableWizard
             }
         }
 
+		private void ShortcutsChooserSelectAllButtons_Click(object sender, RoutedEventArgs e)
+		{
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if ((sender.Equals(ShortcutsChooserDesktopSelectAllButton)))
+				{
+					app.IsDesktopShortcut = true;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartMenuSelectAllButton)))
+				{
+					app.IsStartMenuShortcut = true;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartSelectAllButton)))
+				{
+					app.IsPinnedToStart = true;
+				}
+				else if ((sender.Equals(ShortcutsChooserTaskbarSelectAllButton)))
+				{
+					app.IsPinnedToTaskbar = true;
+				}
+			}
+
+			ShortcutsChooserAppsDataGrid.Items.Refresh();
+		}
+
+		private void ShortcutsChooserDeselectAllButtons_Click(object sender, RoutedEventArgs e)
+		{
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if ((sender.Equals(ShortcutsChooserDesktopDeselectAllButton)))
+				{
+					app.IsDesktopShortcut = false;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartMenuDeselectAllButton)))
+				{
+					app.IsStartMenuShortcut = false;
+				}
+				else if ((sender.Equals(ShortcutsChooserStartDeselectAllButton)))
+				{
+					app.IsPinnedToStart = false;
+				}
+				else if ((sender.Equals(ShortcutsChooserTaskbarDeselectAllButton)))
+				{
+					app.IsPinnedToTaskbar = false;
+				}
+			}
+
+			ShortcutsChooserAppsDataGrid.Items.Refresh();
+		}
+
         #endregion
 
         #region StartupChooser
+
+		private void StartupChooserCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[StartupChooserCheckListBox.SelectedItems.Count];
+			StartupChooserCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			List<string> selectedAppNames = new List<string>();
+			foreach (var app in selectedItems)
+			{
+				selectedAppNames.Add(app.Name);
+			}
+
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (selectedAppNames.Contains(app.Name))
+				{
+					app.IsStartup = true;
+				}
+				else
+				{
+					app.IsStartup = false;
+				}
+			}
+		}
+
+		private void StartupChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			object[] items = new object[StartupChooserCheckListBox.Items.Count];
+			StartupChooserCheckListBox.Items.CopyTo(items, 0);
+			ObservableCollection<object> itemsCollection = new ObservableCollection<object>(items);
+			StartupChooserCheckListBox.SelectedItemsOverride = itemsCollection;
+		}
+
+		private void StartupChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			StartupChooserCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
+		}
+
         #endregion
 
         #region FileExtensionChooser
@@ -189,11 +276,84 @@ namespace PortableWizard
             selectedApplication.HandledFileExtensions = new List<string>(selectedItems);
         }
 
+		private void FileExtensionChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			object[] items = new object[FileExtensionChooserExtensionsCheckListBox.Items.Count];
+			FileExtensionChooserExtensionsCheckListBox.Items.CopyTo(items, 0);
+			ObservableCollection<object> itemsCollection = new ObservableCollection<object>(items);
+			FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = itemsCollection;
+		}
+
+		private void FileExtensionChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
+		}
+
         #endregion
 
-        #region SummaryPage
+		#region SummaryPage
 
-        private void CreateIcon_Click(object sender, RoutedEventArgs e)
+		private void SummaryPage_Enter(object sender, RoutedEventArgs e)
+		{
+			SummaryPageTextBlock.Text = "";
+
+			SummaryPageTextBlock.Text += "Desktop shortcuts will be added for the following applications:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsDesktopShortcut)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			SummaryPageTextBlock.Text += "\n\nStart menu shortcuts folders and shortcuts will be added for the following applications:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsStartMenuShortcut)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			if (IsPinToStartSupported)
+			{
+				SummaryPageTextBlock.Text += "\n\nThe following applications will be pinned to the Start screen:";
+				foreach (var app in appManager.SelectedApplicationList)
+				{
+					if (app.IsPinnedToStart)
+						SummaryPageTextBlock.Text += "\n\t" + app.Name;
+				}
+			}
+
+			SummaryPageTextBlock.Text += "\n\nThe following applications will be pinned to the Taskbar:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsPinnedToTaskbar)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			SummaryPageTextBlock.Text += "\n\nThe following applications will start with Windows:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsStartup)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			SummaryPageTextBlock.Text += "\n\nThe file associations will be added to your system:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.HandledFileExtensions.Count > 0)
+				{
+					SummaryPageTextBlock.Text += "\n\n\t" + app.Name + ":";
+					foreach (var extension in app.HandledFileExtensions)
+					{
+						SummaryPageTextBlock.Text += "\n\t\t" + extension;
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region TestPage
+
+		private void CreateIcon_Click(object sender, RoutedEventArgs e)
         {
             appManager.CreateShortcuts();
         }
@@ -258,7 +418,7 @@ namespace PortableWizard
 
         private void RestartExplorer_Click(object sender, RoutedEventArgs e)
         {
-            Toolkit.WinProcessRestarter.KillProcess("explorer.exe");
+            Toolkit.WinProcessManager.KillProcess("explorer.exe");
         }
 
         #endregion
@@ -338,11 +498,11 @@ namespace PortableWizard
                 appManager.AddFileAssoc();
 
                 (sender as BackgroundWorker).ReportProgress(98);
-                Toolkit.WinProcessRestarter.KillProcess("explorer.exe");
+                Toolkit.WinProcessManager.KillProcess("explorer.exe");
                 System.Threading.Thread.Sleep(1000);
 
                 (sender as BackgroundWorker).ReportProgress(99);
-                Toolkit.WinProcessRestarter.StartProcessIfNotRunning("explorer.exe");
+                Toolkit.WinProcessManager.StartProcessIfNotRunning("explorer.exe");
 
                 (sender as BackgroundWorker).ReportProgress(100);
 
@@ -428,6 +588,8 @@ namespace PortableWizard
         }
 
         #endregion UninstallProcessing
+
+		
 
 
     }
