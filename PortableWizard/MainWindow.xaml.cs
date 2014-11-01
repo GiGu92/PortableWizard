@@ -210,6 +210,29 @@ namespace PortableWizard
 
         #region StartupChooser
 
+		private void StartupChooserCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[StartupChooserCheckListBox.SelectedItems.Count];
+			StartupChooserCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			List<string> selectedAppNames = new List<string>();
+			foreach (var app in selectedItems)
+			{
+				selectedAppNames.Add(app.Name);
+			}
+
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (selectedAppNames.Contains(app.Name))
+				{
+					app.IsStartup = true;
+				}
+				else
+				{
+					app.IsStartup = false;
+				}
+			}
+		}
+
 		private void StartupChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
 		{
 			object[] items = new object[StartupChooserCheckListBox.Items.Count];
@@ -268,9 +291,69 @@ namespace PortableWizard
 
         #endregion
 
-        #region SummaryPage
+		#region SummaryPage
 
-        private void CreateIcon_Click(object sender, RoutedEventArgs e)
+		private void SummaryPage_Enter(object sender, RoutedEventArgs e)
+		{
+			SummaryPageTextBlock.Text = "";
+
+			SummaryPageTextBlock.Text += "Desktop shortcuts will be added for the following applications:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsDesktopShortcut)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			SummaryPageTextBlock.Text += "\n\nStart menu shortcuts folders and shortcuts will be added for the following applications:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsStartMenuShortcut)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			if (IsPinToStartSupported)
+			{
+				SummaryPageTextBlock.Text += "\n\nThe following applications will be pinned to the Start screen:";
+				foreach (var app in appManager.SelectedApplicationList)
+				{
+					if (app.IsPinnedToStart)
+						SummaryPageTextBlock.Text += "\n\t" + app.Name;
+				}
+			}
+
+			SummaryPageTextBlock.Text += "\n\nThe following applications will be pinned to the Taskbar:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsPinnedToTaskbar)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			SummaryPageTextBlock.Text += "\n\nThe following applications will start with Windows:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsStartup)
+					SummaryPageTextBlock.Text += "\n\t" + app.Name;
+			}
+
+			SummaryPageTextBlock.Text += "\n\nThe file associations will be added to your system:";
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.HandledFileExtensions.Count > 0)
+				{
+					SummaryPageTextBlock.Text += "\n\n\t" + app.Name + ":";
+					foreach (var extension in app.HandledFileExtensions)
+					{
+						SummaryPageTextBlock.Text += "\n\t\t" + extension;
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region TestPage
+
+		private void CreateIcon_Click(object sender, RoutedEventArgs e)
         {
             appManager.CreateShortcuts();
         }
@@ -505,6 +588,9 @@ namespace PortableWizard
         }
 
         #endregion UninstallProcessing
+
+		
+
 
     }
 }

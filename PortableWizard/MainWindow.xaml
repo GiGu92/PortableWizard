@@ -260,6 +260,7 @@
                     </Grid.RowDefinitions>
                 
                     <xctk:CheckListBox x:Name="StartupChooserCheckListBox" Grid.Row="0"
+                                       ItemSelectionChanged="StartupChooserCheckListBox_ItemSelectionChanged"
                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                        ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <xctk:CheckListBox.ItemTemplate>
@@ -346,6 +347,21 @@
                          Title="Summary"
                          Description="Check out your options once more. If you like them, press next!"
                          PreviousPage="{Binding ElementName=FileExtensionChooser}"
+                         NextPage="{Binding ElementName=TestPage}"
+                         HelpButtonVisibility="Hidden"
+                         Enter="SummaryPage_Enter">
+            
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBlock x:Name="SummaryPageTextBlock" />
+            </ScrollViewer>
+            
+        </xctk:WizardPage>
+
+
+        <!-- Test page -->
+        <xctk:WizardPage x:Name="TestPage" PageType="Interior"
+                         Title="Test"
+                         PreviousPage="{Binding ElementName=SummaryPage}"
                          NextPage="{Binding ElementName=ProgressPage}"
                          CanFinish="False"
                          HelpButtonVisibility="Hidden">
@@ -361,13 +377,12 @@
                 <Button x:Name="AddToAutostart" Click="AddToAutostart_Click" Width="80" Margin="10,0,0,0">Add to autostart</Button>
                 <Button x:Name="DeleteFromAutostart" Click="DeleteFromAutostart_Click" Width="80" Margin="10,0,0,0">Delete from autostart</Button>
                 <Button x:Name="Windetect" Click="Windetect_Click" Width="80" Margin="10,0,0,0">Win Detect</Button>
-
                 <Button x:Name="AddFileAssoc" Click="AddFileAssoc_Click" Width="80" Margin="10,0,0,0">Add file association</Button>
                 <Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
                 <Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
             </StackPanel>
         </xctk:WizardPage>
-        
+
         
         <!-- Progress page -->
         <xctk:WizardPage x:Name="ProgressPage" PageType="Interior"
@@ -376,6 +391,7 @@
                          CanSelectPreviousPage="False"
                          CanSelectNextPage="False"
                          CanFinish="False"
+                         CanCancel="False"
                          Enter="ProgressPage_Enter"
                          HelpButtonVisibility="Hidden">
             <StackPanel Orientation="Vertical">
@@ -471,6 +487,7 @@
                          CanSelectNextPage="False"
                          CanSelectPreviousPage="False"
                          CanFinish="False"
+                         CanCancel="False"
                          Enter="ProgressPage_Enter"
                          HelpButtonVisibility="Hidden">
             
