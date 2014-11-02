@@ -7,23 +7,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Xml.Serialization;
 
 namespace PortableWizard.Model
 {
-    class Application
+	public class Application
     {
+		[XmlAttribute]
         public string Name { get; set; }
+
+		[XmlAttribute]
+		public string Version { get; set; }
+
+		[XmlIgnore]
         public BitmapImage Icon { get; set; }
 
+		[XmlAttribute]
         public bool IsDesktopShortcut { get; set; }
+		[XmlAttribute]
         public bool IsStartMenuShortcut { get; set; }
+		[XmlAttribute]
         public bool IsPinnedToStart { get; set; }
+		[XmlAttribute]
         public bool IsPinnedToTaskbar { get; set; }
+		[XmlAttribute]
         public bool IsStartup { get; set; }
 
+		[XmlArray]
         public List<string> SupportedFileExtensions { get; set; }
+		[XmlArray]
         public List<string> HandledFileExtensions { get; set; }
 
+		[XmlAttribute]
         private FileInfo ConfigFile;
 
         public Application() { }
@@ -34,6 +49,7 @@ namespace PortableWizard.Model
 
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             Name = iniFile.IniReadValue("Details", "Name");
+			Version = iniFile.IniReadValue("Format", "Version");
             IsDesktopShortcut = true;
             IsStartMenuShortcut = true;
             IsPinnedToStart = false;

@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 using Xceed.Wpf.Toolkit;
 using Xceed.Wpf.Toolkit.Primitives;
 
@@ -87,9 +88,33 @@ namespace PortableWizard
 
         #endregion
 
-        #region AppChooser
+		#region ConfigFileChooser
 
-        private void AppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		private void ConfigFileChooserPathBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			var result = dlg.ShowDialog();
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				ConfigFileChooserPathTextBox.Text = dlg.FileName;
+			}
+		}
+
+		private void ConfigFileChooserLoadButton_Click(object sender, RoutedEventArgs e)
+		{
+			/*XmlSerializer x = new XmlSerializer(appManager.GetType());
+			FileStream fs = new FileStream(ConfigFileChooserPathTextBox.Text, FileMode.Open);
+			this.appManager = x.Deserialize(fs) as ApplicationManager;
+			fs.Close();
+
+			AppChooserAppsPathTextBox.Text = this.appManager.AppsFolderPath + " ";*/
+		}
+
+		#endregion
+
+		#region AppChooser
+
+		private void AppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
             AppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
@@ -105,7 +130,7 @@ namespace PortableWizard
             }
         }
 
-        private void AppChooserConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
+        /*private void AppChooserConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
             var result = dlg.ShowDialog();
@@ -113,7 +138,7 @@ namespace PortableWizard
             {
                 AppChooserConfigFilePathTextBox.Text = dlg.FileName;
             }
-        }
+        }*/
 
         private void AppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
@@ -346,6 +371,22 @@ namespace PortableWizard
 						SummaryPageTextBlock.Text += "\n\t\t" + extension;
 					}
 				}
+			}
+		}
+
+		private void SummaryPageConfigSaveButton_Click(object sender, RoutedEventArgs e)
+		{
+			SaveFileDialog dlg = new SaveFileDialog();
+			dlg.DefaultExt = "xml";
+			dlg.AddExtension = true;
+			var result = dlg.ShowDialog();
+
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				XmlSerializer x = new XmlSerializer(appManager.GetType());
+				FileStream fs = new FileStream(dlg.FileName, FileMode.Create);
+				x.Serialize(fs, appManager);
+				fs.Close();
 			}
 		}
 
@@ -591,6 +632,6 @@ namespace PortableWizard
 
 		
 
-
+		
     }
 }

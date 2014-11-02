@@ -6,14 +6,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace PortableWizard
 {
-    class ApplicationManager
+	[XmlRoot]
+    public class ApplicationManager
     {
-        private string AppsFolderPath;
+		[XmlAttribute]
+		public string AppsFolderPath { get; set; }
 
+		[XmlArray]
         public ObservableCollection<Application> ApplicationList { get; set; }
+		[XmlArray]
 		public ObservableCollection<Application> SelectedApplicationList { get; set; }
 
         public ApplicationManager()
@@ -36,6 +41,12 @@ namespace PortableWizard
                 AppsFolderPath = AppsFolderPath.Substring(0, AppsFolderPath.Length - 2);
             }
 
+			Dictionary<string,string> currentApps = new Dictionary<string,string>();
+			foreach (var app in ApplicationList)
+			{
+				currentApps.Add(app.Name, app.Version);
+			}
+
 			if (Directory.Exists(AppsFolderPath))
 			{
 				DirectoryInfo directory = new DirectoryInfo(AppsFolderPath);				
@@ -48,7 +59,11 @@ namespace PortableWizard
 					if (iniFile.Exists)
 					{
 						Application app = new Application(iniFile);
-						result.Add(app);
+
+						if (!currentApps.Contains(new KeyValuePair<string, string>(app.Name, app.Version)))
+						{
+							result.Add(app);
+						}						
 					}
 				}
 				

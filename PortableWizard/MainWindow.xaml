@@ -66,10 +66,29 @@
         <xctk:WizardPage x:Name="InstallWarningPage" PageType="Exterior"
                          Title="Please read this before you start!"
                          Description=""
-                         NextPage="{Binding ElementName=AppChooser}"
+                         NextPage="{Binding ElementName=ConfigFileChooser}"
                          PreviousPage="{Binding ElementName=IntroPage}"
                          HelpButtonVisibility="Hidden">
             <Label>Wow! Such warrning! Very careful!</Label>
+        </xctk:WizardPage>
+        
+        
+        <!-- Config file chooser page -->
+        <xctk:WizardPage x:Name="ConfigFileChooser" PageType="Interior"
+                         Title="Do you have a Portable Wizard configuration file from a previous initialization, or you want to run a clean init?"
+                         Description="Browse your config file and press the Load button, if you want to init from your config file, or just press next, if you want a clean run!"
+                         NextPage="{Binding ElementName=AppChooser}"
+                         PreviousPage="{Binding ElementName=InstallWarningPage}"
+                         HelpButtonVisibility="Hidden">
+
+            <GroupBox Header="Portable Wizard configuration file location (optional)" Height="Auto" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="ConfigFileChooserPathTextBox" Width="460"/>
+                    <Button x:Name="ConfigFileChooserPathBrowseButton" Click="ConfigFileChooserPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+                    <Button x:Name="ConfigFileChooserLoadButton" Click="ConfigFileChooserLoadButton_Click" Width="80" Margin="10,0,0,0">Load</Button>
+                </StackPanel>
+            </GroupBox>
+
         </xctk:WizardPage>
         
 
@@ -78,34 +97,32 @@
                          Title="Which apps do you want to initialize?"
                          Description="Please choose the folder in which you store your portable apps, then select which of those you want to initialize!"
                          NextPage="{Binding ElementName=ShortcutsChooser}"
-                         PreviousPage="{Binding ElementName=InstallWarningPage}"
+                         PreviousPage="{Binding ElementName=ConfigFileChooser}"
                          HelpButtonVisibility="Hidden">
             
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <!--<RowDefinition Height="Auto" />-->
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
+                <GroupBox Header="Portable applications folder location" Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="AppChooserAppsPathTextBox" Width="550" TextChanged="AppChooserAppsPathTextBox_TextChanged"/>
+                        <TextBox x:Name="AppChooserAppsPathTextBox" Width="550"
+                                 TextChanged="AppChooserAppsPathTextBox_TextChanged"/>
                         <Button x:Name="AppChooserAppsPathBrowseButton" Click="AppChooserAppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
                     </StackPanel>
                 </GroupBox>
                 
-                <GroupBox Header="Portable Wizard configuration file location (optional)" Grid.Column="0" Grid.Row="1">
+                <!--<GroupBox Header="Portable Wizard configuration file location (optional)" Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
                         <TextBox x:Name="AppChooserConfigFilePathTextBox" Width="550"/>
                         <Button x:Name="AppChooserConfigFilePathBrowseButton" Click="AppChooserConfigFilePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
                     </StackPanel>
-                </GroupBox>
+                </GroupBox>-->
                 
-                <GroupBox Header="Portable applications found in your folder" Grid.Column="0" Grid.Row="2">
+                <GroupBox Header="Portable applications found in your folder" Grid.Row="1">
                     <Grid>
                         
                         <Grid.RowDefinitions>
@@ -349,12 +366,25 @@
                          PreviousPage="{Binding ElementName=FileExtensionChooser}"
                          NextPage="{Binding ElementName=TestPage}"
                          HelpButtonVisibility="Hidden"
-                         Enter="SummaryPage_Enter">
-            
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <TextBlock x:Name="SummaryPageTextBlock" />
-            </ScrollViewer>
-            
+                         Enter="SummaryPage_Enter">            
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <GroupBox Header="Changes to be made">
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <TextBlock x:Name="SummaryPageTextBlock" Background="LightGray" Padding="10"/>
+                    </ScrollViewer>
+                </GroupBox>
+
+                <Button x:Name="SummaryPageConfigSaveButton" Grid.Row="1" 
+                        HorizontalAlignment="Left" Width="150" Margin="0,10,0,0"
+                        Click="SummaryPageConfigSaveButton_Click">Save configuration</Button>
+                
+            </Grid>
         </xctk:WizardPage>
 
 
