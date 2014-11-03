@@ -30,7 +30,10 @@ namespace PortableWizard
         public void SetApplicationList(string AppsPath)
         {
             this.AppsFolderPath = AppsPath;
-            this.ApplicationList = GetPortableApps();
+			foreach (var app in GetPortableApps())
+			{
+				this.ApplicationList.Add(app);
+			}
         }
 
 		private ObservableCollection<Application> GetPortableApps()
@@ -55,10 +58,9 @@ namespace PortableWizard
 				foreach (DirectoryInfo dirInfo in subDirs)
 				{
 					string iniPath = dirInfo.FullName + @"\App\AppInfo\appinfo.ini";
-					FileInfo iniFile = new FileInfo(iniPath);
-					if (iniFile.Exists)
+					if (File.Exists(iniPath))
 					{
-						Application app = new Application(iniFile);
+						Application app = new Application(iniPath);
 
 						if (!currentApps.Contains(new KeyValuePair<string, string>(app.Name, app.Version)))
 						{

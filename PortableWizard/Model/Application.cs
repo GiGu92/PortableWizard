@@ -39,39 +39,48 @@ namespace PortableWizard.Model
         public List<string> HandledFileExtensions { get; set; }
 
 		[XmlAttribute]
+		public string ConfigFilePath { get; set; }
+
         private FileInfo ConfigFile;
 
         public Application() { }
 
-        public Application(FileInfo configFile)
+        public Application(string configFilePath)
         {
-            ConfigFile = configFile;
+			this.ConfigFilePath = configFilePath;
+
+			InitUnserializedData();
 
             IniFile iniFile = new IniFile(ConfigFile.FullName);
-            Name = iniFile.IniReadValue("Details", "Name");
-			Version = iniFile.IniReadValue("Format", "Version");
-            IsDesktopShortcut = true;
-            IsStartMenuShortcut = true;
-            IsPinnedToStart = false;
-            IsPinnedToTaskbar = true;
-            IsStartup = false;
+			this.Name = iniFile.IniReadValue("Details", "Name");
+			this.Version = iniFile.IniReadValue("Format", "Version");
+			this.IsDesktopShortcut = true;
+			this.IsStartMenuShortcut = true;
+			this.IsPinnedToStart = false;
+			this.IsPinnedToTaskbar = true;
+			this.IsStartup = false;
 
-            SupportedFileExtensions = new List<string>();
+			this.SupportedFileExtensions = new List<string>();
             string associations = iniFile.IniReadValue("Associations", "FileTypes");
             if (associations != "")
             {
                 SupportedFileExtensions.AddRange(associations.Split(','));
             }
-            SupportedFileExtensions.Sort();
+			this.SupportedFileExtensions.Sort();
 
-            HandledFileExtensions = new List<string>();
-
-            FileInfo iconPath = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
-            if (iconPath.Exists)
-            {
-                Icon = new BitmapImage(new Uri(ConfigFile.Directory.FullName + @"\appicon_32.png"));
-            }
+			this.HandledFileExtensions = new List<string>();
         }
+
+		public void InitUnserializedData()
+		{
+			ConfigFile = new FileInfo(ConfigFilePath);
+
+			FileInfo iconFile = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
+			if (iconFile.Exists)
+			{
+				Icon = new BitmapImage(new Uri(ConfigFile.Directory.FullName + @"\appicon_32.png"));
+			}
+		}
 
         public void AddShortcutToDesktop()
         {

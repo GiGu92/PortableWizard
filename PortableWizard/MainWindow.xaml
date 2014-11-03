@@ -266,6 +266,7 @@
                          Description="Please choose which apps do you want to start automatically after Windows starts!"
                          NextPage="{Binding ElementName=FileExtensionChooser}"
                          PreviousPage="{Binding ElementName=ShortcutsChooser}"
+                         Enter="StartupChooser_Enter"
                          HelpButtonVisibility="Hidden">
             
             <GroupBox Header="Apps starting with Windows">

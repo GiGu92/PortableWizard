@@ -102,12 +102,16 @@ namespace PortableWizard
 
 		private void ConfigFileChooserLoadButton_Click(object sender, RoutedEventArgs e)
 		{
-			/*XmlSerializer x = new XmlSerializer(appManager.GetType());
+			XmlSerializer x = new XmlSerializer(appManager.GetType());
 			FileStream fs = new FileStream(ConfigFileChooserPathTextBox.Text, FileMode.Open);
 			this.appManager = x.Deserialize(fs) as ApplicationManager;
+			foreach (var app in appManager.ApplicationList)
+			{
+				app.InitUnserializedData();
+			}
 			fs.Close();
 
-			AppChooserAppsPathTextBox.Text = this.appManager.AppsFolderPath + " ";*/
+			AppChooserAppsPathTextBox.Text = this.appManager.AppsFolderPath;
 		}
 
 		#endregion
@@ -118,6 +122,24 @@ namespace PortableWizard
         {
             appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
             AppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
+
+			var selectedApps = new ObservableCollection<object>();
+			List<string> selectedAppNames = new List<string>();
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				selectedAppNames.Add(app.Name);
+			}
+			foreach (var app in AppChooserAppsCheckListBox.Items)
+			{
+				if (selectedAppNames.Contains((app as PortableWizard.Model.Application).Name))
+				{
+					selectedApps.Add(app);
+				}
+			}
+			AppChooserAppsCheckListBox.SelectedItemsOverride = selectedApps;
+			
+			// Ugh... this is ugly :(
+			AppChooserAppsCheckListBox_ItemSelectionChanged(this, null);
         }
 
         private void AppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
@@ -234,6 +256,19 @@ namespace PortableWizard
         #endregion
 
         #region StartupChooser
+
+		private void StartupChooser_Enter(object sender, RoutedEventArgs e)
+		{
+			var startUpApps = new ObservableCollection<object>();
+			foreach (var app in appManager.SelectedApplicationList)
+			{
+				if (app.IsStartup)
+				{
+					startUpApps.Add(app);
+				}
+			}
+			StartupChooserCheckListBox.SelectedItemsOverride = startUpApps;
+		}
 
 		private void StartupChooserCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
 		{
@@ -629,6 +664,8 @@ namespace PortableWizard
         }
 
         #endregion UninstallProcessing
+
+		
 
 		
 
