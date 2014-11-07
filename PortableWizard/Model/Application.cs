@@ -434,35 +434,51 @@ namespace PortableWizard.Model
 
         }
 
-        public void DeleteFromRegistry(string ext)
+        public void DeleteFromRegistry()
         {
-            if (!ext.StartsWith(".")) ext = "." + ext;
+            //if (!ext.StartsWith(".")) ext = "." + ext;
 
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             RegistryKey key;
             key = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("Classes", RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+            RegistryKey fileExt;
+            fileExt = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("Microsoft", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("Windows", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("CurrentVersion", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("Explorer", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("FileExts", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                ;
+            
             string[] subkeys = key.GetSubKeyNames();
 
             string appId = iniFile.IniReadValue("Details", "AppID");
 
             bool foundApp = false;
-            bool foundExt = false;
             foreach (var keyname in subkeys)
             {
                 if (keyname == appId)
+                {
                     foundApp = true;
-                if (keyname == ext)
-                    foundExt = true;
+                    break;
+                }
             }
-            //??? ez picit túllövés, mert ha lecsatlakoztatok egyet, akkor teljesen szétesik...
             if (foundApp)
             {
                 key.DeleteSubKeyTree(appId);
             }
 
-            if (foundExt)
+            foreach (var keyname in subkeys)
             {
-                key.DeleteSubKeyTree(ext);
+                if (SupportedFileExtensions.Contains(keyname))
+                {
+                    if (key.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).GetValue("") == appId)
+                    {
+                        key.DeleteSubKey(keyname);
+                        //fileExt
+                    }
+                }
             }
 
         }
