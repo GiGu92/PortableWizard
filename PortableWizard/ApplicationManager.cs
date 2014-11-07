@@ -212,13 +212,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.HandledFileExtensions.Count > 0)
-				{
-					foreach (var ext in app.HandledFileExtensions)
-					{
-						app.DeleteFromRegistry(ext);
-					}
-				}
+				app.DeleteFromRegistry();
 			}
 		}
 	}
