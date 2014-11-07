@@ -11,35 +11,35 @@ using System.Xml.Serialization;
 
 namespace PortableWizard.Model
 {
-	public class Application
+    public class Application
     {
-		[XmlAttribute]
+        [XmlAttribute]
         public string Name { get; set; }
 
-		[XmlAttribute]
-		public string Version { get; set; }
+        [XmlAttribute]
+        public string Version { get; set; }
 
-		[XmlIgnore]
+        [XmlIgnore]
         public BitmapImage Icon { get; set; }
 
-		[XmlAttribute]
+        [XmlAttribute]
         public bool IsDesktopShortcut { get; set; }
-		[XmlAttribute]
+        [XmlAttribute]
         public bool IsStartMenuShortcut { get; set; }
-		[XmlAttribute]
+        [XmlAttribute]
         public bool IsPinnedToStart { get; set; }
-		[XmlAttribute]
+        [XmlAttribute]
         public bool IsPinnedToTaskbar { get; set; }
-		[XmlAttribute]
+        [XmlAttribute]
         public bool IsStartup { get; set; }
 
-		[XmlArray]
+        [XmlArray]
         public List<string> SupportedFileExtensions { get; set; }
-		[XmlArray]
+        [XmlArray]
         public List<string> HandledFileExtensions { get; set; }
 
-		[XmlAttribute]
-		public string ConfigFilePath { get; set; }
+        [XmlAttribute]
+        public string ConfigFilePath { get; set; }
 
         private FileInfo ConfigFile;
 
@@ -47,40 +47,40 @@ namespace PortableWizard.Model
 
         public Application(string configFilePath)
         {
-			this.ConfigFilePath = configFilePath;
+            this.ConfigFilePath = configFilePath;
 
-			InitUnserializedData();
+            InitUnserializedData();
 
             IniFile iniFile = new IniFile(ConfigFile.FullName);
-			this.Name = iniFile.IniReadValue("Details", "Name");
-			this.Version = iniFile.IniReadValue("Format", "Version");
-			this.IsDesktopShortcut = true;
-			this.IsStartMenuShortcut = true;
-			this.IsPinnedToStart = false;
-			this.IsPinnedToTaskbar = true;
-			this.IsStartup = false;
+            this.Name = iniFile.IniReadValue("Details", "Name");
+            this.Version = iniFile.IniReadValue("Format", "Version");
+            this.IsDesktopShortcut = true;
+            this.IsStartMenuShortcut = true;
+            this.IsPinnedToStart = false;
+            this.IsPinnedToTaskbar = true;
+            this.IsStartup = false;
 
-			this.SupportedFileExtensions = new List<string>();
+            this.SupportedFileExtensions = new List<string>();
             string associations = iniFile.IniReadValue("Associations", "FileTypes");
             if (associations != "")
             {
                 SupportedFileExtensions.AddRange(associations.Split(','));
             }
-			this.SupportedFileExtensions.Sort();
+            this.SupportedFileExtensions.Sort();
 
-			this.HandledFileExtensions = new List<string>();
+            this.HandledFileExtensions = new List<string>();
         }
 
-		public void InitUnserializedData()
-		{
-			ConfigFile = new FileInfo(ConfigFilePath);
+        public void InitUnserializedData()
+        {
+            ConfigFile = new FileInfo(ConfigFilePath);
 
-			FileInfo iconFile = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
-			if (iconFile.Exists)
-			{
-				Icon = new BitmapImage(new Uri(ConfigFile.Directory.FullName + @"\appicon_32.png"));
-			}
-		}
+            FileInfo iconFile = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
+            if (iconFile.Exists)
+            {
+                Icon = new BitmapImage(new Uri(ConfigFile.Directory.FullName + @"\appicon_32.png"));
+            }
+        }
 
         public void AddShortcutToDesktop()
         {
@@ -343,6 +343,16 @@ namespace PortableWizard.Model
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             RegistryKey key;
             key = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("Classes", RegistryKeyPermissionCheck.ReadWriteSubTree);
+            RegistryKey fileExt;
+            fileExt = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("Microsoft", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("Windows", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("CurrentVersion", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("Explorer", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                .OpenSubKey("FileExts", RegistryKeyPermissionCheck.ReadWriteSubTree)
+                ;
+
+
             string[] subkeys = key.GetSubKeyNames();
 
             string appId = iniFile.IniReadValue("Details", "AppID");
@@ -384,6 +394,43 @@ namespace PortableWizard.Model
 
             key.CreateSubKey(ext);
             key.OpenSubKey(ext, RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", appId);
+
+
+            //win8.1+
+
+            subkeys = fileExt.GetSubKeyNames();
+            foundExt = false;
+            foreach (var keyname in subkeys)
+            {
+                if (keyname == ext)
+                    foundExt = true;
+            }
+            if (foundExt)
+            {
+                RegistryKey extKey = fileExt.OpenSubKey(ext, RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+                try
+                {
+                    extKey.DeleteSubKey("UserChoice");
+                }
+                catch (Exception e){ }
+                //if win8.1 or higher
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    if (Environment.OSVersion.Version.Minor >= 2)
+                    {
+                        return;
+                    }
+                }
+                //if win7 or win8
+                extKey.CreateSubKey("UserChoice");
+                extKey.OpenSubKey("UserChoice", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("ProgId", appId);
+            }
+            else
+            {
+                //if everithing is awsome we never get there
+                throw new Exception("reg corruption");
+            }
 
         }
 
