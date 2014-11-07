@@ -82,10 +82,12 @@
                          HelpButtonVisibility="Hidden">
 
             <GroupBox Header="Portable Wizard configuration file location (optional)" Height="Auto" VerticalAlignment="Top">
-                <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="ConfigFileChooserPathTextBox" Width="460"/>
-                    <Button x:Name="ConfigFileChooserPathBrowseButton" Click="ConfigFileChooserPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-                    <Button x:Name="ConfigFileChooserLoadButton" Click="ConfigFileChooserLoadButton_Click" Width="80" Margin="10,0,0,0">Load</Button>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="ConfigFileChooserPathTextBox" Width="550" TextChanged="ConfigFileChooserPathTextBox_TextChanged"/>
+                        <Button x:Name="ConfigFileChooserPathBrowseButton" Click="ConfigFileChooserPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+                    </StackPanel>
+                    <TextBlock x:Name="ConfigFileChooserErrorTextBlock" Width="640" TextWrapping="Wrap" />
                 </StackPanel>
             </GroupBox>
 
@@ -125,6 +127,10 @@
                 <GroupBox Header="Portable applications found in your folder" Grid.Row="1">
                     <Grid>
                         
+                        <Grid.Resources>
+                            <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+                        </Grid.Resources>
+                        
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
@@ -139,6 +145,10 @@
                                     <StackPanel Orientation="Horizontal" >
                                         <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
                                         <TextBlock Text="{Binding Path=Name}" />
+                                        <TextBlock Text="New" Margin="10,0,0,0" Foreground="Green"
+                                                   Visibility="{Binding Path=isNew, Converter={StaticResource ResourceKey=BoolToVisConverter}}" />
+                                        <TextBlock Text="Not found!" Margin="10,0,0,0" Foreground="Red"
+                                                   Visibility="{Binding Path=isNotFound, Converter={StaticResource ResourceKey=BoolToVisConverter}}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </xctk:CheckListBox.ItemTemplate>

@@ -11,43 +11,45 @@ using System.Xml.Serialization;
 namespace PortableWizard
 {
 	[XmlRoot]
-    public class ApplicationManager
-    {
+	public class ApplicationManager
+	{
 		[XmlAttribute]
 		public string AppsFolderPath { get; set; }
 
 		[XmlArray]
-        public ObservableCollection<Application> ApplicationList { get; set; }
+		public ObservableCollection<Application> ApplicationList { get; set; }
 		[XmlArray]
 		public ObservableCollection<Application> SelectedApplicationList { get; set; }
 
-        public ApplicationManager()
-        {
-            ApplicationList = new ObservableCollection<Application>();
+		public ApplicationManager()
+		{
+			ApplicationList = new ObservableCollection<Application>();
 			SelectedApplicationList = new ObservableCollection<Application>();
-        }
+		}
 
-        public void SetApplicationList(string AppsPath)
-        {
-            this.AppsFolderPath = AppsPath;
-			foreach (var app in GetPortableApps())
+		public void SetApplicationList(string AppsPath)
+		{
+			this.AppsFolderPath = AppsPath;
+			LoadPortableApps();
+			
+		}
+
+		private void LoadPortableApps()
+		{
+			foreach (var tmpapp in ApplicationList)
 			{
-				this.ApplicationList.Add(app);
+				tmpapp.isNotFound = true;
 			}
-        }
-
-		private ObservableCollection<Application> GetPortableApps()
-        {
 			var result = new ObservableCollection<Application>();
-            if (AppsFolderPath.EndsWith("\\"))
-            {
-                AppsFolderPath = AppsFolderPath.Substring(0, AppsFolderPath.Length - 2);
-            }
+			if (AppsFolderPath.EndsWith("\\"))
+			{
+				AppsFolderPath = AppsFolderPath.Substring(0, AppsFolderPath.Length - 2);
+			}
 
-			Dictionary<string,string> currentApps = new Dictionary<string,string>();
+			List<string> currentAppNames = new List<string>();
 			foreach (var app in ApplicationList)
 			{
-				currentApps.Add(app.Name, app.Version);
+				currentAppNames.Add(app.Name);
 			}
 
 			if (Directory.Exists(AppsFolderPath))
@@ -60,155 +62,164 @@ namespace PortableWizard
 					string iniPath = dirInfo.FullName + @"\App\AppInfo\appinfo.ini";
 					if (File.Exists(iniPath))
 					{
-						Application app = new Application(iniPath);
+						Application app = new Application(AppsFolderPath, dirInfo.Name);
 
-						if (!currentApps.Contains(new KeyValuePair<string, string>(app.Name, app.Version)))
+						if (! currentAppNames.Contains(app.Name))
 						{
-							result.Add(app);
+							this.ApplicationList.Add(app);
+						}
+						else 
+						{
+							foreach (var tmpapp in ApplicationList)
+							{
+								if (tmpapp.Name == app.Name) 
+								{
+									bool isNew = tmpapp.isNew;
+									tmpapp.InitUnserializedData(AppsFolderPath);
+									tmpapp.isNew = isNew;
+								}
+							}
 						}						
 					}
 				}
-				
 			}
+		}
 
-			return result;
-        }
-
-        public void CreateShortcuts() {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsDesktopShortcut)
-                {
-                    app.AddShortcutToDesktop();
-                }
-            }
-        }
-
-        public void DeleteShortcuts() {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsDesktopShortcut)
-                {
-                    app.DeleteShortcutFromDesktop();
-                }
-            }
-        }
-
-        public void CreateStartMenuShortcuts()
-        {
+		public void CreateShortcuts() {
 			foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsStartMenuShortcut)
-                {
-                    app.AddShortcutToStartMenu();
-                }
-            }
-        }
+			{
+				if (app.IsDesktopShortcut)
+				{
+					app.AddShortcutToDesktop();
+				}
+			}
+		}
 
-        public void DeleteStartMenuShortcuts()
-        {
+		public void DeleteShortcuts() {
 			foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsStartMenuShortcut)
-                {
-                    app.DeleteShortcutFromStartMenu();
-                }
-            }
-        }
+			{
+				if (app.IsDesktopShortcut)
+				{
+					app.DeleteShortcutFromDesktop();
+				}
+			}
+		}
 
-        public void PinShortcutsToTaskBar()
-        {
+		public void CreateStartMenuShortcuts()
+		{
 			foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsPinnedToTaskbar)
-                {
-                    app.PinShortcutToTaskBar();
-                }
-            }
-        }
+			{
+				if (app.IsStartMenuShortcut)
+				{
+					app.AddShortcutToStartMenu();
+				}
+			}
+		}
 
-        public void UnPinShortcutsFromTaskBar()
-        {
+		public void DeleteStartMenuShortcuts()
+		{
 			foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsPinnedToTaskbar)
-                {
-                    app.UnPinShortcutFromTaskBar();
-                }
-            }
-        }
+			{
+				if (app.IsStartMenuShortcut)
+				{
+					app.DeleteShortcutFromStartMenu();
+				}
+			}
+		}
 
-        public void PinShortcutsToStart()
-        {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsPinnedToStart)
-                {
-                    app.PinShortcutToStart();
-                }
-            }
-        }
+		public void PinShortcutsToTaskBar()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.IsPinnedToTaskbar)
+				{
+					app.PinShortcutToTaskBar();
+				}
+			}
+		}
 
-        public void UnPinShortcutsFromStart()
-        {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsPinnedToStart)
-                {
-                    app.UnPinShortcutFromStart();
-                }
-            }
-        }
+		public void UnPinShortcutsFromTaskBar()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.IsPinnedToTaskbar)
+				{
+					app.UnPinShortcutFromTaskBar();
+				}
+			}
+		}
+
+		public void PinShortcutsToStart()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.IsPinnedToStart)
+				{
+					app.PinShortcutToStart();
+				}
+			}
+		}
+
+		public void UnPinShortcutsFromStart()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.IsPinnedToStart)
+				{
+					app.UnPinShortcutFromStart();
+				}
+			}
+		}
 
 
-        public void AddToAutostart()
-        {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsStartup)
-                {
-                    app.AddToAutostart();
-                }
-            }
-        }
+		public void AddToAutostart()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.IsStartup)
+				{
+					app.AddToAutostart();
+				}
+			}
+		}
 
-        public void DeleteFromAutostart()
-        {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.IsStartup)
-                {
-                    app.DeleteFromAutostart();
-                }
-            }
-        }
+		public void DeleteFromAutostart()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.IsStartup)
+				{
+					app.DeleteFromAutostart();
+				}
+			}
+		}
 
-        public void AddFileAssoc()
-        {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.HandledFileExtensions.Count>0)
-                {
-                    foreach (var ext in app.HandledFileExtensions)
-                    {
-                        app.TakeToRegistry(ext);
-                    }
-                }
-            }
-        }
+		public void AddFileAssoc()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.HandledFileExtensions.Count>0)
+				{
+					foreach (var ext in app.HandledFileExtensions)
+					{
+						app.TakeToRegistry(ext);
+					}
+				}
+			}
+		}
 
-        public void DeleteFileAssoc()
-        {
-            foreach (var app in SelectedApplicationList)
-            {
-                if (app.HandledFileExtensions.Count > 0)
-                {
-                    foreach (var ext in app.HandledFileExtensions)
-                    {
-                        app.DeleteFromRegistry(ext);
-                    }
-                }
-            }
-        }
-    }
+		public void DeleteFileAssoc()
+		{
+			foreach (var app in SelectedApplicationList)
+			{
+				if (app.HandledFileExtensions.Count > 0)
+				{
+					foreach (var ext in app.HandledFileExtensions)
+					{
+						app.DeleteFromRegistry(ext);
+					}
+				}
+			}
+		}
+	}
 }

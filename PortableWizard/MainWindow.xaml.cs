@@ -20,73 +20,74 @@ using System.Windows.Shapes;
 using System.Xml.Serialization;
 using Xceed.Wpf.Toolkit;
 using Xceed.Wpf.Toolkit.Primitives;
+using PortableWizard.Model;
 
 namespace PortableWizard
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        private ApplicationManager appManager;
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
+	{
+		private ApplicationManager appManager;
 
-        #region Load
-        private int xceedLoadEvents = 0;
+		#region Load
+		private int xceedLoadEvents = 0;
 
-        public MainWindow()
-        {
+		public MainWindow()
+		{
 
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.AssemblyResolve += new ResolveEventHandler(ReferenceResolveEventHandler);
+			AppDomain currentDomain = AppDomain.CurrentDomain;
+			currentDomain.AssemblyResolve += new ResolveEventHandler(ReferenceResolveEventHandler);
 
-            appManager = new ApplicationManager();
-            InitializeComponent();
-        }
+			appManager = new ApplicationManager();
+			InitializeComponent();
+		}
 
-        private System.Reflection.Assembly ReferenceResolveEventHandler(object sender, ResolveEventArgs args)
-        {
-            if (!args.Name.Substring(0, args.Name.IndexOf(",")).StartsWith("Xceed")) return null;
+		private System.Reflection.Assembly ReferenceResolveEventHandler(object sender, ResolveEventArgs args)
+		{
+			if (!args.Name.Substring(0, args.Name.IndexOf(",")).StartsWith("Xceed")) return null;
 
-            string folderPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\App\PortableWizard\bin\";
+			string folderPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\App\PortableWizard\bin\";
 
-            Assembly MyAssembly = null;
-            string strTempAssmbPath = "";
-            DirectoryInfo path = new DirectoryInfo(folderPath);
-            if (!path.Exists) return null;
-            FileInfo[] files = path.GetFiles("Xceed*", SearchOption.AllDirectories);
+			Assembly MyAssembly = null;
+			string strTempAssmbPath = "";
+			DirectoryInfo path = new DirectoryInfo(folderPath);
+			if (!path.Exists) return null;
+			FileInfo[] files = path.GetFiles("Xceed*", SearchOption.AllDirectories);
 
-            Array.Sort(files, (x, y) => x.FullName.Length.CompareTo(y.FullName.Length));
+			Array.Sort(files, (x, y) => x.FullName.Length.CompareTo(y.FullName.Length));
 
-            if (xceedLoadEvents < files.Length)
-            {
-                strTempAssmbPath = files[xceedLoadEvents].FullName;
-                xceedLoadEvents++;
-                MyAssembly = Assembly.LoadFrom(strTempAssmbPath);
-            }
+			if (xceedLoadEvents < files.Length)
+			{
+				strTempAssmbPath = files[xceedLoadEvents].FullName;
+				xceedLoadEvents++;
+				MyAssembly = Assembly.LoadFrom(strTempAssmbPath);
+			}
 
-            //Return the loaded assembly.
-            return MyAssembly;
-        }
-        #endregion Load
+			//Return the loaded assembly.
+			return MyAssembly;
+		}
+		#endregion Load
 
-        #region IntroPage
+		#region IntroPage
 
-        private void InitializeButton_Click(object sender, RoutedEventArgs e)
-        {
-            Wizard.CurrentPage = InstallWarningPage;
-        }
+		private void InitializeButton_Click(object sender, RoutedEventArgs e)
+		{
+			Wizard.CurrentPage = InstallWarningPage;
+		}
 
-        private void UninstallButton_Click(object sender, RoutedEventArgs e)
-        {
-            Wizard.CurrentPage = UninstallWarningPage;
-        }
+		private void UninstallButton_Click(object sender, RoutedEventArgs e)
+		{
+			Wizard.CurrentPage = UninstallWarningPage;
+		}
 
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+		private void ExitButton_Click(object sender, RoutedEventArgs e)
+		{
+			Close();
+		}
 
-        #endregion
+		#endregion
 
 		#region ConfigFileChooser
 
@@ -100,28 +101,52 @@ namespace PortableWizard
 			}
 		}
 
-		private void ConfigFileChooserLoadButton_Click(object sender, RoutedEventArgs e)
+		private void ConfigFileChooserPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			try
+			{
+				XmlSerializer x = new XmlSerializer(appManager.GetType());
+				FileStream fs = new FileStream(ConfigFileChooserPathTextBox.Text, FileMode.Open);
+				this.appManager = x.Deserialize(fs) as ApplicationManager;
+				foreach (var app in appManager.ApplicationList)
+				{
+					app.InitUnserializedData(appManager.AppsFolderPath);
+				}
+				fs.Close();
+
+				AppChooserAppsPathTextBox.Text = this.appManager.AppsFolderPath;
+				ConfigFileChooserErrorTextBlock.Foreground = new SolidColorBrush(Colors.Green);
+				ConfigFileChooserErrorTextBlock.Text = "Configuration load successful.";
+			}
+			catch (Exception ex)
+			{
+				ConfigFileChooserErrorTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+				ConfigFileChooserErrorTextBlock.Text = ex.Message;
+			}
+		}
+
+		/*private void ConfigFileChooserLoadButton_Click(object sender, RoutedEventArgs e)
 		{
 			XmlSerializer x = new XmlSerializer(appManager.GetType());
 			FileStream fs = new FileStream(ConfigFileChooserPathTextBox.Text, FileMode.Open);
 			this.appManager = x.Deserialize(fs) as ApplicationManager;
 			foreach (var app in appManager.ApplicationList)
 			{
-				app.InitUnserializedData();
+				app.InitUnserializedData(appManager.AppsFolderPath);
 			}
 			fs.Close();
 
 			AppChooserAppsPathTextBox.Text = this.appManager.AppsFolderPath;
-		}
+		}*/
 
 		#endregion
 
 		#region AppChooser
 
 		private void AppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
-            AppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
+		{
+			appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
+			AppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
 
 			var selectedApps = new ObservableCollection<object>();
 			List<string> selectedAppNames = new List<string>();
@@ -137,71 +162,85 @@ namespace PortableWizard
 				}
 			}
 			AppChooserAppsCheckListBox.SelectedItemsOverride = selectedApps;
-			
+			AppChooserAppsCheckListBox.Items.Refresh();
+
 			// Ugh... this is ugly :(
 			AppChooserAppsCheckListBox_ItemSelectionChanged(this, null);
-        }
+		}
 
-        private void AppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-            var result = dlg.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                AppChooserAppsPathTextBox.Text = dlg.SelectedPath;
-            }
-        }
+		private void AppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+			FolderBrowserDialog dlg = new FolderBrowserDialog();
+			var result = dlg.ShowDialog();
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				AppChooserAppsPathTextBox.Text = dlg.SelectedPath;
+			}
+		}
 
-        /*private void AppChooserConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            var result = dlg.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                AppChooserConfigFilePathTextBox.Text = dlg.FileName;
-            }
-        }*/
+		/*private void AppChooserConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			var result = dlg.ShowDialog();
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				AppChooserConfigFilePathTextBox.Text = dlg.FileName;
+			}
+		}*/
 
-        private void AppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
-        {
-            appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
-            ShortcutsChooserAppsDataGrid.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
-            StartupChooserCheckListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
-            FileExtensionChooserProgramsListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
-            FileExtensionChooserProgramsListBox.UnselectAll();
+		private void AppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			// Removing items that are "not found" from the selection
+			PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[AppChooserAppsCheckListBox.SelectedItems.Count];
+			AppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			foreach (var app in selectedItems)
+			{
+				if ((app as PortableWizard.Model.Application).isNotFound)
+				{
+					AppChooserAppsCheckListBox.SelectedItemsOverride.Remove(app);
+				}
+			}
 
-            PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[AppChooserAppsCheckListBox.SelectedItems.Count];
-            AppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
-            appManager.SelectedApplicationList = new ObservableCollection<PortableWizard.Model.Application>(selectedItems);
-        }
+			// Setting ItemsSources for the other pages
+			//appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
+			ShortcutsChooserAppsDataGrid.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
+			StartupChooserCheckListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
+			FileExtensionChooserProgramsListBox.ItemsSource = AppChooserAppsCheckListBox.SelectedItems;
+			FileExtensionChooserProgramsListBox.UnselectAll();
 
-        private void AppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
-        {
+			// Initializing the SelectedApplicationList property of the ApplicationManager
+			selectedItems = new PortableWizard.Model.Application[AppChooserAppsCheckListBox.SelectedItems.Count];
+			AppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			appManager.SelectedApplicationList = new ObservableCollection<PortableWizard.Model.Application>(selectedItems);
+		}
+
+		private void AppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
+		{
 			object[] items = new object[AppChooserAppsCheckListBox.Items.Count];
-            AppChooserAppsCheckListBox.Items.CopyTo(items, 0);
+			AppChooserAppsCheckListBox.Items.CopyTo(items, 0);
 			ObservableCollection<object> itemsCollection = new ObservableCollection<object>(items);
-            AppChooserAppsCheckListBox.SelectedItemsOverride = itemsCollection;
-        }
+			AppChooserAppsCheckListBox.SelectedItemsOverride = itemsCollection;
+		}
 
-        private void AppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
-        {
+		private void AppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
 			AppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region ShortcutsChooser
+		#region ShortcutsChooser
 
-        public bool IsPinToStartSupported
-        {
-            get
-            {
-                if (Environment.OSVersion.Version.Major >= 6)
-                    if (Environment.OSVersion.Version.Minor >= 2)
-                        return true;
-                return false;
-            }
-        }
+		public bool IsPinToStartSupported
+		{
+			get
+			{
+				if (Environment.OSVersion.Version.Major >= 6)
+					if (Environment.OSVersion.Version.Minor >= 2)
+						return true;
+				return false;
+			}
+		}
 
 		private void ShortcutsChooserSelectAllButtons_Click(object sender, RoutedEventArgs e)
 		{
@@ -253,9 +292,9 @@ namespace PortableWizard
 			ShortcutsChooserAppsDataGrid.Items.Refresh();
 		}
 
-        #endregion
+		#endregion
 
-        #region StartupChooser
+		#region StartupChooser
 
 		private void StartupChooser_Enter(object sender, RoutedEventArgs e)
 		{
@@ -306,35 +345,35 @@ namespace PortableWizard
 			StartupChooserCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
 		}
 
-        #endregion
+		#endregion
 
-        #region FileExtensionChooser
+		#region FileExtensionChooser
 
-        private void FileExtensionChooserProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+		private void FileExtensionChooserProgramsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
 
-            List<string> supportedExtensions = null;
-            List<string> handledExtensions = null;
-            if (FileExtensionChooserProgramsListBox.Items.Count > 0)
-            {
-                var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
-                if (selectedApplication != null)
-                {
-                    supportedExtensions = selectedApplication.SupportedFileExtensions;
-                    handledExtensions = selectedApplication.HandledFileExtensions;
-                }
-            }
-            FileExtensionChooserExtensionsCheckListBox.ItemsSource = supportedExtensions;
-            FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = handledExtensions;
-        }
+			List<string> supportedExtensions = null;
+			List<string> handledExtensions = null;
+			if (FileExtensionChooserProgramsListBox.Items.Count > 0)
+			{
+				var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
+				if (selectedApplication != null)
+				{
+					supportedExtensions = selectedApplication.SupportedFileExtensions;
+					handledExtensions = selectedApplication.HandledFileExtensions;
+				}
+			}
+			FileExtensionChooserExtensionsCheckListBox.ItemsSource = supportedExtensions;
+			FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = handledExtensions;
+		}
 
-        private void FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
-        {
-            var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
-            string[] selectedItems = new string[FileExtensionChooserExtensionsCheckListBox.SelectedItems.Count];
-            FileExtensionChooserExtensionsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
-            selectedApplication.HandledFileExtensions = new List<string>(selectedItems);
-        }
+		private void FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			var selectedApplication = (PortableWizard.Model.Application)FileExtensionChooserProgramsListBox.SelectedItem;
+			string[] selectedItems = new string[FileExtensionChooserExtensionsCheckListBox.SelectedItems.Count];
+			FileExtensionChooserExtensionsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			selectedApplication.HandledFileExtensions = new List<string>(selectedItems);
+		}
 
 		private void FileExtensionChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -349,7 +388,7 @@ namespace PortableWizard
 			FileExtensionChooserExtensionsCheckListBox.SelectedItemsOverride = new ObservableCollection<object>();
 		}
 
-        #endregion
+		#endregion
 
 		#region SummaryPage
 
@@ -430,245 +469,240 @@ namespace PortableWizard
 		#region TestPage
 
 		private void CreateIcon_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.CreateShortcuts();
-        }
-        private void DeleteIcon_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.DeleteShortcuts();
-        }
+		{
+			appManager.CreateShortcuts();
+		}
+		private void DeleteIcon_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.DeleteShortcuts();
+		}
 
-        private void CreateStartMenuIcon_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.CreateStartMenuShortcuts();
-        }
+		private void CreateStartMenuIcon_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.CreateStartMenuShortcuts();
+		}
 
-        private void DeleteStartMenuIcon_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.DeleteStartMenuShortcuts();
-        }
+		private void DeleteStartMenuIcon_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.DeleteStartMenuShortcuts();
+		}
 
-        private void PinToTask_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.PinShortcutsToTaskBar();
-        }
+		private void PinToTask_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.PinShortcutsToTaskBar();
+		}
 
-        private void UnPinFromTask_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.UnPinShortcutsFromTaskBar();
-        }
+		private void UnPinFromTask_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.UnPinShortcutsFromTaskBar();
+		}
 
-        private void PinToStart_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.PinShortcutsToStart();
-        }
+		private void PinToStart_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.PinShortcutsToStart();
+		}
 
-        private void UnPinFromStart_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.UnPinShortcutsFromStart();
-        }
+		private void UnPinFromStart_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.UnPinShortcutsFromStart();
+		}
 
-        private void Windetect_Click(object sender, RoutedEventArgs e)
-        {
-            bool x = this.IsPinToStartSupported;
-        }
+		private void Windetect_Click(object sender, RoutedEventArgs e)
+		{
+			bool x = this.IsPinToStartSupported;
+		}
 
-        private void AddToAutostart_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.AddToAutostart();
-        }
+		private void AddToAutostart_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.AddToAutostart();
+		}
 
-        private void DeleteFromAutostart_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.DeleteFromAutostart();
-        }
-        private void AddFileAssoc_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.AddFileAssoc();
-        }
+		private void DeleteFromAutostart_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.DeleteFromAutostart();
+		}
+		private void AddFileAssoc_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.AddFileAssoc();
+		}
 
-        private void DeleteFileAssoc_Click(object sender, RoutedEventArgs e)
-        {
-            appManager.DeleteFileAssoc();
-        }
+		private void DeleteFileAssoc_Click(object sender, RoutedEventArgs e)
+		{
+			appManager.DeleteFileAssoc();
+		}
 
-        private void RestartExplorer_Click(object sender, RoutedEventArgs e)
-        {
-            Toolkit.WinProcessManager.KillProcess("explorer.exe");
-        }
+		private void RestartExplorer_Click(object sender, RoutedEventArgs e)
+		{
+			Toolkit.WinProcessManager.KillProcess("explorer.exe");
+		}
 
-        #endregion
+		#endregion
 
-        #region UninstallAppChooser
+		#region UninstallAppChooser
 
-        private void UninstallAppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            appManager.SetApplicationList(UninstallAppChooserAppsPathTextBox.Text);
-            UninstallAppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
-        }
-        private void UninstallAppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-            var result = dlg.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                UninstallAppChooserAppsPathTextBox.Text = dlg.SelectedPath;
-            }
-        }
+		private void UninstallAppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			appManager.SetApplicationList(UninstallAppChooserAppsPathTextBox.Text);
+			UninstallAppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
+		}
+		private void UninstallAppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
+		{
+			FolderBrowserDialog dlg = new FolderBrowserDialog();
+			var result = dlg.ShowDialog();
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				UninstallAppChooserAppsPathTextBox.Text = dlg.SelectedPath;
+			}
+		}
 
-        private void UninstallAppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
-        {
-            PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[UninstallAppChooserAppsCheckListBox.SelectedItems.Count];
-            UninstallAppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
-            appManager.SelectedApplicationList = new ObservableCollection<PortableWizard.Model.Application>(selectedItems);
-        }
+		private void UninstallAppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			PortableWizard.Model.Application[] selectedItems = new PortableWizard.Model.Application[UninstallAppChooserAppsCheckListBox.SelectedItems.Count];
+			UninstallAppChooserAppsCheckListBox.SelectedItems.CopyTo(selectedItems, 0);
+			appManager.SelectedApplicationList = new ObservableCollection<PortableWizard.Model.Application>(selectedItems);
+		}
 
-        private void UninstallAppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
-        {
-            UninstallAppChooserAppsCheckListBox.SelectedItemsOverride = UninstallAppChooserAppsCheckListBox.Items;
-        }
+		private void UninstallAppChooserSelectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			UninstallAppChooserAppsCheckListBox.SelectedItemsOverride = UninstallAppChooserAppsCheckListBox.Items;
+		}
 
-        private void UninstallAppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
-        {
-            UninstallAppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
-        }
+		private void UninstallAppChooserDeselectAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			UninstallAppChooserAppsCheckListBox.SelectedItemsOverride = new ObservableCollection<Object>();
+		}
 
-        #endregion
+		#endregion
 
-        #region ProgressPages
+		#region ProgressPages
 
-        private bool install = true;
+		private bool install = true;
 
-        private void ProgressPage_Enter(object sender, RoutedEventArgs e)
-        {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.WorkerReportsProgress = true;
-            worker.DoWork += worker_DoWork;
-            worker.ProgressChanged += worker_ProgressChanged;
+		private void ProgressPage_Enter(object sender, RoutedEventArgs e)
+		{
+			BackgroundWorker worker = new BackgroundWorker();
+			worker.WorkerReportsProgress = true;
+			worker.DoWork += worker_DoWork;
+			worker.ProgressChanged += worker_ProgressChanged;
 
-            if (((Xceed.Wpf.Toolkit.WizardPage)e.Source).Title.StartsWith("Un")) install = false;
+			if (((Xceed.Wpf.Toolkit.WizardPage)e.Source).Title.StartsWith("Un")) install = false;
 
-            worker.RunWorkerAsync(((Xceed.Wpf.Toolkit.WizardPage)e.Source).Title);
-        }
+			worker.RunWorkerAsync(((Xceed.Wpf.Toolkit.WizardPage)e.Source).Title);
+		}
 
-        private void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            if (!((string)e.Argument).StartsWith("Un"))
-            {
-                (sender as BackgroundWorker).ReportProgress(0);
-                appManager.CreateShortcuts();
+		private void worker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			if (!((string)e.Argument).StartsWith("Un"))
+			{
+				(sender as BackgroundWorker).ReportProgress(0);
+				appManager.CreateShortcuts();
 
-                (sender as BackgroundWorker).ReportProgress(16);
-                appManager.CreateStartMenuShortcuts();
+				(sender as BackgroundWorker).ReportProgress(16);
+				appManager.CreateStartMenuShortcuts();
 
-                (sender as BackgroundWorker).ReportProgress(32);
-                appManager.PinShortcutsToTaskBar();
+				(sender as BackgroundWorker).ReportProgress(32);
+				appManager.PinShortcutsToTaskBar();
 
-                (sender as BackgroundWorker).ReportProgress(48);
-                appManager.PinShortcutsToStart();
+				(sender as BackgroundWorker).ReportProgress(48);
+				appManager.PinShortcutsToStart();
 
-                (sender as BackgroundWorker).ReportProgress(60);
-                appManager.AddToAutostart();
+				(sender as BackgroundWorker).ReportProgress(60);
+				appManager.AddToAutostart();
 
-                (sender as BackgroundWorker).ReportProgress(72);
-                appManager.AddFileAssoc();
+				(sender as BackgroundWorker).ReportProgress(72);
+				appManager.AddFileAssoc();
 
-                (sender as BackgroundWorker).ReportProgress(98);
-                Toolkit.WinProcessManager.KillProcess("explorer.exe");
-                System.Threading.Thread.Sleep(1000);
+				(sender as BackgroundWorker).ReportProgress(98);
+				Toolkit.WinProcessManager.KillProcess("explorer.exe");
+				System.Threading.Thread.Sleep(1000);
 
-                (sender as BackgroundWorker).ReportProgress(99);
-                Toolkit.WinProcessManager.StartProcessIfNotRunning("explorer.exe");
+				(sender as BackgroundWorker).ReportProgress(99);
+				Toolkit.WinProcessManager.StartProcessIfNotRunning("explorer.exe");
 
-                (sender as BackgroundWorker).ReportProgress(100);
+				(sender as BackgroundWorker).ReportProgress(100);
 
 
-            }
-            else
-            {
-                (sender as BackgroundWorker).ReportProgress(0);
-                appManager.DeleteShortcuts();
-                System.Threading.Thread.Sleep(1000);
+			}
+			else
+			{
+				(sender as BackgroundWorker).ReportProgress(0);
+				appManager.DeleteShortcuts();
+				System.Threading.Thread.Sleep(1000);
 
-                (sender as BackgroundWorker).ReportProgress(33);
-                appManager.DeleteStartMenuShortcuts();
-                System.Threading.Thread.Sleep(1000);
+				(sender as BackgroundWorker).ReportProgress(33);
+				appManager.DeleteStartMenuShortcuts();
+				System.Threading.Thread.Sleep(1000);
 
-                (sender as BackgroundWorker).ReportProgress(66);
-                appManager.UnPinShortcutsFromTaskBar();
-                System.Threading.Thread.Sleep(1000);
+				(sender as BackgroundWorker).ReportProgress(66);
+				appManager.UnPinShortcutsFromTaskBar();
+				System.Threading.Thread.Sleep(1000);
 
-                (sender as BackgroundWorker).ReportProgress(100);
-            }
-        }
+				(sender as BackgroundWorker).ReportProgress(100);
+			}
+		}
 
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            if (install)
-            {
-                switch (e.ProgressPercentage)
-                {
-                    case 0:
-                        InstallProgressPageTextBlock.Text += "\n\tCreating shortcuts to desktop...";
-                        break;
-                    case 16:
-                        InstallProgressPageTextBlock.Text += "\n\tCreating shortcuts to start menu...";
-                        break;
-                    case 32:
-                        InstallProgressPageTextBlock.Text += "\n\tPinning shortcuts to taskbar...";
-                        break;
-                    case 48:
-                        InstallProgressPageTextBlock.Text += "\n\tPinning shortcuts to start...";
-                        break;
-                    case 60:
-                        InstallProgressPageTextBlock.Text += "\n\tPlace programs to autostart...";
-                        break;
-                    case 72:
-                        InstallProgressPageTextBlock.Text += "\n\tMake file type association...";
-                        break;
-                    case 98:
-                        InstallProgressPageTextBlock.Text += "\n\tRestarting explorer.exe...";
-                        break;
-                    case 99:
-                        InstallProgressPageTextBlock.Text += "\n\tCheck explorer.exe and start manually if not restarting...";
-                        break;
-                    case 100:
-                        InstallProgressPageTextBlock.Text += "\nFinished!";
-                        ProgressPage.CanFinish = true;
-                        break;
-                }
+		void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			if (install)
+			{
+				switch (e.ProgressPercentage)
+				{
+					case 0:
+						InstallProgressPageTextBlock.Text += "\n\tCreating shortcuts to desktop...";
+						break;
+					case 16:
+						InstallProgressPageTextBlock.Text += "\n\tCreating shortcuts to start menu...";
+						break;
+					case 32:
+						InstallProgressPageTextBlock.Text += "\n\tPinning shortcuts to taskbar...";
+						break;
+					case 48:
+						InstallProgressPageTextBlock.Text += "\n\tPinning shortcuts to start...";
+						break;
+					case 60:
+						InstallProgressPageTextBlock.Text += "\n\tPlace programs to autostart...";
+						break;
+					case 72:
+						InstallProgressPageTextBlock.Text += "\n\tMake file type association...";
+						break;
+					case 98:
+						InstallProgressPageTextBlock.Text += "\n\tRestarting explorer.exe...";
+						break;
+					case 99:
+						InstallProgressPageTextBlock.Text += "\n\tCheck explorer.exe and start manually if not restarting...";
+						break;
+					case 100:
+						InstallProgressPageTextBlock.Text += "\nFinished!";
+						ProgressPage.CanFinish = true;
+						break;
+				}
 
-                InstallProgressPageProgressBar.Value = e.ProgressPercentage;
-            }
-            else
-            {
-                switch (e.ProgressPercentage)
-                {
-                    case 0:
-                        UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from desktop...";
-                        break;
-                    case 33:
-                        UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from start menu...";
-                        break;
-                    case 66:
-                        UninstallProgressPageTextBlock.Text += "\n\tUnpinning shortcuts from taskbar...";
-                        break;
-                    case 100:
-                        UninstallProgressPageTextBlock.Text += "\nFinished!";
-                        UninstallProgressPage.CanFinish = true;
-                        break;
-                }
+				InstallProgressPageProgressBar.Value = e.ProgressPercentage;
+			}
+			else
+			{
+				switch (e.ProgressPercentage)
+				{
+					case 0:
+						UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from desktop...";
+						break;
+					case 33:
+						UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from start menu...";
+						break;
+					case 66:
+						UninstallProgressPageTextBlock.Text += "\n\tUnpinning shortcuts from taskbar...";
+						break;
+					case 100:
+						UninstallProgressPageTextBlock.Text += "\nFinished!";
+						UninstallProgressPage.CanFinish = true;
+						break;
+				}
 
-                UninstallProgressPageProgressBar.Value = e.ProgressPercentage;
-            }
-        }
+				UninstallProgressPageProgressBar.Value = e.ProgressPercentage;
+			}
+		}
 
-        #endregion UninstallProcessing
+		#endregion UninstallProcessing
 
-		
-
-		
-
-		
-    }
+	}
 }
