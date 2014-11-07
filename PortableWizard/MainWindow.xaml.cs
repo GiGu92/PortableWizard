@@ -55,7 +55,7 @@ namespace PortableWizard
 		{
 			if (!args.Name.Substring(0, args.Name.IndexOf(",")).StartsWith("Xceed")) return null;
 
-			string folderPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\App\PortableWizard\bin\";
+			string folderPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\App\bin\";
 
 			Assembly MyAssembly = null;
 			string strTempAssmbPath = "";
