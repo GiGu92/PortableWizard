@@ -424,7 +424,7 @@ namespace PortableWizard.Model
 			foundExt = false;
 			foreach (var keyname in subkeys)
 			{
-				if (keyname == ext)
+				if (keyname.Equals(ext))
 					foundExt = true;
 			}
 			if (foundExt)
@@ -435,7 +435,7 @@ namespace PortableWizard.Model
 				{
 					extKey.DeleteSubKey("UserChoice");
 				}
-				catch (Exception e){ }
+				catch { }
 				
 				//if win7 or win8 (not 8.1 or higher)
 				if (! (Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2))
@@ -476,11 +476,11 @@ namespace PortableWizard.Model
 			bool foundApp = false;
 			foreach (var keyname in subkeys)
 			{
-				if (keyname == appId)
+				if (keyname.Equals(appId))
 				{
 					foundApp = true;
 					break;
-			}
+				}
 			}
 			if (foundApp)
 			{
@@ -489,12 +489,15 @@ namespace PortableWizard.Model
 
 			foreach (var keyname in subkeys)
 			{
-				if (SupportedFileExtensions.Contains(keyname))
+				if (SupportedFileExtensions.Contains(keyname.Remove(0,1)))
 				{
-					if (key.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).GetValue("") == appId)
+					if (key.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).GetValue("").Equals(appId))
 					{
 						key.DeleteSubKey(keyname);
-						fileExt.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteSubKey("UserChoice");
+						if (fileExt.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).GetSubKeyNames().Contains("UserChoice"))
+						{
+							fileExt.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteSubKey("UserChoice");
+						}
 					}
 				}
 			}

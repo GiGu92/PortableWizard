@@ -21,6 +21,7 @@ using System.Xml.Serialization;
 using Xceed.Wpf.Toolkit;
 using Xceed.Wpf.Toolkit.Primitives;
 using PortableWizard.Model;
+using PortableWizard.Toolkit;
 
 namespace PortableWizard
 {
@@ -40,7 +41,13 @@ namespace PortableWizard
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.AssemblyResolve += new ResolveEventHandler(ReferenceResolveEventHandler);
 
-			appManager = new ApplicationManager();
+			this.appManager = new ApplicationManager();
+			Image logo = new Image();
+			logo.Source = new BitmapImage(new Uri(@"Media\PortableWizard_logo.png", UriKind.Relative));
+			logo.Width = 150;
+			this.Logo = logo;
+			this.LogoBackgroundBrush = new SolidColorBrush(new Color() { R = 28, G = 44, B = 61, A = 255 });
+
 			InitializeComponent();
 		}
 
@@ -71,6 +78,10 @@ namespace PortableWizard
 		#endregion Load
 
 		#region IntroPage
+
+		public Image Logo { get; set; }
+
+		public SolidColorBrush LogoBackgroundBrush { get; set; }
 
 		private void InitializeButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -461,6 +472,24 @@ namespace PortableWizard
 				FileStream fs = new FileStream(dlg.FileName, FileMode.Create);
 				x.Serialize(fs, appManager);
 				fs.Close();
+			}
+		}
+
+		private void SummaryPageRegistryBackupButton_Click(object sender, RoutedEventArgs e)
+		{
+			SaveFileDialog dlg = new SaveFileDialog();
+			dlg.DefaultExt = "reg";
+			dlg.AddExtension = false;
+			var result = dlg.ShowDialog();
+
+
+			
+
+
+			if (result == System.Windows.Forms.DialogResult.OK)
+			{
+				WinRegistryExporter.ExportKey("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts",dlg.FileName+"Explorer.reg");
+				WinRegistryExporter.ExportKey("HKEY_CURRENT_USER\\Software\\Classes", dlg.FileName+"classes.reg");
 			}
 		}
 

@@ -89,6 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="Toolkit\IniFile.cs" />
     <Compile Include="Toolkit\WinProcessManager.cs" />
+    <Compile Include="Toolkit\WinRegistryExporter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -166,6 +167,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Media\PortableWizard_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Media\PortableWizard_logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

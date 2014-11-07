@@ -13,6 +13,8 @@
         <xctk:WizardPage x:Name="IntroPage" 
                          Title="Welcome to Portable Wizard!"
                          Description="This Wizard will walk you though initializing your portable applications! Please choose what operation would you like to use Portabe Wizard for!"
+                         ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
+                         ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
                          NextButtonVisibility="Hidden"
                          BackButtonVisibility="Hidden"
                          HelpButtonVisibility="Hidden"
@@ -66,6 +68,8 @@
         <xctk:WizardPage x:Name="InstallWarningPage" PageType="Exterior"
                          Title="Please read this before you start!"
                          Description=""
+                         ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
+                         ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
                          NextPage="{Binding ElementName=ConfigFileChooser}"
                          PreviousPage="{Binding ElementName=IntroPage}"
                          HelpButtonVisibility="Hidden">
@@ -391,9 +395,14 @@
                     </ScrollViewer>
                 </GroupBox>
 
-                <Button x:Name="SummaryPageConfigSaveButton" Grid.Row="1" 
-                        HorizontalAlignment="Left" Width="150" Margin="0,10,0,0"
-                        Click="SummaryPageConfigSaveButton_Click">Save configuration</Button>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <Button x:Name="SummaryPageConfigSaveButton" 
+                            HorizontalAlignment="Left" Width="150" Margin="0,10,0,0"
+                            Click="SummaryPageConfigSaveButton_Click">Save configuration</Button>
+                    <Button x:Name="SummaryPageRegistryBackupButton" 
+                            HorizontalAlignment="Left" Width="150" Margin="10,10,0,0"
+                            Click="SummaryPageRegistryBackupButton_Click">Backup registry</Button>
+                </StackPanel>
                 
             </Grid>
         </xctk:WizardPage>
@@ -453,6 +462,8 @@
         <xctk:WizardPage x:Name="UninstallWarningPage" PageType="Exterior"
                          Title="Please read this before you start!"
                          Description=""
+                         ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
+                         ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
                          NextPage="{Binding ElementName=UninstallAppChooser}"
                          PreviousPage="{Binding ElementName=IntroPage}"
                          HelpButtonVisibility="Hidden">
