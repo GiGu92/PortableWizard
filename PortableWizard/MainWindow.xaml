@@ -1,702 +1,768 @@
 ﻿<Window x:Name="WizardWindow"
-        x:Class="PortableWizard.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="Portable Wizard" Height="500" Width="700" ResizeMode="CanMinimize" Icon="Media/PortableWizard_icon.ico">
+		x:Class="PortableWizard.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:v="clr-namespace:PortableWizard.Control"
+		Title="Portable Wizard" Height="500" Width="700" ResizeMode="CanMinimize" Icon="Media/PortableWizard_icon.ico">
 
-    
-    <xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
-        
-        
-        <!-- Intro Page -->
-        <xctk:WizardPage x:Name="IntroPage" 
-                         Title="Welcome to Portable Wizard!"
-                         Description="This Wizard will walk you though initializing your portable applications! Please choose what operation would you like to use Portabe Wizard for!"
-                         ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
-                         ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
-                         NextButtonVisibility="Hidden"
-                         BackButtonVisibility="Hidden"
-                         HelpButtonVisibility="Hidden"
-                         CancelButtonVisibility="Hidden"
-                         FinishButtonVisibility="Hidden">
-            
-            <Grid Margin="20">
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>                
+	
+	<xctk:Wizard x:Name="Wizard" FinishButtonClosesWindow="True">
+		
+		
+		<!-- Intro Page -->
+		<xctk:WizardPage x:Name="IntroPage" 
+						 Title="Welcome to Portable Wizard!"
+						 Description="This Wizard will walk you though initializing your portable applications! Please choose what operation would you like to use Portabe Wizard for!"
+						 ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
+						 ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
+						 NextButtonVisibility="Hidden"
+						 BackButtonVisibility="Hidden"
+						 HelpButtonVisibility="Hidden"
+						 CancelButtonVisibility="Hidden"
+						 FinishButtonVisibility="Hidden">
+			
+			<Grid Margin="20">
+				
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>                
 
-                <Button x:Name="InitializeButton" Grid.Column="0" Grid.Row="0" Margin="10" Width="100" Height="50"
-                        Click="InitializeButton_Click" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Buttons/Install-button.png" Height="28" Width="28" Margin="5,0,5,0" />
-                        <Label>Initialize</Label>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="UninstallButton" Grid.Column="0" Grid.Row="1" Margin="10" Width="100" Height="50"
-                        Click="UninstallButton_Click" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Buttons/Uninstall-button.png" Height="28" Width="28" Margin="5,0,5,0" />
-                        <Label>Uninstall</Label>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="IniEditorButton" Grid.Column="0" Grid.Row="2" Margin="10" Width="100" Height="50"
-                        Click="IniEditorButton_Click" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Buttons/Edit-button.png" Height="28" Width="28" Margin="5,0,5,0" />
-                        <Label>Ini editor</Label>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="ExitButton" Grid.Column="0" Grid.Row="3" Margin="10" Width="100" Height="50"
-                        Click="ExitButton_Click" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Buttons/Exit-button.png" Height="28" Width="28" Margin="5,0,5,0" />
-                        <Label>Exit</Label>
-                    </StackPanel>
-                </Button>
-                
-                <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">Initialize your portable applications</Label>
-                <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Uninstall your initialized portable applications</Label>
-                <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">Use this tool if your app is not from the portableapps.com</Label>
-                <Label Grid.Column="1" Grid.Row="3" VerticalAlignment="Center">Exit program</Label>
-                
-            </Grid>
-            
-        </xctk:WizardPage>
-        
-        
-        <!-- Install warning page -->
-        <xctk:WizardPage x:Name="InstallWarningPage" PageType="Exterior"
-                         Title="Please read this before you start!"
-                         Description=""
-                         ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
-                         ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
-                         NextPage="{Binding ElementName=ConfigFileChooser}"
-                         PreviousPage="{Binding ElementName=IntroPage}"
-                         HelpButtonVisibility="Hidden">
-            <Label>Wow! Such warrning! Very careful!</Label>
-        </xctk:WizardPage>
-        
-        
-        <!-- Config file chooser page -->
-        <xctk:WizardPage x:Name="ConfigFileChooser" PageType="Interior"
-                         Title="Do you have a Portable Wizard configuration file from a previous initialization, or you want to run a clean init?"
-                         Description="Browse your config file and press the Load button, if you want to init from your config file, or just press next, if you want a clean run!"
-                         NextPage="{Binding ElementName=AppChooser}"
-                         PreviousPage="{Binding ElementName=InstallWarningPage}"
-                         HelpButtonVisibility="Hidden">
+				<Button x:Name="InitializeButton" Grid.Column="0" Grid.Row="0" Margin="10" Width="100" Height="50"
+						Click="InitializeButton_Click" HorizontalAlignment="Left">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+						<Image Source="Media/Buttons/Install-button.png" Height="28" Width="28" Margin="5,0,5,0" />
+						<Label>Initialize</Label>
+					</StackPanel>
+				</Button>
+				<Button x:Name="UninstallButton" Grid.Column="0" Grid.Row="1" Margin="10" Width="100" Height="50"
+						Click="UninstallButton_Click" HorizontalAlignment="Left">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+						<Image Source="Media/Buttons/Uninstall-button.png" Height="28" Width="28" Margin="5,0,5,0" />
+						<Label>Uninstall</Label>
+					</StackPanel>
+				</Button>
+				<Button x:Name="IniEditorButton" Grid.Column="0" Grid.Row="2" Margin="10" Width="100" Height="50"
+						Click="IniEditorButton_Click" HorizontalAlignment="Left">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+						<Image Source="Media/Buttons/Edit-button.png" Height="28" Width="28" Margin="5,0,5,0" />
+						<Label>Ini editor</Label>
+					</StackPanel>
+				</Button>
+				<Button x:Name="ExitButton" Grid.Column="0" Grid.Row="3" Margin="10" Width="100" Height="50"
+						Click="ExitButton_Click" HorizontalAlignment="Left">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+						<Image Source="Media/Buttons/Exit-button.png" Height="28" Width="28" Margin="5,0,5,0" />
+						<Label>Exit</Label>
+					</StackPanel>
+				</Button>
+				
+				<Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">Initialize your portable applications</Label>
+				<Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Uninstall your initialized portable applications</Label>
+				<Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">Use this tool if your app is not from the portableapps.com</Label>
+				<Label Grid.Column="1" Grid.Row="3" VerticalAlignment="Center">Exit program</Label>
+				
+			</Grid>
+			
+		</xctk:WizardPage>
+		
+		
+		<!-- Install warning page -->
+		<xctk:WizardPage x:Name="InstallWarningPage" PageType="Exterior"
+						 Title="Please read this before you start!"
+						 Description=""
+						 ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
+						 ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
+						 NextPage="{Binding ElementName=ConfigFileChooser}"
+						 PreviousPage="{Binding ElementName=IntroPage}"
+						 HelpButtonVisibility="Hidden">
+			<Label>Wow! Such warrning! Very careful!</Label>
+		</xctk:WizardPage>
+		
+		
+		<!-- Config file chooser page -->
+		<xctk:WizardPage x:Name="ConfigFileChooser" PageType="Interior"
+						 Title="Do you have a Portable Wizard configuration file from a previous initialization, or you want to run a clean init?"
+						 Description="Browse your config file and press the Load button, if you want to init from your config file, or just press next, if you want a clean run!"
+						 NextPage="{Binding ElementName=AppChooser}"
+						 PreviousPage="{Binding ElementName=InstallWarningPage}"
+						 HelpButtonVisibility="Hidden">
 
-            <GroupBox Header="Portable Wizard configuration file location (optional)" Height="Auto" VerticalAlignment="Top">
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="ConfigFileChooserPathTextBox" Width="550" TextChanged="ConfigFileChooserPathTextBox_TextChanged"/>
-                        <Button x:Name="ConfigFileChooserPathBrowseButton" Click="ConfigFileChooserPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-                    </StackPanel>
-                    <TextBlock x:Name="ConfigFileChooserErrorTextBlock" Width="640" TextWrapping="Wrap" />
-                </StackPanel>
-            </GroupBox>
+			<GroupBox Header="Portable Wizard configuration file location (optional)" Height="Auto" VerticalAlignment="Top">
+				<StackPanel Orientation="Vertical">
+					<StackPanel Orientation="Horizontal">
+						<TextBox x:Name="ConfigFileChooserPathTextBox" Width="550" TextChanged="ConfigFileChooserPathTextBox_TextChanged"/>
+						<Button x:Name="ConfigFileChooserPathBrowseButton" Click="ConfigFileChooserPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+					</StackPanel>
+					<TextBlock x:Name="ConfigFileChooserErrorTextBlock" Width="640" TextWrapping="Wrap" />
+				</StackPanel>
+			</GroupBox>
 
-        </xctk:WizardPage>
-        
+		</xctk:WizardPage>
+		
 
-        <!-- Application chooser page -->
-        <xctk:WizardPage x:Name="AppChooser" PageType="Interior"
-                         Title="Which apps do you want to initialize?"
-                         Description="Please choose the folder in which you store your portable apps, then select which of those you want to initialize!"
-                         NextPage="{Binding ElementName=ShortcutsChooser}"
-                         PreviousPage="{Binding ElementName=ConfigFileChooser}"
-                         HelpButtonVisibility="Hidden">
-            
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <!--<RowDefinition Height="Auto" />-->
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+		<!-- Application chooser page -->
+		<xctk:WizardPage x:Name="AppChooser" PageType="Interior"
+						 Title="Which apps do you want to initialize?"
+						 Description="Please choose the folder in which you store your portable apps, then select which of those you want to initialize!"
+						 NextPage="{Binding ElementName=ShortcutsChooser}"
+						 PreviousPage="{Binding ElementName=ConfigFileChooser}"
+						 HelpButtonVisibility="Hidden">
+			
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<!--<RowDefinition Height="Auto" />-->
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
 
-                <GroupBox Header="Portable applications folder location" Grid.Row="0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="AppChooserAppsPathTextBox" Width="550"
-                                 TextChanged="AppChooserAppsPathTextBox_TextChanged"/>
-                        <Button x:Name="AppChooserAppsPathBrowseButton" Click="AppChooserAppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-                    </StackPanel>
-                </GroupBox>
-                
-                <!--<GroupBox Header="Portable Wizard configuration file location (optional)" Grid.Row="1">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="AppChooserConfigFilePathTextBox" Width="550"/>
-                        <Button x:Name="AppChooserConfigFilePathBrowseButton" Click="AppChooserConfigFilePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-                    </StackPanel>
-                </GroupBox>-->
-                
-                <GroupBox Header="Portable applications found in your folder" Grid.Row="1">
-                    <Grid>
-                        
-                        <Grid.Resources>
-                            <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
-                        </Grid.Resources>
-                        
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+				<GroupBox Header="Portable applications folder location" Grid.Row="0">
+					<StackPanel Orientation="Horizontal">
+						<TextBox x:Name="AppChooserAppsPathTextBox" Width="550"
+								 TextChanged="AppChooserAppsPathTextBox_TextChanged"/>
+						<Button x:Name="AppChooserAppsPathBrowseButton" Click="AppChooserAppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+					</StackPanel>
+				</GroupBox>
+				
+				<!--<GroupBox Header="Portable Wizard configuration file location (optional)" Grid.Row="1">
+					<StackPanel Orientation="Horizontal">
+						<TextBox x:Name="AppChooserConfigFilePathTextBox" Width="550"/>
+						<Button x:Name="AppChooserConfigFilePathBrowseButton" Click="AppChooserConfigFilePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+					</StackPanel>
+				</GroupBox>-->
+				
+				<GroupBox Header="Portable applications found in your folder" Grid.Row="1">
+					<Grid>
+						
+						<Grid.Resources>
+							<BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+						</Grid.Resources>
+						
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
 
-                        <xctk:CheckListBox Name="AppChooserAppsCheckListBox" Grid.Row="0"
-                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                           ItemSelectionChanged="AppChooserAppsCheckListBox_ItemSelectionChanged">
-                            <xctk:CheckListBox.ItemTemplate>
-                                <DataTemplate>                                
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
-                                        <TextBlock Text="{Binding Path=Name}" />
-                                        <TextBlock Text="New" Margin="10,0,0,0" Foreground="Green"
-                                                   Visibility="{Binding Path=isNew, Converter={StaticResource ResourceKey=BoolToVisConverter}}" />
-                                        <TextBlock Text="Not found!" Margin="10,0,0,0" Foreground="Red"
-                                                   Visibility="{Binding Path=isNotFound, Converter={StaticResource ResourceKey=BoolToVisConverter}}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </xctk:CheckListBox.ItemTemplate>
-                        </xctk:CheckListBox>
+						<xctk:CheckListBox Name="AppChooserAppsCheckListBox" Grid.Row="0"
+										   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+										   ScrollViewer.VerticalScrollBarVisibility="Auto"
+										   ItemSelectionChanged="AppChooserAppsCheckListBox_ItemSelectionChanged">
+							<xctk:CheckListBox.ItemTemplate>
+								<DataTemplate>                                
+									<StackPanel Orientation="Horizontal" >
+										<Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+										<TextBlock Text="{Binding Path=Name}" />
+										<TextBlock Text="New" Margin="10,0,0,0" Foreground="Green"
+												   Visibility="{Binding Path=isNew, Converter={StaticResource ResourceKey=BoolToVisConverter}}" />
+										<TextBlock Text="Not found!" Margin="10,0,0,0" Foreground="Red"
+												   Visibility="{Binding Path=isNotFound, Converter={StaticResource ResourceKey=BoolToVisConverter}}"/>
+									</StackPanel>
+								</DataTemplate>
+							</xctk:CheckListBox.ItemTemplate>
+						</xctk:CheckListBox>
 
-                        <StackPanel Orientation="Horizontal" Grid.Row="1">
-                            <Button x:Name="AppChooserSelectAllButton" Click="AppChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-                            <Button x:Name="AppChooserDeselectAllButton" Click="AppChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
-                        </StackPanel>
-                        
-                    </Grid>
-                </GroupBox>
+						<StackPanel Orientation="Horizontal" Grid.Row="1">
+							<Button x:Name="AppChooserSelectAllButton" Click="AppChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+							<Button x:Name="AppChooserDeselectAllButton" Click="AppChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+						</StackPanel>
+						
+					</Grid>
+				</GroupBox>
 
-            </Grid>
-            
-        </xctk:WizardPage>
-
-
-        <!-- Shortcuts and pins chooser page -->
-        <xctk:WizardPage x:Name="ShortcutsChooser" PageType="Interior"
-                         Title="What shortcuts and pins do you want for your apps?"
-                         Description="Please choose whether you want a desktop shortcut, start menu shortcut for each app you selected, and please choose which app do you want to pin to the start page or the taskbar!"
-                         NextPage="{Binding ElementName=StartupChooser}"
-                         PreviousPage="{Binding ElementName=AppChooser}"
-                         HelpButtonVisibility="Hidden">
-            <Grid>
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="35" />
-                    <ColumnDefinition Width="3.5*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                
-                <DataGrid Name="ShortcutsChooserAppsDataGrid"
-                          Grid.ColumnSpan="6"
-                          Grid.Column="0"
-                          Grid.Row="0"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          CanUserResizeColumns="False"
-                          CanUserResizeRows="False"
-                          CanUserReorderColumns="False"
-                          GridLinesVisibility="None"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto">
-                
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Icon" Width="35" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="10,0,10,0" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
-                        <DataGridTemplateColumn Header="Desktop" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Start menu" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Pin to Start" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                              IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Pin to taskbar" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                
-                </DataGrid>
-
-                <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
-                    <Button x:Name="ShortcutsChooserDesktopSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-                    <Button x:Name="ShortcutsChooserDesktopDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
-                </StackPanel>
-
-                <StackPanel Orientation="Vertical" Grid.Column="3" Grid.Row="1">
-                    <Button x:Name="ShortcutsChooserStartMenuSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-                    <Button x:Name="ShortcutsChooserStartMenuDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
-                </StackPanel>
-
-                <StackPanel Orientation="Vertical" Grid.Column="4" Grid.Row="1">
-                    <Button x:Name="ShortcutsChooserStartSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0"
-                            IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Select All</Button>
-                    <Button x:Name="ShortcutsChooserStartDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0"
-                            IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Deselect All</Button>
-                </StackPanel>
-
-                <StackPanel Orientation="Vertical" Grid.Column="5" Grid.Row="1">
-                    <Button x:Name="ShortcutsChooserTaskbarSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-                    <Button x:Name="ShortcutsChooserTaskbarDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
-                </StackPanel>
-
-            </Grid>
-        </xctk:WizardPage>
+			</Grid>
+			
+		</xctk:WizardPage>
 
 
-        <!-- Startup apps chooser page -->
-        <xctk:WizardPage x:Name="StartupChooser" PageType="Interior"
-                         Title="What programs do you want to start automatically after Windows starts?"
-                         Description="Please choose which apps do you want to start automatically after Windows starts!"
-                         NextPage="{Binding ElementName=FileExtensionChooser}"
-                         PreviousPage="{Binding ElementName=ShortcutsChooser}"
-                         Enter="StartupChooser_Enter"
-                         HelpButtonVisibility="Hidden">
-            
-            <GroupBox Header="Apps starting with Windows">
-                <Grid>
-                    
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                
-                    <xctk:CheckListBox x:Name="StartupChooserCheckListBox" Grid.Row="0"
-                                       ItemSelectionChanged="StartupChooserCheckListBox_ItemSelectionChanged"
-                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                       ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <xctk:CheckListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" >
-                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </xctk:CheckListBox.ItemTemplate>
-                    </xctk:CheckListBox>
+		<!-- Shortcuts and pins chooser page -->
+		<xctk:WizardPage x:Name="ShortcutsChooser" PageType="Interior"
+						 Title="What shortcuts and pins do you want for your apps?"
+						 Description="Please choose whether you want a desktop shortcut, start menu shortcut for each app you selected, and please choose which app do you want to pin to the start page or the taskbar!"
+						 NextPage="{Binding ElementName=StartupChooser}"
+						 PreviousPage="{Binding ElementName=AppChooser}"
+						 HelpButtonVisibility="Hidden">
+			<Grid>
+				
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="35" />
+					<ColumnDefinition Width="3.5*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				
+				<DataGrid Name="ShortcutsChooserAppsDataGrid"
+						  Grid.ColumnSpan="6"
+						  Grid.Column="0"
+						  Grid.Row="0"
+						  AutoGenerateColumns="False"
+						  CanUserAddRows="False"
+						  CanUserDeleteRows="False"
+						  CanUserResizeColumns="False"
+						  CanUserResizeRows="False"
+						  CanUserReorderColumns="False"
+						  GridLinesVisibility="None"
+						  ScrollViewer.VerticalScrollBarVisibility="Auto">
+				
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="Icon" Width="35" IsReadOnly="True">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="10,0,10,0" />
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
+						<DataGridTemplateColumn Header="Desktop" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Start menu" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Pin to Start" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+											  IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Pin to taskbar" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				
+				</DataGrid>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="1">
-                        <Button x:Name="StartupChooserSelectAllButton" Click="StartupChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-                        <Button x:Name="StartupChooserDeselectAllButton" Click="StartupChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
-                    </StackPanel>
-                    
-                </Grid>
-            </GroupBox>
-            
-        </xctk:WizardPage>
+				<StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
+					<Button x:Name="ShortcutsChooserDesktopSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+					<Button x:Name="ShortcutsChooserDesktopDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+				</StackPanel>
 
+				<StackPanel Orientation="Vertical" Grid.Column="3" Grid.Row="1">
+					<Button x:Name="ShortcutsChooserStartMenuSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+					<Button x:Name="ShortcutsChooserStartMenuDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+				</StackPanel>
 
-        <!-- File extension chooser page -->
-        <xctk:WizardPage x:Name="FileExtensionChooser" PageType="Interior"
-                         Title="What type of files do you want your apps to open?"
-                         Description="Please choose file extensions do you want to link with each of your apps!"
-                         NextPage="{Binding ElementName=SummaryPage}"
-                         PreviousPage="{Binding ElementName=StartupChooser}"
-                         HelpButtonVisibility="Hidden">
-            
-            <StackPanel Orientation="Horizontal">
-                
-                <GroupBox Header="Programs" Width="325" HorizontalAlignment="Left">
-                    <ListBox x:Name="FileExtensionChooserProgramsListBox"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             SelectionChanged="FileExtensionChooserProgramsListBox_SelectionChanged">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" >
-                                    <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
-                                    <TextBlock Text="{Binding Path=Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </GroupBox>
+				<StackPanel Orientation="Vertical" Grid.Column="4" Grid.Row="1">
+					<Button x:Name="ShortcutsChooserStartSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0"
+							IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Select All</Button>
+					<Button x:Name="ShortcutsChooserStartDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0"
+							IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Deselect All</Button>
+				</StackPanel>
 
-                <GroupBox Header="File extensions" Width="325" HorizontalAlignment="Right">
-                    <Grid>
-                        
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        
-                        <xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox" Grid.Row="0"
-                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                           ItemSelectionChanged="FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged">
-                            <xctk:CheckListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}" />
-                                </DataTemplate>
-                            </xctk:CheckListBox.ItemTemplate>                        
-                        </xctk:CheckListBox>
+				<StackPanel Orientation="Vertical" Grid.Column="5" Grid.Row="1">
+					<Button x:Name="ShortcutsChooserTaskbarSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+					<Button x:Name="ShortcutsChooserTaskbarDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+				</StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Grid.Row="1">
-                            <Button x:Name="FileExtensionChooserSelectAllButton" Click="FileExtensionChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-                            <Button x:Name="FileExtensionChooserDeselectAllButton" Click="FileExtensionChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
-                        </StackPanel>
-                        
-                    </Grid>
-                </GroupBox>
-                
-            </StackPanel>
-            
-        </xctk:WizardPage>
-
-    
-        <!-- Summary page -->
-        <xctk:WizardPage x:Name="SummaryPage" PageType="Interior"
-                         Title="Summary"
-                         Description="Check out your options once more. If you like them, press next!"
-                         PreviousPage="{Binding ElementName=FileExtensionChooser}"
-                         NextPage="{Binding ElementName=TestPage}"
-                         HelpButtonVisibility="Hidden"
-                         Enter="SummaryPage_Enter">            
-            <Grid>
-                
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                
-                <GroupBox Header="Changes to be made">
-                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                        <TextBlock x:Name="SummaryPageTextBlock" Background="LightGray" Padding="10"/>
-                    </ScrollViewer>
-                </GroupBox>
-
-                <StackPanel Orientation="Horizontal" Grid.Row="1">
-                    <Button x:Name="SummaryPageConfigSaveButton" 
-                            HorizontalAlignment="Left" Width="150" Margin="0,10,0,0"
-                            Click="SummaryPageConfigSaveButton_Click">Save configuration</Button>
-                    <Button x:Name="SummaryPageRegistryBackupButton" 
-                            HorizontalAlignment="Left" Width="150" Margin="10,10,0,0"
-                            Click="SummaryPageRegistryBackupButton_Click">Backup registry</Button>
-                </StackPanel>
-                
-            </Grid>
-        </xctk:WizardPage>
+			</Grid>
+		</xctk:WizardPage>
 
 
-        <!-- Test page -->
-        <xctk:WizardPage x:Name="TestPage" PageType="Interior"
-                         Title="Test"
-                         PreviousPage="{Binding ElementName=SummaryPage}"
-                         NextPage="{Binding ElementName=ProgressPage}"
-                         CanFinish="False"
-                         HelpButtonVisibility="Hidden">
-            <StackPanel Orientation="Vertical">
-                <Button x:Name="CreateIcon" Click="CreateIcon_Click" Width="80" Margin="10,0,0,0">Create Icon</Button>
-                <Button x:Name="DeleteIcon" Click="DeleteIcon_Click" Width="80" Margin="10,0,0,0">Delete Icon</Button>
-                <Button x:Name="CreateStartMenuIcon" Click="CreateStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Create STMenu Icon</Button>
-                <Button x:Name="DeleteStartMenuIcon" Click="DeleteStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Delete STMenu Icon</Button>
-                <Button x:Name="PinToTask" Click="PinToTask_Click" Width="80" Margin="10,0,0,0">Pin Task</Button>
-                <Button x:Name="UnPinFromTask" Click="UnPinFromTask_Click" Width="80" Margin="10,0,0,0">UnPin Task</Button>
-                <Button x:Name="PinToStart" Click="PinToStart_Click" Width="80" Margin="10,0,0,0">Pin Start</Button>
-                <Button x:Name="UnPinFromStart" Click="UnPinFromStart_Click" Width="80" Margin="10,0,0,0">UnPin Start</Button>
-                <Button x:Name="AddToAutostart" Click="AddToAutostart_Click" Width="80" Margin="10,0,0,0">Add to autostart</Button>
-                <Button x:Name="DeleteFromAutostart" Click="DeleteFromAutostart_Click" Width="80" Margin="10,0,0,0">Delete from autostart</Button>
-                <Button x:Name="Windetect" Click="Windetect_Click" Width="80" Margin="10,0,0,0">Win Detect</Button>
-                <Button x:Name="AddFileAssoc" Click="AddFileAssoc_Click" Width="80" Margin="10,0,0,0">Add file association</Button>
-                <Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
-                <Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
-            </StackPanel>
-        </xctk:WizardPage>
+		<!-- Startup apps chooser page -->
+		<xctk:WizardPage x:Name="StartupChooser" PageType="Interior"
+						 Title="What programs do you want to start automatically after Windows starts?"
+						 Description="Please choose which apps do you want to start automatically after Windows starts!"
+						 NextPage="{Binding ElementName=FileExtensionChooser}"
+						 PreviousPage="{Binding ElementName=ShortcutsChooser}"
+						 Enter="StartupChooser_Enter"
+						 HelpButtonVisibility="Hidden">
+			
+			<GroupBox Header="Apps starting with Windows">
+				<Grid>
+					
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+				
+					<xctk:CheckListBox x:Name="StartupChooserCheckListBox" Grid.Row="0"
+									   ItemSelectionChanged="StartupChooserCheckListBox_ItemSelectionChanged"
+									   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+									   ScrollViewer.VerticalScrollBarVisibility="Auto">
+						<xctk:CheckListBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal" >
+									<Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+									<TextBlock Text="{Binding Path=Name}" />
+								</StackPanel>
+							</DataTemplate>
+						</xctk:CheckListBox.ItemTemplate>
+					</xctk:CheckListBox>
 
-        
-        <!-- Progress page -->
-        <xctk:WizardPage x:Name="ProgressPage" PageType="Interior"
-                         Title="Installing..."
-                         Description="Please wait while the processes are finishing."
-                         CanSelectPreviousPage="False"
-                         CanSelectNextPage="False"
-                         CanFinish="False"
-                         CanCancel="False"
-                         Enter="ProgressPage_Enter"
-                         HelpButtonVisibility="Hidden">
-            <StackPanel Orientation="Vertical">
-                <GroupBox Header="Overall progress" VerticalAlignment="Top">
-                    <ProgressBar x:Name="InstallProgressPageProgressBar" Height="20" />
-                </GroupBox>
-
-                <GroupBox Header="Log">
-                    <TextBlock x:Name="InstallProgressPageTextBlock" Height ="270"
-                               ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                               Text="Installing applications..."/>
-                </GroupBox>
-            </StackPanel>
-        </xctk:WizardPage>
+					<StackPanel Orientation="Horizontal" Grid.Row="1">
+						<Button x:Name="StartupChooserSelectAllButton" Click="StartupChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+						<Button x:Name="StartupChooserDeselectAllButton" Click="StartupChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+					</StackPanel>
+					
+				</Grid>
+			</GroupBox>
+			
+		</xctk:WizardPage>
 
 
-        <!-- Uninstall warning page -->
-        <xctk:WizardPage x:Name="UninstallWarningPage" PageType="Exterior"
-                         Title="Please read this before you start!"
-                         Description=""
-                         ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
-                         ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
-                         NextPage="{Binding ElementName=UninstallAppChooser}"
-                         PreviousPage="{Binding ElementName=IntroPage}"
-                         HelpButtonVisibility="Hidden">
-            <Label>Wow! Such warrning! Very careful!</Label>
-        </xctk:WizardPage>
-        
+		<!-- File extension chooser page -->
+		<xctk:WizardPage x:Name="FileExtensionChooser" PageType="Interior"
+						 Title="What type of files do you want your apps to open?"
+						 Description="Please choose file extensions do you want to link with each of your apps!"
+						 NextPage="{Binding ElementName=SummaryPage}"
+						 PreviousPage="{Binding ElementName=StartupChooser}"
+						 HelpButtonVisibility="Hidden">
+			
+			<StackPanel Orientation="Horizontal">
+				
+				<GroupBox Header="Programs" Width="325" HorizontalAlignment="Left">
+					<ListBox x:Name="FileExtensionChooserProgramsListBox"
+							 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+							 ScrollViewer.VerticalScrollBarVisibility="Auto"
+							 SelectionChanged="FileExtensionChooserProgramsListBox_SelectionChanged">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal" >
+									<Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+									<TextBlock Text="{Binding Path=Name}" />
+								</StackPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</GroupBox>
 
-        <!-- Uninstall Application chooser page -->
-        <xctk:WizardPage x:Name="UninstallAppChooser" PageType="Interior"
-                         Title="Which apps do you want to uninstall?"
-                         Description="Please choose the folder in which you store your portable apps, then select which of those you want to uninstall! Note, that all shortcuts, pins, and file associations of the selected programs will be removed!"
-                         NextPage="{Binding ElementName=UninstallProgressPage}"
-                         PreviousPage="{Binding ElementName=UninstallWarningPage}"
-                         HelpButtonVisibility="Hidden">
+				<GroupBox Header="File extensions" Width="325" HorizontalAlignment="Right">
+					<Grid>
+						
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+						
+						<xctk:CheckListBox x:Name="FileExtensionChooserExtensionsCheckListBox" Grid.Row="0"
+										   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+										   ScrollViewer.VerticalScrollBarVisibility="Auto"
+										   ItemSelectionChanged="FileExtensionChooserExtensionsCheckListBox_ItemSelectionChanged">
+							<xctk:CheckListBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding}" />
+								</DataTemplate>
+							</xctk:CheckListBox.ItemTemplate>                        
+						</xctk:CheckListBox>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+						<StackPanel Orientation="Horizontal" Grid.Row="1">
+							<Button x:Name="FileExtensionChooserSelectAllButton" Click="FileExtensionChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+							<Button x:Name="FileExtensionChooserDeselectAllButton" Click="FileExtensionChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+						</StackPanel>
+						
+					</Grid>
+				</GroupBox>
+				
+			</StackPanel>
+			
+		</xctk:WizardPage>
 
-                <GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="UninstallAppChooserAppsPathTextBox" Width="550" TextChanged="UninstallAppChooserAppsPathTextBox_TextChanged"/>
-                        <Button x:Name="UninstallAppChooserAppsPathBrowseButton" Click="UninstallAppChooserAppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-                    </StackPanel>
-                </GroupBox>
+	
+		<!-- Summary page -->
+		<xctk:WizardPage x:Name="SummaryPage" PageType="Interior"
+						 Title="Summary"
+						 Description="Check out your options once more. If you like them, press next!"
+						 PreviousPage="{Binding ElementName=FileExtensionChooser}"
+						 NextPage="{Binding ElementName=TestPage}"
+						 HelpButtonVisibility="Hidden"
+						 Enter="SummaryPage_Enter">            
+			<Grid>
+				
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				
+				<GroupBox Header="Changes to be made">
+					<ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+						<TextBlock x:Name="SummaryPageTextBlock" Background="LightGray" Padding="10"/>
+					</ScrollViewer>
+				</GroupBox>
 
-                <GroupBox Header="Portable applications found in your folder" Grid.Column="0" Grid.Row="2">
-                    <Grid>
+				<StackPanel Orientation="Horizontal" Grid.Row="1">
+					<Button x:Name="SummaryPageConfigSaveButton" 
+							HorizontalAlignment="Left" Width="150" Margin="0,10,0,0"
+							Click="SummaryPageConfigSaveButton_Click">Save configuration</Button>
+					<Button x:Name="SummaryPageRegistryBackupButton" 
+							HorizontalAlignment="Left" Width="150" Margin="10,10,0,0"
+							Click="SummaryPageRegistryBackupButton_Click">Backup registry</Button>
+				</StackPanel>
+				
+			</Grid>
+		</xctk:WizardPage>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
 
-                        <xctk:CheckListBox Name="UninstallAppChooserAppsCheckListBox" Grid.Column="0" Grid.Row="0"
-                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                           ItemSelectionChanged="UninstallAppChooserAppsCheckListBox_ItemSelectionChanged">
-                            <xctk:CheckListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
-                                        <TextBlock Text="{Binding Path=Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </xctk:CheckListBox.ItemTemplate>
-                        </xctk:CheckListBox>
+		<!-- Test page -->
+		<xctk:WizardPage x:Name="TestPage" PageType="Interior"
+						 Title="Test"
+						 PreviousPage="{Binding ElementName=SummaryPage}"
+						 NextPage="{Binding ElementName=ProgressPage}"
+						 CanFinish="False"
+						 HelpButtonVisibility="Hidden">
+			<StackPanel Orientation="Vertical">
+				<Button x:Name="CreateIcon" Click="CreateIcon_Click" Width="80" Margin="10,0,0,0">Create Icon</Button>
+				<Button x:Name="DeleteIcon" Click="DeleteIcon_Click" Width="80" Margin="10,0,0,0">Delete Icon</Button>
+				<Button x:Name="CreateStartMenuIcon" Click="CreateStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Create STMenu Icon</Button>
+				<Button x:Name="DeleteStartMenuIcon" Click="DeleteStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Delete STMenu Icon</Button>
+				<Button x:Name="PinToTask" Click="PinToTask_Click" Width="80" Margin="10,0,0,0">Pin Task</Button>
+				<Button x:Name="UnPinFromTask" Click="UnPinFromTask_Click" Width="80" Margin="10,0,0,0">UnPin Task</Button>
+				<Button x:Name="PinToStart" Click="PinToStart_Click" Width="80" Margin="10,0,0,0">Pin Start</Button>
+				<Button x:Name="UnPinFromStart" Click="UnPinFromStart_Click" Width="80" Margin="10,0,0,0">UnPin Start</Button>
+				<Button x:Name="AddToAutostart" Click="AddToAutostart_Click" Width="80" Margin="10,0,0,0">Add to autostart</Button>
+				<Button x:Name="DeleteFromAutostart" Click="DeleteFromAutostart_Click" Width="80" Margin="10,0,0,0">Delete from autostart</Button>
+				<Button x:Name="Windetect" Click="Windetect_Click" Width="80" Margin="10,0,0,0">Win Detect</Button>
+				<Button x:Name="AddFileAssoc" Click="AddFileAssoc_Click" Width="80" Margin="10,0,0,0">Add file association</Button>
+				<Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
+				<Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
+			</StackPanel>
+		</xctk:WizardPage>
 
-                        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
-                            <Button x:Name="UninstallAppChooserSelectAllButton" Click="UninstallAppChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-                            <Button x:Name="UninstallAppChooserDeselectAllButton" Click="UninstallAppChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
-                        </StackPanel>
+		
+		<!-- Progress page -->
+		<xctk:WizardPage x:Name="ProgressPage" PageType="Interior"
+						 Title="Installing..."
+						 Description="Please wait while the processes are finishing."
+						 CanSelectPreviousPage="False"
+						 CanSelectNextPage="False"
+						 CanFinish="False"
+						 CanCancel="False"
+						 Enter="ProgressPage_Enter"
+						 HelpButtonVisibility="Hidden">
+			<StackPanel Orientation="Vertical">
+				<GroupBox Header="Overall progress" VerticalAlignment="Top">
+					<ProgressBar x:Name="InstallProgressPageProgressBar" Height="20" />
+				</GroupBox>
 
-                    </Grid>
-                </GroupBox>
+				<GroupBox Header="Log">
+					<TextBlock x:Name="InstallProgressPageTextBlock" Height ="270"
+							   ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+							   Text="Installing applications..."/>
+				</GroupBox>
+			</StackPanel>
+		</xctk:WizardPage>
 
-            </Grid>
 
-        </xctk:WizardPage>
+		<!-- Uninstall warning page -->
+		<xctk:WizardPage x:Name="UninstallWarningPage" PageType="Exterior"
+						 Title="Please read this before you start!"
+						 Description=""
+						 ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
+						 ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
+						 NextPage="{Binding ElementName=UninstallAppChooser}"
+						 PreviousPage="{Binding ElementName=IntroPage}"
+						 HelpButtonVisibility="Hidden">
+			<Label>Wow! Such warrning! Very careful!</Label>
+		</xctk:WizardPage>
+		
 
-        <!-- Uninstall Progress page -->
-        <xctk:WizardPage x:Name="UninstallProgressPage" PageType="Interior"
-                         Title="Uninstalling..."
-                         PreviousPage="{Binding ElementName=UninstallAppChooser}"
-                         CanSelectNextPage="False"
-                         CanSelectPreviousPage="False"
-                         CanFinish="False"
-                         CanCancel="False"
-                         Enter="ProgressPage_Enter"
-                         HelpButtonVisibility="Hidden">
-            
-            <StackPanel Orientation="Vertical">
-                <GroupBox Header="Overall progress" VerticalAlignment="Top">
-                    <ProgressBar x:Name="UninstallProgressPageProgressBar" Height="20" />
-                </GroupBox>
-                
-                <GroupBox Header="Log">
-                    <TextBlock x:Name="UninstallProgressPageTextBlock" Height ="270"
-                               ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                               Text="Uninstalling applications..."/>
-                </GroupBox>
-            </StackPanel>
+		<!-- Uninstall Application chooser page -->
+		<xctk:WizardPage x:Name="UninstallAppChooser" PageType="Interior"
+						 Title="Which apps do you want to uninstall?"
+						 Description="Please choose the folder in which you store your portable apps, then select which of those you want to uninstall! Note, that all shortcuts, pins, and file associations of the selected programs will be removed!"
+						 NextPage="{Binding ElementName=UninstallProgressPage}"
+						 PreviousPage="{Binding ElementName=UninstallWarningPage}"
+						 HelpButtonVisibility="Hidden">
 
-        </xctk:WizardPage>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
 
-        <!-- Ini editor warning page -->
-        <xctk:WizardPage x:Name="IniEditorWarningPage" PageType="Exterior"
-                         Title="Please read this before you start!"
-                         Description=""
-                         ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
-                         ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
-                         NextPage="{Binding ElementName=IniDirChooser}"
-                         PreviousPage="{Binding ElementName=IntroPage}"
-                         HelpButtonVisibility="Hidden">
-            <Label>Wow! Such warrning! Very careful!</Label>
-        </xctk:WizardPage>
+				<GroupBox Header="Portable applications folder location" Grid.Column="0" Grid.Row="0">
+					<StackPanel Orientation="Horizontal">
+						<TextBox x:Name="UninstallAppChooserAppsPathTextBox" Width="550" TextChanged="UninstallAppChooserAppsPathTextBox_TextChanged"/>
+						<Button x:Name="UninstallAppChooserAppsPathBrowseButton" Click="UninstallAppChooserAppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+					</StackPanel>
+				</GroupBox>
 
-        <!-- Ini dir chooser page -->
-        <xctk:WizardPage x:Name="IniDirChooser" PageType="Interior"
-                         Title="Please pick your app root directory, and the exe file!"
-                         Description="Browse your app root directory, it is w"
-                         NextPage="{Binding ElementName=IniDatafill}"
-                         PreviousPage="{Binding ElementName=InstallWarningPage}"
-                         HelpButtonVisibility="Hidden">
+				<GroupBox Header="Portable applications found in your folder" Grid.Column="0" Grid.Row="2">
+					<Grid>
 
-            <GroupBox Header="Your portable app root directory location:" Height="Auto" VerticalAlignment="Top">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
 
-                <StackPanel Orientation="Vertical" >
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">Root directory:</Label>
-                        <TextBox x:Name="IniDirChooserPathTextBox" Width="400"/>
-                        <Button x:Name="IniDirChooserPathBrowseButton" Click="IniDirChooserPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-                    </StackPanel>
+						<xctk:CheckListBox Name="UninstallAppChooserAppsCheckListBox" Grid.Column="0" Grid.Row="0"
+										   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+										   ScrollViewer.VerticalScrollBarVisibility="Auto"
+										   ItemSelectionChanged="UninstallAppChooserAppsCheckListBox_ItemSelectionChanged">
+							<xctk:CheckListBox.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" >
+										<Image Source="{Binding Path=Icon}" Height="15" Width="15" Margin="5,0,10,0" />
+										<TextBlock Text="{Binding Path=Name}" />
+									</StackPanel>
+								</DataTemplate>
+							</xctk:CheckListBox.ItemTemplate>
+						</xctk:CheckListBox>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">Exe path:</Label>
-                        <TextBox x:Name="IniAppExeChooserPathTextBox" Width="400"/>
-                        <Button x:Name="IniAppExeChooserPathBrowseButton" Click="IniAppExeChooserPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-                    </StackPanel>
-                </StackPanel>
-                
-            </GroupBox>
+						<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
+							<Button x:Name="UninstallAppChooserSelectAllButton" Click="UninstallAppChooserSelectAllButton_Click" Width="80" Margin="0,5,0,0">Select All</Button>
+							<Button x:Name="UninstallAppChooserDeselectAllButton" Click="UninstallAppChooserDeselectAllButton_Click" Width="80" Margin="0,5,0,0">Deselect All</Button>
+						</StackPanel>
 
-        </xctk:WizardPage>
+					</Grid>
+				</GroupBox>
 
-        <!-- Ini data filling page -->
-        <xctk:WizardPage x:Name="IniDatafill" PageType="Interior"
-                         Title="Please fill your application data!"
-                         Description="Fill this fields."
-                         NextPage="{Binding ElementName=IniSummaryPage}"
-                         PreviousPage="{Binding ElementName=IniDirChooser}"
-                         HelpButtonVisibility="Hidden"
-                         Enter="IniDatafill_Enter">
+			</Grid>
 
-            <GroupBox Header="Your portable app root directory location:" Height="Auto" VerticalAlignment="Top">
+		</xctk:WizardPage>
 
-                <StackPanel Orientation="Vertical">
-                    <!-- need the name, version, SupportedFileExtensions, start-generated, appid-generated-prefill, filetypecommandline-generated-prefill -->
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">Name:</Label>
-                        <TextBox x:Name="IniAppNameTextBox" Width="490"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">Version:</Label>
-                        <TextBox x:Name="IniAppVersionTextBox" Width="490"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">Supported file extensions:</Label>
-                        <TextBox x:Name="IniAppSupportedExtensionsTextBox" Width="490"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">Start:</Label>
-                        <TextBox x:Name="IniAppStartTextBox" Width="490"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">AppId:</Label>
-                        <TextBox x:Name="IniAppAppIdTextBox" Width="490"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Label Width="150">Command line:</Label>
-                        <TextBox x:Name="IniAppCommandLineTextBox" Width="490"/>
-                    </StackPanel>
+		
+		<!-- Uninstall Progress page -->
+		<xctk:WizardPage x:Name="UninstallProgressPage" PageType="Interior"
+						 Title="Uninstalling..."
+						 PreviousPage="{Binding ElementName=UninstallAppChooser}"
+						 CanSelectNextPage="False"
+						 CanSelectPreviousPage="False"
+						 CanFinish="False"
+						 CanCancel="False"
+						 Enter="ProgressPage_Enter"
+						 HelpButtonVisibility="Hidden">
+			
+			<StackPanel Orientation="Vertical">
+				<GroupBox Header="Overall progress" VerticalAlignment="Top">
+					<ProgressBar x:Name="UninstallProgressPageProgressBar" Height="20" />
+				</GroupBox>
+				
+				<GroupBox Header="Log">
+					<TextBlock x:Name="UninstallProgressPageTextBlock" Height ="270"
+							   ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+							   Text="Uninstalling applications..."/>
+				</GroupBox>
+			</StackPanel>
 
-                    
-                </StackPanel>
+		</xctk:WizardPage>
 
-            </GroupBox>
+		
+		<!-- Ini editor warning page -->
+		<xctk:WizardPage x:Name="IniEditorWarningPage" PageType="Exterior"
+						 Title="Please read this before you start!"
+						 Description=""
+						 ExteriorPanelContent="{Binding ElementName=WizardWindow, Path=Logo}"
+						 ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
+						 NextPage="{Binding ElementName=IniDirChooser}"
+						 PreviousPage="{Binding ElementName=IntroPage}"
+						 HelpButtonVisibility="Hidden">
+			<Label>Wow! Such warrning! Very careful!</Label>
+		</xctk:WizardPage>
 
-        </xctk:WizardPage>
+		
+		<!-- Ini dir chooser page -->
+		<xctk:WizardPage x:Name="IniDirChooser" PageType="Interior"
+						 Title="Tell us where your app is!"
+						 Description="Please give us the location for the directory, and the exe file of your application!"
+						 NextPage="{Binding ElementName=IniDatafill}"
+						 PreviousPage="{Binding ElementName=InstallWarningPage}"
+						 CanSelectNextPage="False"
+						 HelpButtonVisibility="Hidden">
 
-        <!-- Ini Summary page -->
-        <xctk:WizardPage x:Name="IniSummaryPage" PageType="Interior"
-                         Title="Summary"
-                         Description="Check out your options once more. If you like them, press next!"
-                         PreviousPage="{Binding ElementName=IniDatafill}"
-                         NextPage="{Binding ElementName=IniProgressPage}"
-                         HelpButtonVisibility="Hidden"
-                         Enter="IniSummaryPage_Enter">
-            <Grid>
+			
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+			<StackPanel Orientation="Vertical" >
+				<GroupBox Header="Application directory" Height="Auto" VerticalAlignment="Top">
+					<StackPanel Orientation="Horizontal">
+						<TextBox x:Name="IniDirChooserDirPathTextBox" Width="550" TextChanged="IniDirChooserTextChanged"/>
+						<Button x:Name="IniDirChooserDirPathBrowseButton" Click="IniDirChooserDirPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+					</StackPanel>
+				</GroupBox>
 
-                <GroupBox Header="Changes to be made">
-                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                        <TextBlock x:Name="IniSummaryPageTextBlock" Background="LightGray" Padding="10"/>
-                    </ScrollViewer>
-                </GroupBox>
+				<GroupBox Header="Exe file location" Height="Auto" VerticalAlignment="Top">
+					<StackPanel Orientation="Horizontal">
+						<TextBox x:Name="IniDirChooserAppExePathTextBox" Width="550" TextChanged="IniDirChooserTextChanged"/>
+						<Button x:Name="IniDirChooserAppExePathBrowseButton" Click="IniDirChooserAppExePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
+					</StackPanel>
+				</GroupBox>
+			</StackPanel>
+				
+			
 
-            </Grid>
-        </xctk:WizardPage>
+		</xctk:WizardPage>
 
-        <!-- Progress page -->
-        <xctk:WizardPage x:Name="IniProgressPage" PageType="Interior"
-                         Title="Installing..."
-                         Description="Please wait while the processes are finishing."
-                         CanSelectPreviousPage="False"
-                         CanSelectNextPage="False"
-                         CanFinish="False"
-                         CanCancel="False"
-                         Enter="IniProgressPage_Enter"
-                         HelpButtonVisibility="Hidden">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="HomeButton" Margin="10" Width="100" Height="50"
-                        Click="HomeButton_Click" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Image Source="Media/Buttons/Home-button.png" Height="28" Width="28" Margin="5,0,5,0" />
-                        <Label>Home</Label>
-                    </StackPanel>
-                </Button>
-                <Label VerticalAlignment="Center">Jump back to the first page</Label>
-            </StackPanel>
-        </xctk:WizardPage>
+		
+		<!-- Ini data form page -->
+		<xctk:WizardPage x:Name="IniDataForm" PageType="Interior"
+						 Title="Give us some information about Your application"
+						 Description="Fill the fields."
+						 NextPage="{Binding ElementName=IniSummaryPage}"
+						 PreviousPage="{Binding ElementName=IniDirChooser}"
+						 HelpButtonVisibility="Hidden"
+						 Enter="IniDatafill_Enter">
 
-    </xctk:Wizard>
-    
+			<GroupBox Header="Application information" Height="Auto" VerticalAlignment="Top">
+
+				<Grid>
+					
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="30" />
+						<RowDefinition Height="30" />
+						<RowDefinition Height="30" />
+						<RowDefinition Height="30" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="150" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+
+					<!-- Name -->
+					<Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Name:</Label>
+					<v:WatermarkTextBox x:Name="IniAppNameTextBox" Grid.Column="1" Grid.Row="0" Margin="0,5"
+										Watermark="name of your application" />
+					
+					<!-- Version -->
+					<Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Version:</Label>
+					<v:WatermarkTextBox x:Name="IniAppVersionTextBox" Grid.Column="1" Grid.Row="1" Margin="0,5"
+										Watermark="version number of your application (e.g. &quot;3.2.1&quot;)"/>
+
+					<!-- Supported file extensions -->
+					<Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Supported file extensions:</Label>
+					<v:WatermarkTextBox x:Name="IniAppSupportedExtensionsTextBox" Grid.Column="1" Grid.Row="2" Margin="0,5"
+										Watermark="file extensions separated with comma, without point (e.g. &quot;avi,mkv,wmv&quot;)"/>
+
+					<!-- AppID -->
+					<Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">AppID:</Label>
+					<v:WatermarkTextBox x:Name="IniAppAppIdTextBox" Grid.Column="1" Grid.Row="3" Margin="0,5"
+										Watermark="ID for your application"/>
+
+					<!-- Command line -->
+					<Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Command line:</Label>
+					<v:WatermarkTextBox x:Name="IniAppCommandLineTextBox" Grid.Column="1" Grid.Row="4" Margin="0,5"
+										Watermark="command line symbol for opening files with your application"/>
+
+				</Grid>
+				
+				<!--<StackPanel Orientation="Vertical">
+					
+					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+						<Label Width="150">Name:</Label>
+						<TextBox x:Name="IniAppNameTextBox" Width="490"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+						<Label Width="150">Version:</Label>
+						<TextBox x:Name="IniAppVersionTextBox" Width="490"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+						<Label Width="150">Supported file extensions:</Label>
+						<TextBox x:Name="IniAppSupportedExtensionsTextBox" Width="490"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+						<Label Width="150">Start:</Label>
+						<TextBox x:Name="IniAppStartTextBox" Width="490"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+						<Label Width="150">AppId:</Label>
+						<TextBox x:Name="IniAppAppIdTextBox" Width="490"/>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+						<Label Width="150">Command line:</Label>
+						<TextBox x:Name="IniAppCommandLineTextBox" Width="490"/>
+					</StackPanel>
+
+					
+				</StackPanel>-->
+
+			</GroupBox>
+
+		</xctk:WizardPage>
+
+		
+		<!-- Ini Summary page -->
+		<xctk:WizardPage x:Name="IniSummaryPage" PageType="Interior"
+						 Title="Summary"
+						 Description="Check out your options once more. If you like them, press next!"
+						 PreviousPage="{Binding ElementName=IniDatafill}"
+						 NextPage="{Binding ElementName=IniProgressPage}"
+						 HelpButtonVisibility="Hidden"
+						 Enter="IniSummaryPage_Enter">
+
+			<GroupBox Header="Changes to be made">
+				<ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+					<TextBlock x:Name="IniSummaryPageTextBlock" Background="LightGray" Padding="10"/>
+				</ScrollViewer>
+			</GroupBox>
+			
+		</xctk:WizardPage>
+
+		
+		<!-- Success page -->
+		<xctk:WizardPage x:Name="IniSuccessPage" PageType="Interior"
+						 Title="Ini file creation successful."
+						 Description="We created the appinfo.ini file for your application. You can check it out below, if you want!"
+						 CanSelectPreviousPage="False"
+						 CanSelectNextPage="False"
+						 CanFinish="False"
+						 CanCancel="False"
+						 Enter="IniSuccessPage_Enter"
+						 HelpButtonVisibility="Hidden">
+			
+			<Grid Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Button x:Name="OpenIniButton" Grid.Column="0" Grid.Row="0" Margin="10" Width="150" Height="50"
+						Click="OpenIniButton_Click" HorizontalAlignment="Left">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+						<Image Source="Media/Buttons/Edit-button.png" Height="28" Width="28" Margin="5,0,5,0" />
+						<Label>Open appinfo.ini</Label>
+					</StackPanel>
+				</Button>
+				<Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">Open the freshly created appinfo.ini file</Label>
+
+				<Button x:Name="HomeButton" Grid.Column="0" Grid.Row="1" Margin="10" Width="150" Height="50"
+						Click="HomeButton_Click" HorizontalAlignment="Left">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+						<Image Source="Media/Buttons/Home-button.png" Height="28" Width="28" Margin="5,0,5,0" />
+						<Label>Home</Label>
+					</StackPanel>
+				</Button>
+				<Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Jump back to the first page</Label>
+			
+			</Grid>
+			
+		</xctk:WizardPage>
+
+	</xctk:Wizard>
+	
 </Window>

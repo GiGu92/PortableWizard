@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 
@@ -66,7 +64,7 @@ namespace PortableWizard.Model
 			this.IsStartup = false;
 			this.isNew = true;
 
-			this.HandledFileExtensions = new List<string>();	
+			this.HandledFileExtensions = new List<string>();
 		}
 
 		public void InitUnserializedData(string appsFolderPath)
@@ -74,7 +72,7 @@ namespace PortableWizard.Model
 			ConfigFile = new FileInfo(appsFolderPath + @"\" + this.AppFolderName + @"\App\AppInfo\appinfo.ini");
 			IniFile iniFile = new IniFile(ConfigFile.FullName);
 
-			this.isNotFound = !ConfigFile.Exists;			
+			this.isNotFound = !ConfigFile.Exists;
 
 			FileInfo iconFile = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
 			if (iconFile.Exists)
@@ -89,21 +87,24 @@ namespace PortableWizard.Model
 			string associations = iniFile.IniReadValue("Associations", "FileTypes");
 			if (associations != "")
 			{
-				SupportedFileExtensions.AddRange(associations.Split(','));
+				foreach (var association in associations.Split(','))
+				{
+					SupportedFileExtensions.Add(association.Trim());
+				}
 			}
 			this.SupportedFileExtensions.Sort();
 
 			// Removing handled extensions if they are not supported any more
 			if (this.HandledFileExtensions != null)
-		{
+			{
 				var handledExtensions = this.HandledFileExtensions.ToArray();
 				foreach (var extension in handledExtensions)
-			{
-					if (! SupportedFileExtensions.Contains(extension))
+				{
+					if (!SupportedFileExtensions.Contains(extension))
 					{
 						this.HandledFileExtensions.Remove(extension);
-			}
-		}
+					}
+				}
 			}
 		}
 
@@ -436,13 +437,13 @@ namespace PortableWizard.Model
 					extKey.DeleteSubKey("UserChoice");
 				}
 				catch { }
-				
+
 				//if win7 or win8 (not 8.1 or higher)
-				if (! (Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2))
+				if (!(Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2))
 				{
-				extKey.CreateSubKey("UserChoice");
-				extKey.OpenSubKey("UserChoice", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("ProgId", appId);
-			}
+					extKey.CreateSubKey("UserChoice");
+					extKey.OpenSubKey("UserChoice", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("ProgId", appId);
+				}
 			}
 			else
 			{
@@ -468,7 +469,7 @@ namespace PortableWizard.Model
 				.OpenSubKey("Explorer", RegistryKeyPermissionCheck.ReadWriteSubTree)
 				.OpenSubKey("FileExts", RegistryKeyPermissionCheck.ReadWriteSubTree)
 				;
-			
+
 			string[] subkeys = key.GetSubKeyNames();
 
 			string appId = iniFile.IniReadValue("Details", "AppID");
@@ -489,7 +490,7 @@ namespace PortableWizard.Model
 
 			foreach (var keyname in subkeys)
 			{
-				if (SupportedFileExtensions.Contains(keyname.Remove(0,1)))
+				if (SupportedFileExtensions.Contains(keyname.Remove(0, 1)))
 				{
 					if (key.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).GetValue("").Equals(appId))
 					{
