@@ -245,15 +245,15 @@ namespace PortableWizard
 			{
 				if ((sender.Equals(ShortcutsChooserDesktopSelectAllButton)))
 				{
-					app.IsDesktopShortcut = true;
+					app.NeedsDesktopShortcut = true;
 				}
 				else if ((sender.Equals(ShortcutsChooserStartMenuSelectAllButton)))
 				{
-					app.IsStartMenuShortcut = true;
+					app.NeedsStartMenuShortcut = true;
 				}
 				else if ((sender.Equals(ShortcutsChooserTaskbarSelectAllButton)))
 				{
-					app.IsPinnedToTaskbar = true;
+					app.NeedsPinToTaskbar = true;
 				}
 			}
 
@@ -266,15 +266,15 @@ namespace PortableWizard
 			{
 				if ((sender.Equals(ShortcutsChooserDesktopDeselectAllButton)))
 				{
-					app.IsDesktopShortcut = false;
+					app.NeedsDesktopShortcut = false;
 				}
 				else if ((sender.Equals(ShortcutsChooserStartMenuDeselectAllButton)))
 				{
-					app.IsStartMenuShortcut = false;
+					app.NeedsStartMenuShortcut = false;
 				}
 				else if ((sender.Equals(ShortcutsChooserTaskbarDeselectAllButton)))
 				{
-					app.IsPinnedToTaskbar = false;
+					app.NeedsPinToTaskbar = false;
 				}
 			}
 
@@ -290,7 +290,7 @@ namespace PortableWizard
 			var startUpApps = new ObservableCollection<object>();
 			foreach (var app in appManager.SelectedApplicationList)
 			{
-				if (app.IsStartup)
+				if (app.NeedsToBeStartup)
 				{
 					startUpApps.Add(app);
 				}
@@ -312,11 +312,11 @@ namespace PortableWizard
 			{
 				if (selectedAppNames.Contains(app.Name))
 				{
-					app.IsStartup = true;
+					app.NeedsToBeStartup = true;
 				}
 				else
 				{
-					app.IsStartup = false;
+					app.NeedsToBeStartup = false;
 				}
 			}
 		}
@@ -388,28 +388,28 @@ namespace PortableWizard
 			SummaryPageTextBlock.Text += "Desktop shortcuts will be added for the following applications:";
 			foreach (var app in appManager.SelectedApplicationList)
 			{
-				if (app.IsDesktopShortcut)
+				if (app.NeedsDesktopShortcut)
 					SummaryPageTextBlock.Text += "\n\t" + app.Name;
 			}
 
 			SummaryPageTextBlock.Text += "\n\nStart menu shortcuts folders and shortcuts will be added for the following applications:";
 			foreach (var app in appManager.SelectedApplicationList)
 			{
-				if (app.IsStartMenuShortcut)
+				if (app.NeedsStartMenuShortcut)
 					SummaryPageTextBlock.Text += "\n\t" + app.Name;
 			}
 
 			SummaryPageTextBlock.Text += "\n\nThe following applications will be pinned to the Taskbar:";
 			foreach (var app in appManager.SelectedApplicationList)
 			{
-				if (app.IsPinnedToTaskbar)
+				if (app.NeedsPinToTaskbar)
 					SummaryPageTextBlock.Text += "\n\t" + app.Name;
 			}
 
 			SummaryPageTextBlock.Text += "\n\nThe following applications will start with Windows:";
 			foreach (var app in appManager.SelectedApplicationList)
 			{
-				if (app.IsStartup)
+				if (app.NeedsToBeStartup)
 					SummaryPageTextBlock.Text += "\n\t" + app.Name;
 			}
 

@@ -9,6 +9,9 @@ using System.Xml.Serialization;
 
 namespace PortableWizard.Model
 {
+	/// <summary>
+	/// Class that represents a portable application
+	/// </summary>
 	public class Application
 	{
 		[XmlAttribute]
@@ -21,13 +24,13 @@ namespace PortableWizard.Model
 		public BitmapImage Icon { get; set; }
 
 		[XmlAttribute]
-		public bool IsDesktopShortcut { get; set; }
+		public bool NeedsDesktopShortcut { get; set; }
 		[XmlAttribute]
-		public bool IsStartMenuShortcut { get; set; }
+		public bool NeedsStartMenuShortcut { get; set; }
 		[XmlAttribute]
-		public bool IsPinnedToTaskbar { get; set; }
+		public bool NeedsPinToTaskbar { get; set; }
 		[XmlAttribute]
-		public bool IsStartup { get; set; }
+		public bool NeedsToBeStartup { get; set; }
 
 		[XmlIgnore]
 		public List<string> SupportedFileExtensions { get; set; }
@@ -46,6 +49,13 @@ namespace PortableWizard.Model
 
 		public Application() { }
 
+		/// <summary>
+		/// Constructor for portable applications that meets the requirements of portableapps.com. This constructor
+		/// initializes fields and properties of the application, from the appinfo.ini file, few that are not in the
+		/// ini file, are set to default values.
+		/// </summary>
+		/// <param name="appsFolderPath">The folder the user keeps his/her portable applications</param>
+		/// <param name="appFolderName">The name of the folder of the application</param>
 		public Application(string appsFolderPath, string appFolderName)
 		{
 			this.AppFolderName = appFolderName;
@@ -55,15 +65,19 @@ namespace PortableWizard.Model
 			IniFile iniFile = new IniFile(ConfigFile.FullName);
 			this.Name = iniFile.IniReadValue("Details", "Name");
 			this.Version = iniFile.IniReadValue("Format", "Version");
-			this.IsDesktopShortcut = true;
-			this.IsStartMenuShortcut = true;
-			this.IsPinnedToTaskbar = true;
-			this.IsStartup = false;
+			this.NeedsDesktopShortcut = true;
+			this.NeedsStartMenuShortcut = true;
+			this.NeedsPinToTaskbar = false;
+			this.NeedsToBeStartup = false;
 			this.isNew = true;
 
 			this.HandledFileExtensions = new List<string>();
 		}
 
+		/// <summary>
+		/// Function that initializes data, that are not serialized when the user saves the configuration of Portable Wizard.
+		/// </summary>
+		/// <param name="appsFolderPath">The folder the user keeps his/her portable applications</param>
 		public void InitUnserializedData(string appsFolderPath)
 		{
 			ConfigFile = new FileInfo(appsFolderPath + @"\" + this.AppFolderName + @"\App\AppInfo\appinfo.ini");
@@ -71,6 +85,7 @@ namespace PortableWizard.Model
 
 			this.isNotFound = !ConfigFile.Exists;
 
+			// Loading icon
 			FileInfo iconFile = new FileInfo(ConfigFile.Directory.FullName + @"\appicon_32.png");
 			if (iconFile.Exists)
 			{
@@ -105,18 +120,27 @@ namespace PortableWizard.Model
 			}
 		}
 
+		/// <summary>
+		/// Adds a shortcut for the application to the desktop
+		/// </summary>
 		public void AddShortcutToDesktop()
 		{
 			string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-			createShortcut(deskDir + "\\" + Name + ".url");
+			CreateShortcut(deskDir + "\\" + Name + ".url");
 		}
 
+		/// <summary>
+		/// Deletes the shortcut for the application from the desktop
+		/// </summary>
 		public void DeleteShortcutFromDesktop()
 		{
 			string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 			File.Delete(deskDir + "\\" + Name + ".url");
 		}
 
+		/// <summary>
+		/// Adds a shortcut for the application to the start menu
+		/// </summary>
 		public void AddShortcutToStartMenu()
 		{
 			string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -126,10 +150,28 @@ namespace PortableWizard.Model
 			{
 				startPath.Create();
 			}
-			createShortcut(startDir + "\\" + Name + ".url");
+			CreateShortcut(startDir + "\\" + Name + ".url");
 		}
 
-		private void createShortcut(string fullpath)
+		/// <summary>
+		/// Deletes the shortcut for the application from the desktop
+		/// </summary>
+		public void DeleteShortcutFromStartMenu()
+		{
+			string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
+			DirectoryInfo startPath = new DirectoryInfo(startDir);
+			if (startPath.Exists)
+			{
+				startPath.Delete(true);
+			}
+		}
+
+		/// <summary>
+		/// Helper method for shortcut creating
+		/// </summary>
+		/// <param name="fullpath">Path to the location where the shortcut needs to be created</param>
+		private void CreateShortcut(string fullpath)
 		{
 			IniFile iniFile = new IniFile(ConfigFile.FullName);
 			string appexe = iniFile.IniReadValue("Control", "Start");
@@ -149,45 +191,20 @@ namespace PortableWizard.Model
 			}
 		}
 
-		public void DeleteShortcutFromStartMenu()
-		{
-			string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			startDir += @"\Microsoft\Windows\Start Menu\Programs\" + Name;
-			DirectoryInfo startPath = new DirectoryInfo(startDir);
-			if (startPath.Exists)
-			{
-				startPath.Delete(true);
-			}
-		}
-
+		/// <summary>
+		/// Pins the application to the taskbar
+		/// </summary>
 		public void PinShortcutToTaskBar()
 		{
 			PinToWindows(true, true);
 		}
 
+		/// <summary>
+		/// Unpins the application from the taskbar
+		/// </summary>
 		public void UnPinShortcutFromTaskBar()
 		{
 			PinToWindows(true, false);
-		}
-
-		public void PinShortcutToStart()
-		{
-			PinToWindows(false, true);
-		}
-
-		public void UnPinShortcutFromStart()
-		{
-			IniFile iniFile = new IniFile(ConfigFile.FullName);
-			string appexe = iniFile.IniReadValue("Control", "Start");
-			string ext = appexe.Split('.')[appexe.Split('.').Length - 1];
-			string exename = appexe.Substring(0, appexe.LastIndexOf("." + ext));
-			string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			startDir += @"\Microsoft\Windows\Start Menu\Programs\" + exename + ".lnk";
-			FileInfo fileshortcut = new FileInfo(startDir);
-			if (fileshortcut.Exists)
-			{
-				fileshortcut.Delete();
-			}
 		}
 
 		/// <summary>
@@ -336,7 +353,25 @@ namespace PortableWizard.Model
 
 		#endregion
 
-		public void DeleteFromAutostart()
+		/// <summary>
+		/// Adds the application to the startup applications
+		/// </summary>
+		public void AddToAutostart()
+		{
+			string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			startDir += @"\Microsoft\Windows\Start Menu\Programs\Startup";
+			DirectoryInfo startPath = new DirectoryInfo(startDir);
+			if (!startPath.Exists)
+			{
+				startPath.Create();
+			}
+			CreateShortcut(startDir + "\\" + Name + ".url");
+		}
+
+		/// <summary>
+		/// Removes the application from the startup applications
+		/// </summary>
+		public void RemoveFromAutostart()
 		{
 			string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			startDir += @"\Microsoft\Windows\Start Menu\Programs\Startup\" + Name + ".url";
@@ -347,19 +382,11 @@ namespace PortableWizard.Model
 			}
 		}
 
-		public void AddToAutostart()
-		{
-			string startDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			startDir += @"\Microsoft\Windows\Start Menu\Programs\Startup";
-			DirectoryInfo startPath = new DirectoryInfo(startDir);
-			if (!startPath.Exists)
-			{
-				startPath.Create();
-			}
-			createShortcut(startDir + "\\" + Name + ".url");
-		}
-
-		public void TakeToRegistry(string ext)
+		/// <summary>
+		/// Adds a file association to the application in the registry
+		/// </summary>
+		/// <param name="ext">the file extension we want an association for e.g.: "avi" or ".avi"</param>
+		public void AddFileAssociationToRegistry(string ext)
 		{
 			if (!ext.StartsWith(".")) ext = "." + ext;
 
@@ -450,7 +477,11 @@ namespace PortableWizard.Model
 
 		}
 
-		public void DeleteFromRegistry()
+		/// <summary>
+		/// Removes a file association to the application in the registry
+		/// </summary>
+		/// <param name="ext">the file extension of which we want the association removed</param>
+		public void RemoveFileAssociationFromRegistry()
 		{
 			//if (!ext.StartsWith(".")) ext = "." + ext;
 

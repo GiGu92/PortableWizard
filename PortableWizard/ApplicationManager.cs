@@ -85,7 +85,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsDesktopShortcut)
+				if (app.NeedsDesktopShortcut)
 				{
 					app.AddShortcutToDesktop();
 				}
@@ -96,7 +96,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsDesktopShortcut)
+				if (app.NeedsDesktopShortcut)
 				{
 					app.DeleteShortcutFromDesktop();
 				}
@@ -107,7 +107,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsStartMenuShortcut)
+				if (app.NeedsStartMenuShortcut)
 				{
 					app.AddShortcutToStartMenu();
 				}
@@ -118,7 +118,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsStartMenuShortcut)
+				if (app.NeedsStartMenuShortcut)
 				{
 					app.DeleteShortcutFromStartMenu();
 				}
@@ -129,7 +129,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsPinnedToTaskbar)
+				if (app.NeedsPinToTaskbar)
 				{
 					app.PinShortcutToTaskBar();
 				}
@@ -140,7 +140,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsPinnedToTaskbar)
+				if (app.NeedsPinToTaskbar)
 				{
 					app.UnPinShortcutFromTaskBar();
 				}
@@ -151,7 +151,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsStartup)
+				if (app.NeedsToBeStartup)
 				{
 					app.AddToAutostart();
 				}
@@ -162,9 +162,9 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.IsStartup)
+				if (app.NeedsToBeStartup)
 				{
-					app.DeleteFromAutostart();
+					app.RemoveFromAutostart();
 				}
 			}
 		}
@@ -177,7 +177,7 @@ namespace PortableWizard
 				{
 					foreach (var ext in app.HandledFileExtensions)
 					{
-						app.TakeToRegistry(ext);
+						app.AddFileAssociationToRegistry(ext);
 					}
 				}
 			}
@@ -187,7 +187,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				app.DeleteFromRegistry();
+				app.RemoveFileAssociationFromRegistry();
 			}
 		}
 	}
