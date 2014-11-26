@@ -192,11 +192,11 @@
 				
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="35" />
-					<ColumnDefinition Width="3.5*" />
+					<ColumnDefinition Width="340" />
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="15" />
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
@@ -224,7 +224,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Name" Width="3.5*" IsReadOnly="True" Binding="{Binding Path=Name}" />
+						<DataGridTextColumn Header="Name" Width="340" IsReadOnly="True" Binding="{Binding Path=Name}" />
 						<DataGridTemplateColumn Header="Desktop" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
@@ -238,15 +238,7 @@
 									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="Pin to Start" Width="*">
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-											  IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}"/>
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
+						</DataGridTemplateColumn>						
 						<DataGridTemplateColumn Header="Pin to taskbar" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
@@ -260,24 +252,17 @@
 
 				<StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
 					<Button x:Name="ShortcutsChooserDesktopSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-					<Button x:Name="ShortcutsChooserDesktopDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+					<Button x:Name="ShortcutsChooserDesktopDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0">Deselect All</Button>
 				</StackPanel>
 
 				<StackPanel Orientation="Vertical" Grid.Column="3" Grid.Row="1">
 					<Button x:Name="ShortcutsChooserStartMenuSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-					<Button x:Name="ShortcutsChooserStartMenuDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+					<Button x:Name="ShortcutsChooserStartMenuDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0">Deselect All</Button>
 				</StackPanel>
 
 				<StackPanel Orientation="Vertical" Grid.Column="4" Grid.Row="1">
-					<Button x:Name="ShortcutsChooserStartSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0"
-							IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Select All</Button>
-					<Button x:Name="ShortcutsChooserStartDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0"
-							IsEnabled="{Binding ElementName=WizardWindow, Path=IsPinToStartSupported}">Deselect All</Button>
-				</StackPanel>
-
-				<StackPanel Orientation="Vertical" Grid.Column="5" Grid.Row="1">
 					<Button x:Name="ShortcutsChooserTaskbarSelectAllButton" Click="ShortcutsChooserSelectAllButtons_Click" Width="80" Margin="0,5,0,0">Select All</Button>
-					<Button x:Name="ShortcutsChooserTaskbarDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0,0,0,0">Deselect All</Button>
+					<Button x:Name="ShortcutsChooserTaskbarDeselectAllButton" Click="ShortcutsChooserDeselectAllButtons_Click" Width="80" Margin="0">Deselect All</Button>
 				</StackPanel>
 
 			</Grid>
@@ -432,11 +417,8 @@
 				<Button x:Name="DeleteStartMenuIcon" Click="DeleteStartMenuIcon_Click" Width="80" Margin="10,0,0,0">Delete STMenu Icon</Button>
 				<Button x:Name="PinToTask" Click="PinToTask_Click" Width="80" Margin="10,0,0,0">Pin Task</Button>
 				<Button x:Name="UnPinFromTask" Click="UnPinFromTask_Click" Width="80" Margin="10,0,0,0">UnPin Task</Button>
-				<Button x:Name="PinToStart" Click="PinToStart_Click" Width="80" Margin="10,0,0,0">Pin Start</Button>
-				<Button x:Name="UnPinFromStart" Click="UnPinFromStart_Click" Width="80" Margin="10,0,0,0">UnPin Start</Button>
 				<Button x:Name="AddToAutostart" Click="AddToAutostart_Click" Width="80" Margin="10,0,0,0">Add to autostart</Button>
 				<Button x:Name="DeleteFromAutostart" Click="DeleteFromAutostart_Click" Width="80" Margin="10,0,0,0">Delete from autostart</Button>
-				<Button x:Name="Windetect" Click="Windetect_Click" Width="80" Margin="10,0,0,0">Win Detect</Button>
 				<Button x:Name="AddFileAssoc" Click="AddFileAssoc_Click" Width="80" Margin="10,0,0,0">Add file association</Button>
 				<Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
 				<Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
@@ -666,36 +648,6 @@
 
 				</Grid>
 				
-				<!--<StackPanel Orientation="Vertical">
-					
-					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-						<Label Width="150">Name:</Label>
-						<TextBox x:Name="IniAppNameTextBox" Width="490"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-						<Label Width="150">Version:</Label>
-						<TextBox x:Name="IniAppVersionTextBox" Width="490"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-						<Label Width="150">Supported file extensions:</Label>
-						<TextBox x:Name="IniAppSupportedExtensionsTextBox" Width="490"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-						<Label Width="150">Start:</Label>
-						<TextBox x:Name="IniAppStartTextBox" Width="490"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-						<Label Width="150">AppId:</Label>
-						<TextBox x:Name="IniAppAppIdTextBox" Width="490"/>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-						<Label Width="150">Command line:</Label>
-						<TextBox x:Name="IniAppCommandLineTextBox" Width="490"/>
-					</StackPanel>
-
-					
-				</StackPanel>-->
-
 			</GroupBox>
 
 		</xctk:WizardPage>

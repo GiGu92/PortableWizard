@@ -1,11 +1,7 @@
 ﻿using PortableWizard.Model;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace PortableWizard
@@ -31,7 +27,7 @@ namespace PortableWizard
 		{
 			this.AppsFolderPath = AppsPath;
 			LoadPortableApps();
-			
+
 		}
 
 		private void LoadPortableApps()
@@ -54,7 +50,7 @@ namespace PortableWizard
 
 			if (Directory.Exists(AppsFolderPath))
 			{
-				DirectoryInfo directory = new DirectoryInfo(AppsFolderPath);				
+				DirectoryInfo directory = new DirectoryInfo(AppsFolderPath);
 				DirectoryInfo[] subDirs = directory.GetDirectories();
 
 				foreach (DirectoryInfo dirInfo in subDirs)
@@ -64,28 +60,29 @@ namespace PortableWizard
 					{
 						Application app = new Application(AppsFolderPath, dirInfo.Name);
 
-						if (! currentAppNames.Contains(app.Name))
+						if (!currentAppNames.Contains(app.Name))
 						{
 							this.ApplicationList.Add(app);
 						}
-						else 
+						else
 						{
 							foreach (var tmpapp in ApplicationList)
 							{
-								if (tmpapp.Name == app.Name) 
+								if (tmpapp.Name == app.Name)
 								{
 									bool isNew = tmpapp.isNew;
 									tmpapp.InitUnserializedData(AppsFolderPath);
 									tmpapp.isNew = isNew;
 								}
 							}
-						}						
+						}
 					}
 				}
 			}
 		}
 
-		public void CreateShortcuts() {
+		public void CreateShortcuts()
+		{
 			foreach (var app in SelectedApplicationList)
 			{
 				if (app.IsDesktopShortcut)
@@ -95,7 +92,8 @@ namespace PortableWizard
 			}
 		}
 
-		public void DeleteShortcuts() {
+		public void DeleteShortcuts()
+		{
 			foreach (var app in SelectedApplicationList)
 			{
 				if (app.IsDesktopShortcut)
@@ -149,29 +147,6 @@ namespace PortableWizard
 			}
 		}
 
-		public void PinShortcutsToStart()
-		{
-			foreach (var app in SelectedApplicationList)
-			{
-				if (app.IsPinnedToStart)
-				{
-					app.PinShortcutToStart();
-				}
-			}
-		}
-
-		public void UnPinShortcutsFromStart()
-		{
-			foreach (var app in SelectedApplicationList)
-			{
-				if (app.IsPinnedToStart)
-				{
-					app.UnPinShortcutFromStart();
-				}
-			}
-		}
-
-
 		public void AddToAutostart()
 		{
 			foreach (var app in SelectedApplicationList)
@@ -194,11 +169,11 @@ namespace PortableWizard
 			}
 		}
 
-		public void AddFileAssoc()
+		public void AddFileAssociations()
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.HandledFileExtensions.Count>0)
+				if (app.HandledFileExtensions.Count > 0)
 				{
 					foreach (var ext in app.HandledFileExtensions)
 					{
@@ -208,7 +183,7 @@ namespace PortableWizard
 			}
 		}
 
-		public void DeleteFileAssoc()
+		public void DeleteFileAssociations()
 		{
 			foreach (var app in SelectedApplicationList)
 			{

@@ -25,8 +25,6 @@ namespace PortableWizard.Model
 		[XmlAttribute]
 		public bool IsStartMenuShortcut { get; set; }
 		[XmlAttribute]
-		public bool IsPinnedToStart { get; set; }
-		[XmlAttribute]
 		public bool IsPinnedToTaskbar { get; set; }
 		[XmlAttribute]
 		public bool IsStartup { get; set; }
@@ -59,7 +57,6 @@ namespace PortableWizard.Model
 			this.Version = iniFile.IniReadValue("Format", "Version");
 			this.IsDesktopShortcut = true;
 			this.IsStartMenuShortcut = true;
-			this.IsPinnedToStart = false;
 			this.IsPinnedToTaskbar = true;
 			this.IsStartup = false;
 			this.isNew = true;

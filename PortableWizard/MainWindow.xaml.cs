@@ -239,17 +239,6 @@ namespace PortableWizard
 
 		#region ShortcutsChooser
 
-		public bool IsPinToStartSupported
-		{
-			get
-			{
-				if (Environment.OSVersion.Version.Major >= 6)
-					if (Environment.OSVersion.Version.Minor >= 2)
-						return true;
-				return false;
-			}
-		}
-
 		private void ShortcutsChooserSelectAllButtons_Click(object sender, RoutedEventArgs e)
 		{
 			foreach (var app in appManager.SelectedApplicationList)
@@ -261,10 +250,6 @@ namespace PortableWizard
 				else if ((sender.Equals(ShortcutsChooserStartMenuSelectAllButton)))
 				{
 					app.IsStartMenuShortcut = true;
-				}
-				else if ((sender.Equals(ShortcutsChooserStartSelectAllButton)))
-				{
-					app.IsPinnedToStart = true;
 				}
 				else if ((sender.Equals(ShortcutsChooserTaskbarSelectAllButton)))
 				{
@@ -286,10 +271,6 @@ namespace PortableWizard
 				else if ((sender.Equals(ShortcutsChooserStartMenuDeselectAllButton)))
 				{
 					app.IsStartMenuShortcut = false;
-				}
-				else if ((sender.Equals(ShortcutsChooserStartDeselectAllButton)))
-				{
-					app.IsPinnedToStart = false;
 				}
 				else if ((sender.Equals(ShortcutsChooserTaskbarDeselectAllButton)))
 				{
@@ -418,16 +399,6 @@ namespace PortableWizard
 					SummaryPageTextBlock.Text += "\n\t" + app.Name;
 			}
 
-			if (IsPinToStartSupported)
-			{
-				SummaryPageTextBlock.Text += "\n\nThe following applications will be pinned to the Start screen:";
-				foreach (var app in appManager.SelectedApplicationList)
-				{
-					if (app.IsPinnedToStart)
-						SummaryPageTextBlock.Text += "\n\t" + app.Name;
-				}
-			}
-
 			SummaryPageTextBlock.Text += "\n\nThe following applications will be pinned to the Taskbar:";
 			foreach (var app in appManager.SelectedApplicationList)
 			{
@@ -523,21 +494,6 @@ namespace PortableWizard
 			appManager.UnPinShortcutsFromTaskBar();
 		}
 
-		private void PinToStart_Click(object sender, RoutedEventArgs e)
-		{
-			appManager.PinShortcutsToStart();
-		}
-
-		private void UnPinFromStart_Click(object sender, RoutedEventArgs e)
-		{
-			appManager.UnPinShortcutsFromStart();
-		}
-
-		private void Windetect_Click(object sender, RoutedEventArgs e)
-		{
-			bool x = this.IsPinToStartSupported;
-		}
-
 		private void AddToAutostart_Click(object sender, RoutedEventArgs e)
 		{
 			appManager.AddToAutostart();
@@ -549,12 +505,12 @@ namespace PortableWizard
 		}
 		private void AddFileAssoc_Click(object sender, RoutedEventArgs e)
 		{
-			appManager.AddFileAssoc();
+			appManager.AddFileAssociations();
 		}
 
 		private void DeleteFileAssoc_Click(object sender, RoutedEventArgs e)
 		{
-			appManager.DeleteFileAssoc();
+			appManager.DeleteFileAssociations();
 		}
 
 		private void RestartExplorer_Click(object sender, RoutedEventArgs e)
@@ -623,26 +579,23 @@ namespace PortableWizard
 				(sender as BackgroundWorker).ReportProgress(0);
 				appManager.CreateShortcuts();
 
-				(sender as BackgroundWorker).ReportProgress(16);
+				(sender as BackgroundWorker).ReportProgress(15);
 				appManager.CreateStartMenuShortcuts();
 
-				(sender as BackgroundWorker).ReportProgress(32);
+				(sender as BackgroundWorker).ReportProgress(30);
 				appManager.PinShortcutsToTaskBar();
 
-				(sender as BackgroundWorker).ReportProgress(48);
-				appManager.PinShortcutsToStart();
-
-				(sender as BackgroundWorker).ReportProgress(60);
+				(sender as BackgroundWorker).ReportProgress(45);
 				appManager.AddToAutostart();
 
-				(sender as BackgroundWorker).ReportProgress(72);
-				appManager.AddFileAssoc();
+				(sender as BackgroundWorker).ReportProgress(60);
+				appManager.AddFileAssociations();
 
-				(sender as BackgroundWorker).ReportProgress(98);
+				(sender as BackgroundWorker).ReportProgress(75);
 				Toolkit.WinProcessManager.KillProcess("explorer.exe");
 				System.Threading.Thread.Sleep(1000);
 
-				(sender as BackgroundWorker).ReportProgress(99);
+				(sender as BackgroundWorker).ReportProgress(90);
 				Toolkit.WinProcessManager.StartProcessIfNotRunning("explorer.exe");
 
 				(sender as BackgroundWorker).ReportProgress(100);
@@ -653,15 +606,15 @@ namespace PortableWizard
 			{
 				(sender as BackgroundWorker).ReportProgress(0);
 				appManager.DeleteShortcuts();
-				System.Threading.Thread.Sleep(1000);
 
-				(sender as BackgroundWorker).ReportProgress(33);
+				(sender as BackgroundWorker).ReportProgress(25);
 				appManager.DeleteStartMenuShortcuts();
-				System.Threading.Thread.Sleep(1000);
 
-				(sender as BackgroundWorker).ReportProgress(66);
+				(sender as BackgroundWorker).ReportProgress(50);
 				appManager.UnPinShortcutsFromTaskBar();
-				System.Threading.Thread.Sleep(1000);
+
+				(sender as BackgroundWorker).ReportProgress(75);
+				appManager.DeleteFileAssociations();
 
 				(sender as BackgroundWorker).ReportProgress(100);
 			}
