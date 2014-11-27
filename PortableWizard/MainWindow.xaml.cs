@@ -940,7 +940,7 @@ namespace PortableWizard
 
 		private void OpenIniButton_Click(object sender, RoutedEventArgs e)
 		{
-			// TODO
+			System.Diagnostics.Process.Start(IniDirChooserDirPathTextBox.Text + "\\App\\AppInfo\\appinfo.ini");
 		}
 
 		#endregion
