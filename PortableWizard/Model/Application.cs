@@ -139,7 +139,7 @@ namespace PortableWizard.Model
 		}
 
 		/// <summary>
-		/// Adds a shortcut for the application to the start menu
+		/// Adds a folder and a shortcut for the application to the start menu
 		/// </summary>
 		public void AddShortcutToStartMenu()
 		{
@@ -402,12 +402,11 @@ namespace PortableWizard.Model
 				.OpenSubKey("FileExts", RegistryKeyPermissionCheck.ReadWriteSubTree)
 				;
 
-
 			string[] subkeys = key.GetSubKeyNames();
 
 			string appId = iniFile.IniReadValue("Details", "AppID");
 
-			bool foundApp = false;
+			/*bool foundApp = false;
 			bool foundExt = false;
 			foreach (var keyname in subkeys)
 			{
@@ -415,8 +414,9 @@ namespace PortableWizard.Model
 					foundApp = true;
 				if (keyname == ext)
 					foundExt = true;
-			}
-			if (!foundApp)
+			}*/
+			//if (!foundApp)
+			if (!subkeys.Contains(appId))
 			{
 				string assoc = iniFile.IniReadValue("Associations", "FileTypeCommandLine");
 				string exec = new FileInfo(ConfigFile.Directory.FullName + @"\..\..\" + iniFile.IniReadValue("Control", "Start")).FullName;
@@ -437,7 +437,8 @@ namespace PortableWizard.Model
 				appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("open", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("ddeexec", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", "");
 			}
 
-			if (foundExt)
+			//if (foundExt)
+			if (subkeys.Contains(ext))
 			{
 				key.DeleteSubKeyTree(ext);
 			}
@@ -446,13 +447,14 @@ namespace PortableWizard.Model
 			key.OpenSubKey(ext, RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", appId);
 
 			subkeys = fileExt.GetSubKeyNames();
-			foundExt = false;
+			/*foundExt = false;
 			foreach (var keyname in subkeys)
 			{
 				if (keyname.Equals(ext))
 					foundExt = true;
-			}
-			if (foundExt)
+			}*/
+			//if (foundExt)
+			if (subkeys.Contains(ext))
 			{
 				RegistryKey extKey = fileExt.OpenSubKey(ext, RegistryKeyPermissionCheck.ReadWriteSubTree);
 
@@ -502,7 +504,7 @@ namespace PortableWizard.Model
 
 			string appId = iniFile.IniReadValue("Details", "AppID");
 
-			bool foundApp = false;
+			/*bool foundApp = false;
 			foreach (var keyname in subkeys)
 			{
 				if (keyname.Equals(appId))
@@ -510,8 +512,9 @@ namespace PortableWizard.Model
 					foundApp = true;
 					break;
 				}
-			}
-			if (foundApp)
+			}*/
+			//if (foundApp)
+			if (subkeys.Contains(appId))
 			{
 				key.DeleteSubKeyTree(appId);
 			}

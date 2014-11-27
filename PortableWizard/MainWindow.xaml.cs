@@ -467,11 +467,11 @@ namespace PortableWizard
 
 		private void CreateIcon_Click(object sender, RoutedEventArgs e)
 		{
-			appManager.CreateShortcuts();
+			appManager.CreateDesktopShortcuts();
 		}
 		private void DeleteIcon_Click(object sender, RoutedEventArgs e)
 		{
-			appManager.DeleteShortcuts();
+			appManager.DeleteDesktopShortcuts();
 		}
 
 		private void CreateStartMenuIcon_Click(object sender, RoutedEventArgs e)
@@ -577,7 +577,7 @@ namespace PortableWizard
 			if (!((string)e.Argument).StartsWith("Un"))
 			{
 				(sender as BackgroundWorker).ReportProgress(0);
-				appManager.CreateShortcuts();
+				appManager.CreateDesktopShortcuts();
 
 				(sender as BackgroundWorker).ReportProgress(15);
 				appManager.CreateStartMenuShortcuts();
@@ -605,7 +605,7 @@ namespace PortableWizard
 			else
 			{
 				(sender as BackgroundWorker).ReportProgress(0);
-				appManager.DeleteShortcuts();
+				appManager.DeleteDesktopShortcuts();
 
 				(sender as BackgroundWorker).ReportProgress(25);
 				appManager.DeleteStartMenuShortcuts();
