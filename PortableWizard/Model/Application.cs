@@ -2,6 +2,7 @@
 using PortableWizard.Toolkit;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
@@ -412,7 +413,7 @@ namespace PortableWizard.Model
 
             //if win7 or win8 (not 8.1 or higher)
 			string winVersionString = Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor;
-			double winVersion = Double.Parse(winVersionString);
+			double winVersion = double.Parse(winVersionString, CultureInfo.InvariantCulture);
             if (winVersion < 6.2)
             {
                 extKey.CreateSubKey("UserChoice");

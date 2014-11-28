@@ -509,6 +509,7 @@ namespace PortableWizard
 			appManager.SetApplicationList(UninstallAppChooserAppsPathTextBox.Text, false);
 			UninstallAppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
 		}
+
 		private void UninstallAppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
 		{
 			FolderBrowserDialog dlg = new FolderBrowserDialog();
@@ -723,6 +724,19 @@ namespace PortableWizard
 			IniAppNameTextBox.Text = appname;
 			IniAppAppIdTextBox.Text = appid;
 			IniAppCommandLineTextBox.Text = "\"%1\"";
+		}
+
+		private void IniDataForm_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (!(IniAppNameTextBox.IsWatermarked || IniAppVersionTextBox.IsWatermarked || 
+				IniAppSupportedExtensionsTextBox.IsWatermarked || IniAppAppIdTextBox.IsWatermarked || IniAppCommandLineTextBox.IsWatermarked))
+			{
+				IniDataForm.CanSelectNextPage = true;
+			}
+			else
+			{
+				IniDataForm.CanSelectNextPage = false;
+			}
 		}
 
 		#endregion

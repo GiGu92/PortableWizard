@@ -598,6 +598,7 @@
 						 NextPage="{Binding ElementName=IniSummaryPage}"
 						 PreviousPage="{Binding ElementName=IniDirChooser}"
 						 HelpButtonVisibility="Hidden"
+						 CanSelectNextPage="False"
 						 Enter="IniDatafill_Enter">
 
 			<GroupBox Header="Application information" Height="Auto" VerticalAlignment="Top">
@@ -618,27 +619,27 @@
 
 					<!-- Name -->
 					<Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Name:</Label>
-					<v:WatermarkTextBox x:Name="IniAppNameTextBox" Grid.Column="1" Grid.Row="0" Margin="0,5"
+					<v:WatermarkTextBox x:Name="IniAppNameTextBox" Grid.Column="1" Grid.Row="0" Margin="0,5" TextChanged="IniDataForm_TextChanged"
 										Watermark="name of your application" />
 					
 					<!-- Version -->
 					<Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Version:</Label>
-					<v:WatermarkTextBox x:Name="IniAppVersionTextBox" Grid.Column="1" Grid.Row="1" Margin="0,5"
+					<v:WatermarkTextBox x:Name="IniAppVersionTextBox" Grid.Column="1" Grid.Row="1" Margin="0,5" TextChanged="IniDataForm_TextChanged"
 										Watermark="version number of your application (e.g. &quot;3.2.1&quot;)"/>
 
 					<!-- Supported file extensions -->
 					<Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Supported file extensions:</Label>
-					<v:WatermarkTextBox x:Name="IniAppSupportedExtensionsTextBox" Grid.Column="1" Grid.Row="2" Margin="0,5"
+					<v:WatermarkTextBox x:Name="IniAppSupportedExtensionsTextBox" Grid.Column="1" Grid.Row="2" Margin="0,5" TextChanged="IniDataForm_TextChanged"
 										Watermark="file extensions separated with comma, without point (e.g. &quot;avi,mkv,wmv&quot;)"/>
 
 					<!-- AppID -->
 					<Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">AppID:</Label>
-					<v:WatermarkTextBox x:Name="IniAppAppIdTextBox" Grid.Column="1" Grid.Row="3" Margin="0,5"
+					<v:WatermarkTextBox x:Name="IniAppAppIdTextBox" Grid.Column="1" Grid.Row="3" Margin="0,5" TextChanged="IniDataForm_TextChanged"
 										Watermark="ID for your application"/>
 
 					<!-- Command line -->
 					<Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Command line:</Label>
-					<v:WatermarkTextBox x:Name="IniAppCommandLineTextBox" Grid.Column="1" Grid.Row="4" Margin="0,5"
+					<v:WatermarkTextBox x:Name="IniAppCommandLineTextBox" Grid.Column="1" Grid.Row="4" Margin="0,5" TextChanged="IniDataForm_TextChanged"
 										Watermark="command line symbol for opening files with your application"/>
 
 				</Grid>

@@ -18,6 +18,13 @@ namespace PortableWizard.Control
 		private bool _isWatermarked = false;
 		private Binding _textBinding = null;
 
+		public bool IsWatermarked
+		{
+			get { return _isWatermarked; }
+			set { _isWatermarked = value; }
+		}
+		
+
 		public WatermarkTextBox()
 		{
 			Loaded += (s, ea) => ShowWatermark();
