@@ -338,14 +338,16 @@ namespace PortableWizard.Model
         /// <param name="ext">the file extension we want an association for e.g.: "avi" or ".avi"</param>
         public void AddFileAssociationToRegistry(string ext)
         {
-            //make the extension to ".avi" format
+            // Make the extension to ".avi" format
             if (!ext.StartsWith(".")) ext = "." + ext;
 
             IniFile iniFile = new IniFile(ConfigFile.FullName);
             RegistryKey key;
-            //navigate in the registry to the current_user/Software/Classes
+            
+			// Navigate in the registry to the current_user/Software/Classes
             key = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("Classes", RegistryKeyPermissionCheck.ReadWriteSubTree);
-            //navigate in the registry to the current_user/Software/Microsoft/CurrentVersion/Explorer/FileExts
+            
+			// Navigate in the registry to the current_user/Software/Microsoft/CurrentVersion/Explorer/FileExts
             RegistryKey fileExt;
             fileExt = Registry.CurrentUser.OpenSubKey("Software", RegistryKeyPermissionCheck.ReadWriteSubTree)
                 .OpenSubKey("Microsoft", RegistryKeyPermissionCheck.ReadWriteSubTree)
@@ -356,20 +358,11 @@ namespace PortableWizard.Model
                 ;
 
             string[] subkeys = key.GetSubKeyNames();
-            //read the portable app appid
+            
+			// Read the portable app appid
             string appId = iniFile.IniReadValue("Details", "AppID");
 
-            /*bool foundApp = false;
-            bool foundExt = false;
-            foreach (var keyname in subkeys)
-            {
-                if (keyname == appId)
-                    foundApp = true;
-                if (keyname == ext)
-                    foundExt = true;
-            }*/
-            //if (!foundApp)
-            //If the classis not contains the appid, we register the app to the Classes
+            // If the class is not contains the appid, we register the app to the Classes
             if (!subkeys.Contains(appId))
             {
                 string assoc = iniFile.IniReadValue("Associations", "FileTypeCommandLine");
@@ -391,8 +384,7 @@ namespace PortableWizard.Model
                 appkey.OpenSubKey("shell", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("open", RegistryKeyPermissionCheck.ReadWriteSubTree).OpenSubKey("ddeexec", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("", "");
             }
 
-            //if (foundExt)
-            //If the extension is exist we delete it and recreate with our appid
+            // If the extension is exist we delete it and recreate with our appid
             if (subkeys.Contains(ext))
             {
                 key.DeleteSubKeyTree(ext);
@@ -406,13 +398,6 @@ namespace PortableWizard.Model
             //in win 7 or win8 just rewrite the user choice value
 
             subkeys = fileExt.GetSubKeyNames();
-            /*foundExt = false;
-            foreach (var keyname in subkeys)
-            {
-                if (keyname.Equals(ext))
-                    foundExt = true;
-            }*/
-            //if (foundExt)
             if (!subkeys.Contains(ext))
             {
                 fileExt.CreateSubKey(ext);
@@ -426,7 +411,9 @@ namespace PortableWizard.Model
             catch { }
 
             //if win7 or win8 (not 8.1 or higher)
-            if (!(Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2))
+			string winVersionString = Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor;
+			double winVersion = Double.Parse(winVersionString);
+            if (winVersion < 6.2)
             {
                 extKey.CreateSubKey("UserChoice");
                 extKey.OpenSubKey("UserChoice", RegistryKeyPermissionCheck.ReadWriteSubTree).SetValue("ProgId", appId);
@@ -459,16 +446,6 @@ namespace PortableWizard.Model
 
             string appId = iniFile.IniReadValue("Details", "AppID");
 
-            /*bool foundApp = false;
-            foreach (var keyname in subkeys)
-            {
-                if (keyname.Equals(appId))
-                {
-                    foundApp = true;
-                    break;
-                }
-            }*/
-            //if (foundApp)
             if (subkeys.Contains(appId))
             {
                 key.DeleteSubKeyTree(appId);
@@ -479,7 +456,8 @@ namespace PortableWizard.Model
                 if (SupportedFileExtensions.Contains(keyname.Remove(0, 1)))
                 {
                     //if supported and we are the choosen app in the registry delete the registry nodes!
-                    if (key.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).GetValue("").Equals(appId))
+					var currentKey = key.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree);
+					if (currentKey != null && currentKey.GetValue("")!= null && currentKey.GetValue("").Equals(appId))
                     {
                         key.DeleteSubKey(keyname);
                         if (fileExt.OpenSubKey(keyname, RegistryKeyPermissionCheck.ReadWriteSubTree).GetSubKeyNames().Contains("UserChoice"))
@@ -489,7 +467,6 @@ namespace PortableWizard.Model
                     }
                 }
             }
-
         }
 
 

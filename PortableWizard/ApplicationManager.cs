@@ -34,19 +34,24 @@ namespace PortableWizard
 		/// Sets the AppsFolderPath property and discovers the portable applications within the given folder.
 		/// The found applications will be added to the ApplicationList
 		/// </summary>
-		/// <param name="AppsPath"></param>
-		public void SetApplicationList(string AppsPath)
+		/// <param name="appsPath"></param>
+		public void SetApplicationList(string appsPath, bool install)
 		{
-			if (AppsPath.EndsWith("\\"))
+			if (appsPath.EndsWith("\\"))
 			{
-				this.AppsFolderPath = AppsPath.Substring(0, AppsPath.Length - 2);
+				this.AppsFolderPath = appsPath.Substring(0, appsPath.Length - 2);
 			}
 			else
 			{
-				this.AppsFolderPath = AppsPath;
+				this.AppsFolderPath = appsPath;
 			}
 
 			LoadPortableApps();
+
+			if (!install)
+			{
+				RemoveNotFoundApps();
+			}
 		}
 
 		/// <summary>
@@ -58,7 +63,6 @@ namespace PortableWizard
 			{
 				tmpapp.isNotFound = true;
 			}
-			var result = new ObservableCollection<Application>();
 
 			// Fetching the names of the applications currently in the ApplicationList
 			List<string> currentAppNames = new List<string>();
@@ -105,6 +109,23 @@ namespace PortableWizard
 		}
 
 		/// <summary>
+		/// Removes apps from the ApplicationList that are not in the apps folder.
+		/// </summary>
+		private void RemoveNotFoundApps()
+		{
+			var foundApps = new ObservableCollection<Application>();
+			foreach (var app in ApplicationList)
+			{
+				if (! app.isNotFound)
+				{
+					foundApps.Add(app);
+				}
+			}
+
+			this.ApplicationList = foundApps;
+		}
+
+		/// <summary>
 		/// Creates desktop shortcuts for the applications that are in the
 		/// SelectedApplicationsList and need desktop icons.
 		/// </summary>
@@ -126,10 +147,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.NeedsDesktopShortcut)
-				{
-					app.DeleteShortcutFromDesktop();
-				}
+				app.DeleteShortcutFromDesktop();
 			}
 		}
 
@@ -155,10 +173,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.NeedsStartMenuShortcut)
-				{
-					app.DeleteShortcutFromStartMenu();
-				}
+				app.DeleteShortcutFromStartMenu();
 			}
 		}
 
@@ -183,10 +198,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.NeedsPinToTaskbar)
-				{
-					app.UnPinShortcutFromTaskBar();
-				}
+				app.UnPinShortcutFromTaskBar();
 			}
 		}
 
@@ -211,10 +223,7 @@ namespace PortableWizard
 		{
 			foreach (var app in SelectedApplicationList)
 			{
-				if (app.NeedsToBeStartup)
-				{
-					app.RemoveFromAutostart();
-				}
+				app.RemoveFromAutostart();
 			}
 		}
 

@@ -153,7 +153,7 @@ namespace PortableWizard
 
 		private void AppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			appManager.SetApplicationList(AppChooserAppsPathTextBox.Text);
+			appManager.SetApplicationList(AppChooserAppsPathTextBox.Text, true);
 			AppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
 
 			var selectedApps = new ObservableCollection<object>();
@@ -506,7 +506,7 @@ namespace PortableWizard
 
 		private void UninstallAppChooserAppsPathTextBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			appManager.SetApplicationList(UninstallAppChooserAppsPathTextBox.Text);
+			appManager.SetApplicationList(UninstallAppChooserAppsPathTextBox.Text, false);
 			UninstallAppChooserAppsCheckListBox.ItemsSource = appManager.ApplicationList;
 		}
 		private void UninstallAppChooserAppsPathBrowseButton_Click(object sender, RoutedEventArgs e)
@@ -549,9 +549,9 @@ namespace PortableWizard
 			worker.DoWork += worker_DoWork;
 			worker.ProgressChanged += worker_ProgressChanged;
 
-			if (((Xceed.Wpf.Toolkit.WizardPage)e.Source).Title.StartsWith("Un")) install = false;
+			if (((WizardPage)sender).Equals(this.UninstallProgressPage)) install = false;
 
-			worker.RunWorkerAsync(((Xceed.Wpf.Toolkit.WizardPage)e.Source).Title);
+			worker.RunWorkerAsync(((WizardPage)sender).Title);
 		}
 
 		private void worker_DoWork(object sender, DoWorkEventArgs e)
@@ -611,25 +611,22 @@ namespace PortableWizard
 					case 0:
 						InstallProgressPageTextBlock.Text += "\n\tCreating shortcuts to desktop...";
 						break;
-					case 16:
+					case 15:
 						InstallProgressPageTextBlock.Text += "\n\tCreating shortcuts to start menu...";
 						break;
-					case 32:
+					case 30:
 						InstallProgressPageTextBlock.Text += "\n\tPinning shortcuts to taskbar...";
 						break;
-					case 48:
-						InstallProgressPageTextBlock.Text += "\n\tPinning shortcuts to start...";
-						break;
-					case 60:
+					case 45:
 						InstallProgressPageTextBlock.Text += "\n\tPlace programs to autostart...";
 						break;
-					case 72:
+					case 60:
 						InstallProgressPageTextBlock.Text += "\n\tMake file type association...";
 						break;
-					case 98:
+					case 75:
 						InstallProgressPageTextBlock.Text += "\n\tRestarting explorer.exe...";
 						break;
-					case 99:
+					case 90:
 						InstallProgressPageTextBlock.Text += "\n\tCheck explorer.exe and start manually if not restarting...";
 						break;
 					case 100:
@@ -647,11 +644,14 @@ namespace PortableWizard
 					case 0:
 						UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from desktop...";
 						break;
-					case 33:
+					case 25:
 						UninstallProgressPageTextBlock.Text += "\n\tDeleting shortcuts from start menu...";
 						break;
-					case 66:
+					case 50:
 						UninstallProgressPageTextBlock.Text += "\n\tUnpinning shortcuts from taskbar...";
+						break;
+					case 75:
+						UninstallProgressPageTextBlock.Text += "\n\tDeleting file associations...";
 						break;
 					case 100:
 						UninstallProgressPageTextBlock.Text += "\nFinished!";
