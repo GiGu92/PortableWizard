@@ -390,14 +390,9 @@
 					</ScrollViewer>
 				</GroupBox>
 
-				<StackPanel Orientation="Horizontal" Grid.Row="1">
-					<Button x:Name="SummaryPageConfigSaveButton" 
-							HorizontalAlignment="Left" Width="150" Margin="0,10,0,0"
-							Click="SummaryPageConfigSaveButton_Click">Save configuration</Button>
-					<Button x:Name="SummaryPageRegistryBackupButton" 
-							HorizontalAlignment="Left" Width="150" Margin="10,10,0,0"
-							Click="SummaryPageRegistryBackupButton_Click">Backup registry</Button>
-				</StackPanel>
+				<Button x:Name="SummaryPageConfigSaveButton" Grid.Row="1"
+						HorizontalAlignment="Left" Width="150" Margin="0,10,0,0"
+						Click="SummaryPageConfigSaveButton_Click">Save configuration</Button>
 				
 			</Grid>
 		</xctk:WizardPage>

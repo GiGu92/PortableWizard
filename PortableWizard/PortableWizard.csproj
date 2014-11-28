@@ -90,7 +90,6 @@
     </ApplicationDefinition>
     <Compile Include="Toolkit\IniFile.cs" />
     <Compile Include="Toolkit\WinProcessManager.cs" />
-    <Compile Include="Toolkit\WinRegistryExporter.cs" />
     <Compile Include="Control\WatermarkTextBox.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

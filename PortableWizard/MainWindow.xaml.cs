@@ -443,24 +443,6 @@ namespace PortableWizard
 			}
 		}
 
-		private void SummaryPageRegistryBackupButton_Click(object sender, RoutedEventArgs e)
-		{
-			SaveFileDialog dlg = new SaveFileDialog();
-			dlg.DefaultExt = "reg";
-			dlg.AddExtension = false;
-			var result = dlg.ShowDialog();
-
-
-
-
-
-			if (result == System.Windows.Forms.DialogResult.OK)
-			{
-				WinRegistryExporter.ExportKey("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts", dlg.FileName + "Explorer.reg");
-				WinRegistryExporter.ExportKey("HKEY_CURRENT_USER\\Software\\Classes", dlg.FileName + "classes.reg");
-			}
-		}
-
 		#endregion
 
 		#region TestPage
