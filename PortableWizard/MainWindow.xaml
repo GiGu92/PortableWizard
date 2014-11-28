@@ -228,21 +228,21 @@
 						<DataGridTemplateColumn Header="Desktop" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding NeedsDesktopShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
 						<DataGridTemplateColumn Header="Start menu" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding NeedsStartMenuShortcut, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>						
 						<DataGridTemplateColumn Header="Pin to taskbar" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsPinnedToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									<CheckBox HorizontalAlignment="Center" IsChecked="{Binding NeedsPinToTaskbar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
@@ -564,7 +564,7 @@
 		</xctk:WizardPage>
 
 		
-		<!-- Ini dir chooser page -->
+		<!-- Ini directory chooser page -->
 		<xctk:WizardPage x:Name="IniDirChooser" PageType="Interior"
 						 Title="Tell us where your app is!"
 						 Description="Please give us the location for the directory, and the exe file of your application!"
@@ -671,7 +671,7 @@
 		</xctk:WizardPage>
 
 		
-		<!-- Success page -->
+		<!-- Ini Success page -->
 		<xctk:WizardPage x:Name="IniSuccessPage" PageType="Interior"
 						 Title="Ini file creation successful."
 						 Description="We created the appinfo.ini file for your application. You can check it out below, if you want!"
