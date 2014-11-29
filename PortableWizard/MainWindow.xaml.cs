@@ -97,6 +97,17 @@ namespace PortableWizard
 
 		#endregion
 
+		#region WarningPage
+
+		private void WarningPage_Loaded(object sender, RoutedEventArgs e)
+		{
+			WarningPageDearUserTextBlock.Text = "Dear " + Environment.UserName + "!\n\n" ;
+			UninstallWarningPageDearUserTextBlock.Text = "Dear " + Environment.UserName + "!\n\n";
+			IniEditorWarningPageDearUserTextBlock.Text = "Dear " + Environment.UserName + "!\n\n";
+		}
+
+		#endregion
+
 		#region ConfigFileChooser
 
 		private void ConfigFileChooserPathBrowseButton_Click(object sender, RoutedEventArgs e)

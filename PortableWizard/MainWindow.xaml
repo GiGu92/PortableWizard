@@ -82,8 +82,36 @@
 						 ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
 						 NextPage="{Binding ElementName=ConfigFileChooser}"
 						 PreviousPage="{Binding ElementName=IntroPage}"
-						 HelpButtonVisibility="Hidden">
-			<Label>Wow! Such warrning! Very careful!</Label>
+						 HelpButtonVisibility="Hidden"
+						 Loaded="WarningPage_Loaded">
+			<StackPanel>
+				<TextBlock x:Name="WarningPageDearUserTextBlock" />
+				<RichTextBox BorderThickness="0" IsReadOnly="True">
+					<FlowDocument>
+						<List MarkerStyle="Disc">
+							<ListItem>
+								<Paragraph>
+									Please note that this application only modifies the settings of the current user.
+								</Paragraph>
+							</ListItem>
+							<ListItem>
+								<Paragraph>
+									If you use Portable Wizard for initializing applications located on a removable device, 
+									there may be some unwanted consequences when you remove the device.
+								</Paragraph>
+							</ListItem>
+							<ListItem>
+								<Paragraph>
+									The titles and descriptions of each page contains useful information about the usage
+									of Portable Wizard, so please read them carefully!
+								</Paragraph>
+							</ListItem>
+						</List>
+					</FlowDocument>
+					
+				</RichTextBox>
+			</StackPanel>
+			
 		</xctk:WizardPage>
 		
 		
@@ -119,7 +147,6 @@
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
-					<!--<RowDefinition Height="Auto" />-->
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
@@ -130,13 +157,6 @@
 						<Button x:Name="AppChooserAppsPathBrowseButton" Click="AppChooserAppsPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
 					</StackPanel>
 				</GroupBox>
-				
-				<!--<GroupBox Header="Portable Wizard configuration file location (optional)" Grid.Row="1">
-					<StackPanel Orientation="Horizontal">
-						<TextBox x:Name="AppChooserConfigFilePathTextBox" Width="550"/>
-						<Button x:Name="AppChooserConfigFilePathBrowseButton" Click="AppChooserConfigFilePathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
-					</StackPanel>
-				</GroupBox>-->
 				
 				<GroupBox Header="Portable applications found in your folder" Grid.Row="1">
 					<Grid>
@@ -453,8 +473,36 @@
 						 ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
 						 NextPage="{Binding ElementName=UninstallAppChooser}"
 						 PreviousPage="{Binding ElementName=IntroPage}"
-						 HelpButtonVisibility="Hidden">
-			<Label>Wow! Such warrning! Very careful!</Label>
+						 HelpButtonVisibility="Hidden"
+						 Loaded="WarningPage_Loaded">
+			
+			<StackPanel>
+				<TextBlock x:Name="UninstallWarningPageDearUserTextBlock" />
+				<RichTextBox BorderThickness="0" IsReadOnly="True">
+					<FlowDocument>
+						<List MarkerStyle="Disc">
+							<ListItem>
+								<Paragraph>
+									Please note that this application only modifies the settings of the current user.
+								</Paragraph>
+							</ListItem>
+							<ListItem>
+								<Paragraph>
+									If your apps were not initialized by Portable Wizard (for example you created the desktop icon yourself),
+									we cannot garantee that they will be uninstalled properly.
+								</Paragraph>
+							</ListItem>
+							<ListItem>
+								<Paragraph>
+									The titles and descriptions of each page contains useful information about the usage
+									of Portable Wizard, so please read them carefully!
+								</Paragraph>
+							</ListItem>
+						</List>
+					</FlowDocument>
+				</RichTextBox>
+			</StackPanel>
+			
 		</xctk:WizardPage>
 		
 
@@ -554,8 +602,35 @@
 						 ExteriorPanelBackground="{Binding ElementName=WizardWindow, Path=LogoBackgroundBrush}"
 						 NextPage="{Binding ElementName=IniDirChooser}"
 						 PreviousPage="{Binding ElementName=IntroPage}"
-						 HelpButtonVisibility="Hidden">
-			<Label>Wow! Such warrning! Very careful!</Label>
+						 HelpButtonVisibility="Hidden"
+						 Loaded="WarningPage_Loaded">
+			<StackPanel>
+				<TextBlock x:Name="IniEditorWarningPageDearUserTextBlock" />
+				<RichTextBox BorderThickness="0" IsReadOnly="True">
+					<FlowDocument>
+						<List MarkerStyle="Disc">
+							<ListItem>
+								<Paragraph>
+									Please note that this editor only creates a compatible ini file for Portable Wizard. The process
+									will not make your application meet the requirements of PortableApps.com.
+								</Paragraph>
+							</ListItem>
+							<ListItem>
+								<Paragraph>
+									It is only your responsibility, to know what are the capabilities of your app, when you fill the
+									upcoming forms.
+								</Paragraph>
+							</ListItem>
+							<ListItem>
+								<Paragraph>
+									The titles and descriptions of each page contains useful information about the usage
+									of Portable Wizard, so please read them carefully!
+								</Paragraph>
+							</ListItem>
+						</List>
+					</FlowDocument>
+				</RichTextBox>
+			</StackPanel>
 		</xctk:WizardPage>
 
 		
