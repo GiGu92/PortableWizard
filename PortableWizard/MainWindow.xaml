@@ -394,7 +394,7 @@
 						 Title="Summary"
 						 Description="Check out your options once more. If you like them, press next!"
 						 PreviousPage="{Binding ElementName=FileExtensionChooser}"
-						 NextPage="{Binding ElementName=TestPage}"
+						 NextPage="{Binding ElementName=ProgressPage}"
 						 HelpButtonVisibility="Hidden"
 						 Enter="SummaryPage_Enter">            
 			<Grid>
@@ -419,7 +419,7 @@
 
 
 		<!-- Test page -->
-		<xctk:WizardPage x:Name="TestPage" PageType="Interior"
+		<!--<xctk:WizardPage x:Name="TestPage" PageType="Interior"
 						 Title="Test"
 						 PreviousPage="{Binding ElementName=SummaryPage}"
 						 NextPage="{Binding ElementName=ProgressPage}"
@@ -438,7 +438,7 @@
 				<Button x:Name="DeleteFileAssoc" Click="DeleteFileAssoc_Click" Width="80" Margin="10,0,0,0">Delete file association</Button>
 				<Button x:Name="RestartExplorer" Click="RestartExplorer_Click" Width="80" Margin="10,0,0,0">Restart explorer.exe</Button>
 			</StackPanel>
-		</xctk:WizardPage>
+		</xctk:WizardPage>-->
 
 		
 		<!-- Progress page -->

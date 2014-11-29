@@ -101,7 +101,7 @@ namespace PortableWizard
 
 		private void WarningPage_Loaded(object sender, RoutedEventArgs e)
 		{
-			WarningPageDearUserTextBlock.Text = "Dear " + Environment.UserName + "!\n\n" ;
+			WarningPageDearUserTextBlock.Text = "Dear " + Environment.UserName + "!\n\n";
 			UninstallWarningPageDearUserTextBlock.Text = "Dear " + Environment.UserName + "!\n\n";
 			IniEditorWarningPageDearUserTextBlock.Text = "Dear " + Environment.UserName + "!\n\n";
 		}
@@ -144,20 +144,6 @@ namespace PortableWizard
 			}
 		}
 
-		/*private void ConfigFileChooserLoadButton_Click(object sender, RoutedEventArgs e)
-		{
-			XmlSerializer x = new XmlSerializer(appManager.GetType());
-			FileStream fs = new FileStream(ConfigFileChooserPathTextBox.Text, FileMode.Open);
-			this.appManager = x.Deserialize(fs) as ApplicationManager;
-			foreach (var app in appManager.ApplicationList)
-			{
-				app.InitUnserializedData(appManager.AppsFolderPath);
-			}
-			fs.Close();
-
-			AppChooserAppsPathTextBox.Text = this.appManager.AppsFolderPath;
-		}*/
-
 		#endregion
 
 		#region AppChooser
@@ -196,16 +182,6 @@ namespace PortableWizard
 				AppChooserAppsPathTextBox.Text = dlg.SelectedPath;
 			}
 		}
-
-		/*private void AppChooserConfigFilePathBrowseButton_Click(object sender, RoutedEventArgs e)
-		{
-			OpenFileDialog dlg = new OpenFileDialog();
-			var result = dlg.ShowDialog();
-			if (result == System.Windows.Forms.DialogResult.OK)
-			{
-				AppChooserConfigFilePathTextBox.Text = dlg.FileName;
-			}
-		}*/
 
 		private void AppChooserAppsCheckListBox_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
 		{
@@ -739,7 +715,7 @@ namespace PortableWizard
 
 		private void IniDataForm_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			if (!(IniAppNameTextBox.IsWatermarked || IniAppVersionTextBox.IsWatermarked || 
+			if (!(IniAppNameTextBox.IsWatermarked || IniAppVersionTextBox.IsWatermarked ||
 				IniAppSupportedExtensionsTextBox.IsWatermarked || IniAppAppIdTextBox.IsWatermarked || IniAppCommandLineTextBox.IsWatermarked))
 			{
 				IniDataForm.CanSelectNextPage = true;
