@@ -488,6 +488,11 @@
 							</ListItem>
 							<ListItem>
 								<Paragraph>
+									This option will only remove the artifacts added by Portable Wizard. I will not delete your application.
+								</Paragraph>
+							</ListItem>
+							<ListItem>
+								<Paragraph>
 									If your apps were not initialized by Portable Wizard (for example you created the desktop icon yourself),
 									we cannot garantee that they will be uninstalled properly.
 								</Paragraph>
@@ -637,13 +642,11 @@
 		<!-- Ini directory chooser page -->
 		<xctk:WizardPage x:Name="IniDirChooser" PageType="Interior"
 						 Title="Tell us where your app is!"
-						 Description="Please give us the location for the directory, and the exe file of your application!"
+						 Description="Please give us the location for the directory, and the exe file of your application! We recommand you tho have your application separated from your other files by creating a directory just for your app."
 						 NextPage="{Binding ElementName=IniDatafill}"
 						 PreviousPage="{Binding ElementName=InstallWarningPage}"
 						 CanSelectNextPage="False"
-						 HelpButtonVisibility="Hidden">
-
-			
+						 HelpButtonVisibility="Hidden">			
 
 			<StackPanel Orientation="Vertical" >
 				<GroupBox Header="Application directory" Height="Auto" VerticalAlignment="Top">
@@ -652,7 +655,6 @@
 						<Button x:Name="IniDirChooserDirPathBrowseButton" Click="IniDirChooserDirPathBrowseButton_Click" Width="80" Margin="10,0,0,0">Browse</Button>
 					</StackPanel>
 				</GroupBox>
-
 				<GroupBox Header="Exe file location" Height="Auto" VerticalAlignment="Top">
 					<StackPanel Orientation="Horizontal">
 						<TextBox x:Name="IniDirChooserAppExePathTextBox" Width="550" TextChanged="IniDirChooserTextChanged"/>
@@ -660,8 +662,6 @@
 					</StackPanel>
 				</GroupBox>
 			</StackPanel>
-				
-			
 
 		</xctk:WizardPage>
 

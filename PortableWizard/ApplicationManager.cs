@@ -34,7 +34,8 @@ namespace PortableWizard
 		/// Sets the AppsFolderPath property and discovers the portable applications within the given folder.
 		/// The found applications will be added to the ApplicationList
 		/// </summary>
-		/// <param name="appsPath"></param>
+		/// <param name="appsPath">path to the folder</param>
+		/// <param name="install">true if the program is inicializing the apps, false if it's uninstalling</param>
 		public void SetApplicationList(string appsPath, bool install)
 		{
 			if (appsPath.EndsWith("\\"))
@@ -116,7 +117,7 @@ namespace PortableWizard
 			var foundApps = new ObservableCollection<Application>();
 			foreach (var app in ApplicationList)
 			{
-				if (! app.isNotFound)
+				if (!app.isNotFound)
 				{
 					foundApps.Add(app);
 				}
