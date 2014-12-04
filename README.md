@@ -26,7 +26,7 @@ Portable Wizard is a tool for initializing portable apps on your Windows system 
 ### Install
 * Download .zip file from the release page or [click here](https://github.com/GiGu92/PortableWizard/releases/download/v1.0.0/PortableWizard_v1.0.0.zip)
 * Extract the downloaded .zip file 
-* Run the PortableWizard.exe file
+* Run the PortableWizard.exe file in the root directory, or in the App/bin directory
 
 ### Build
 * Open the .sln file with Visual Studio
